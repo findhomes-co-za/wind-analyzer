@@ -76,14 +76,27 @@
       <h2>Suburb ranking <button id="csvBtn" class="ghost small" title="Download as CSV">CSV ⬇</button></h2>
       <input type="search" id="suburbSearch" placeholder="Search 82 suburbs — try Khayelitsha, Stellenbosch…" autocomplete="off">
       <div class="filters" id="groupFilters"></div>
+      <div id="scorePopover" hidden>
+        <strong>Windiness score (0–100) — the ranking order</strong>
+        <p>Score = <b>55%</b> mean street-level wind (capped at 72 km/h)
+          + <b>30%</b> gusts (capped at 108 km/h)
+          + <b>15%</b> turbulence index (capped at 0.7).</p>
+        <p>Mean wind dominates; gusts and rotor turbulence add the "feels-like"
+          violence that averages miss (why rotor suburbs like Vredehoek and
+          Clifton's slopes outrank their calm means). Each suburb's popup shows
+          its exact breakdown. Click any column header to re-sort — e.g. sort
+          by Wind for the pure mean-speed order; the # rank always follows the
+          score.</p>
+      </div>
       <table id="rankTable">
         <thead>
           <tr>
             <th>#</th>
             <th data-sort="suburb">Suburb</th>
-            <th data-sort="speed10_mean" class="num sorted desc" title="Mean wind at 10 m">Wind</th>
+            <th data-sort="score" class="num sorted" title="Windiness score 0–100 — the ranking order">
+              Score<button id="scoreInfoBtn" type="button" title="How is the score calculated?">ⓘ</button></th>
+            <th data-sort="speed10_mean" class="num" title="Mean street-level wind">Wind</th>
             <th data-sort="gust_mean" class="num" title="Estimated gusts">Gust</th>
-            <th data-sort="speedup" class="num" title="Local wind / open-water wind">×</th>
             <th data-sort="ti_mean" class="num" title="Turbulence index">Turb</th>
           </tr>
         </thead>
@@ -183,6 +196,7 @@
 </div>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
-<script src="app.js?v=3"></script>
+<script src="config.local.js"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>

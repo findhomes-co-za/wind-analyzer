@@ -132,6 +132,21 @@ button { font: inherit; cursor: pointer; }
 #rankTable td { padding: 5px 6px; border-bottom: 1px solid #f0f2f5; }
 #rankTable tbody tr { cursor: pointer; }
 #rankTable tbody tr:hover { background: var(--accent-soft); }
+.score-pill {
+  display: inline-block; min-width: 26px; text-align: center;
+  border-radius: 999px; color: #fff; font-weight: 700; font-size: .74rem;
+  padding: 1px 6px; font-variant-numeric: tabular-nums;
+}
+#scoreInfoBtn {
+  border: none; background: none; color: var(--accent); cursor: pointer;
+  font-size: .8rem; padding: 0 0 0 3px; vertical-align: 1px;
+}
+#scorePopover {
+  border: 1px solid var(--accent); background: var(--accent-soft);
+  border-radius: 10px; padding: 10px 12px; margin: 8px 0;
+  font-size: .78rem; line-height: 1.5; color: var(--ink);
+}
+#scorePopover p { margin: 6px 0 0; }
 .sub-name { display: flex; align-items: center; gap: 6px; }
 .sub-name .b { width: 8px; height: 8px; border-radius: 50%; flex: none; }
 .sub-name .g { color: var(--ink-soft); font-size: .68rem; }
@@ -143,6 +158,14 @@ footer { font-size: .68rem; color: var(--ink-soft); line-height: 1.5;
 /* ---------- map ---------- */
 #mapwrap { flex: 1; position: relative; min-width: 0; }
 #map { position: absolute; inset: 0; }
+
+#particle-overlay {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 2;
+}
+.mapboxgl-popup { z-index: 5; }
+.mapboxgl-ctrl-top-right, .mapboxgl-ctrl-bottom-right,
+.mapboxgl-ctrl-bottom-left { z-index: 4; }
 
 #scenarioChip {
   position: absolute; top: 12px; left: 12px; z-index: 5;

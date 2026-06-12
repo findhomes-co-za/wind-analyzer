@@ -7,8 +7,8 @@
  */
 "use strict";
 
-// Set your Mapbox public token here (pk.ey…) or via MAPBOX_TOKEN env at build time
-const MAPBOX_TOKEN = "YOUR_MAPBOX_TOKEN";
+// Token comes from web/config.local.js (window.MAPBOX_TOKEN) — keep it out of app.js
+const MAPBOX_TOKEN = window.MAPBOX_TOKEN || "YOUR_MAPBOX_TOKEN";
 const SECTOR_LABELS = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
 const TRANSPARENT_PX = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 const GROUP_ORDER = ["City Bowl", "Atlantic Seaboard", "Southern Suburbs", "South Peninsula",
@@ -28,7 +28,7 @@ const state = {
   threeD: false,
   group: "all",
   search: "",
-  sort: { key: "speed10_mean", asc: false },
+  sort: { key: "score", asc: false },
 };
 
 /* ---------------- colormaps ---------------- */
@@ -127,8 +127,9 @@ async function loadRun(dirIdx, strength) {
       effects: b64ToU8(d.fields.effects.b64),
     };
   }
+  run.ranking.forEach((r) => { r.score = windScore(r); });
   run.rankMap = new Map();
-  [...j.ranking].sort((a, b) => b.speed10_mean - a.speed10_mean)
+  [...j.ranking].sort((a, b) => b.score - a.score || b.speed10_mean - a.speed10_mean)
     .forEach((r, i) => run.rankMap.set(r.suburb, i + 1));
   if (runCache.size >= 10) runCache.delete(runCache.keys().next().value);  // LRU-ish
   runCache.set(key, run);
@@ -143,6 +144,27 @@ async function loadShelter(dirIdx) {
   const s = { grid: { bbox: j.bbox, nx: j.shape[1], ny: j.shape[0] }, factor: dequant(j.factor) };
   shelterCache.set(dirIdx, s);
   return s;
+}
+
+/* ---------------- windiness score ----------------
+ * The ranking order. Transparent formula (also shown in the table's info
+ * popover): 55% mean street wind (vs 20 m/s), 30% gusts (vs 30 m/s),
+ * 15% turbulence (vs 0.7), each capped, scaled to 0-100.
+ */
+const SCORE = { wMean: 0.55, refMean: 20.0, wGust: 0.30, refGust: 30.0, wTi: 0.15, refTi: 0.7 };
+function scoreParts(r) {
+  return {
+    mean: 100 * SCORE.wMean * Math.min(r.speed10_mean / SCORE.refMean, 1),
+    gust: 100 * SCORE.wGust * Math.min(r.gust_mean / SCORE.refGust, 1),
+    ti: 100 * SCORE.wTi * Math.min(r.ti_mean / SCORE.refTi, 1),
+  };
+}
+function windScore(r) {
+  const p = scoreParts(r);
+  return Math.round(p.mean + p.gust + p.ti);
+}
+function scoreColor(s) {
+  return `hsl(${Math.max(0, 120 - 1.55 * s)}, 65%, 40%)`;
 }
 
 /* ---------------- units ---------------- */
@@ -251,12 +273,6 @@ function initMap() {
     map.addLayer({ id: "field-pockets", type: "raster", source: "field-pockets",
       paint: { "raster-opacity": ["interpolate", ["linear"], ["zoom"], 11, 0, 12.2, 0.92],
                "raster-fade-duration": 120 } }, beforeId);
-
-    pCanvas.id = "particle-canvas";
-    map.addSource("particles", { type: "canvas", canvas: pCanvas,
-      coordinates: corners(GRIDS.region.bbox), animate: true });
-    map.addLayer({ id: "particles", type: "raster", source: "particles",
-      paint: { "raster-opacity": 0.9, "raster-fade-duration": 0 } }, beforeId);
 
     // 75 m high-resolution zone outline
     const D = GRIDS.detail.bbox;
@@ -439,25 +455,52 @@ function drawPockets(sh) {
   src.updateImage({ url: bigCanvas.toDataURL() });
 }
 
-/* ---------------- particles ---------------- */
+/* ---------------- particles (screen-space: crisp at every zoom) ----------------
+ * Particles are advected in geographic (grid) space but DRAWN on a viewport
+ * canvas in screen pixels, so trails stay 1.5 px wide at any zoom. They spawn
+ * inside the current viewport, the apparent speed law is constant on screen
+ * (px/s proportional to m/s), and trails clear during map interaction.
+ */
 const pCanvas = document.createElement("canvas");
-let particles = [], lastT = 0, regToDet = null;
+let particles = [], lastT = 0, regToDet = null, pCtx = null;
 function initParticles() {
-  const g = GRIDS.region;
-  pCanvas.width = g.nx * UPSCALE.region; pCanvas.height = g.ny * UPSCALE.region;
-  particles = Array.from({ length: 1500 }, () => spawnParticle());
+  pCanvas.id = "particle-overlay";
+  $("#mapwrap").appendChild(pCanvas);
+  pCtx = pCanvas.getContext("2d");
+  sizeParticleCanvas();
+  map.on("resize", sizeParticleCanvas);
   // affine region-grid -> detail-grid transform (both linear in lon/lat)
   const R = GRIDS.region, D = GRIDS.detail;
   const sx = (R.bbox.lon_max - R.bbox.lon_min) / R.nx / ((D.bbox.lon_max - D.bbox.lon_min) / D.nx);
   const sy = (R.bbox.lat_max - R.bbox.lat_min) / R.ny / ((D.bbox.lat_max - D.bbox.lat_min) / D.ny);
   const [ox, oy] = lngLatToGrid(D, ...gridToLngLat(R, 0, 0));
   regToDet = (fx, fy) => [ox + fx * sx, oy + fy * sy];
+  particles = [];
   requestAnimationFrame(particleStep);
 }
+function sizeParticleCanvas() {
+  const el = map.getContainer();
+  const dpr = window.devicePixelRatio || 1;
+  pCanvas.width = el.clientWidth * dpr;
+  pCanvas.height = el.clientHeight * dpr;
+  pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
 function spawnParticle() {
-  const g = GRIDS.region;
-  return { x: Math.random() * (g.nx - 1), y: Math.random() * (g.ny - 1), age: 0,
-           life: 4 + Math.random() * 7 };
+  const R = GRIDS.region;
+  const b = map.getBounds();
+  const mw = (b.getEast() - b.getWest()) * 0.1, mh = (b.getNorth() - b.getSouth()) * 0.1;
+  const lng = Math.min(Math.max(b.getWest() - mw + Math.random() * (b.getEast() - b.getWest() + 2 * mw),
+                                R.bbox.lon_min), R.bbox.lon_max);
+  const lat = Math.min(Math.max(b.getSouth() - mh + Math.random() * (b.getNorth() - b.getSouth() + 2 * mh),
+                                R.bbox.lat_min), R.bbox.lat_max);
+  const [x, y] = lngLatToGrid(R, lng, lat);
+  return { x: Math.min(Math.max(x, 0), R.nx - 1), y: Math.min(Math.max(y, 0), R.ny - 1),
+           age: Math.random() * 2, life: 3 + Math.random() * 6 };
+}
+function particleTargetCount() {
+  const dpr = window.devicePixelRatio || 1;
+  const area = (pCanvas.width / dpr) * (pCanvas.height / dpr);
+  return Math.max(250, Math.min(1100, Math.round(area / 1600)));
 }
 function sampleUV(fx, fy) {
   const det = RUN.domains.detail;
@@ -472,37 +515,59 @@ function sampleUV(fx, fy) {
 }
 function particleStep(t) {
   requestAnimationFrame(particleStep);
-  const ctx = pCanvas.getContext("2d");
+  if (!pCtx) return;
   const dt = Math.min((t - lastT) / 1000 || 0.016, 0.05);
   lastT = t;
-  if (!state.particles || !RUN || document.hidden) {
-    if (state._pCleared !== true) { ctx.clearRect(0, 0, pCanvas.width, pCanvas.height); state._pCleared = true; }
+  const dpr = window.devicePixelRatio || 1;
+  const w = pCanvas.width / dpr, h = pCanvas.height / dpr;
+  if (!state.particles || !RUN || !mapReady || document.hidden) {
+    if (state._pCleared !== true) { pCtx.clearRect(0, 0, w, h); state._pCleared = true; }
     return;
   }
+  if (map.isMoving()) { pCtx.clearRect(0, 0, w, h); return; }
   state._pCleared = false;
-  ctx.globalCompositeOperation = "destination-in";
-  ctx.fillStyle = "rgba(0,0,0,0.95)";
-  ctx.fillRect(0, 0, pCanvas.width, pCanvas.height);
-  ctx.globalCompositeOperation = "source-over";
-  ctx.lineWidth = 1.5;
-  ctx.strokeStyle = state.overlay === "none" || state.overlay === "effects"
-    ? "rgba(30,41,59,0.66)" : "rgba(255,255,255,0.8)";
-  const g = GRIDS.region, up = UPSCALE.region, dxm = g.dx_m, timeScale = 340;
-  ctx.beginPath();
+
+  const n = particleTargetCount();
+  while (particles.length < n) particles.push(spawnParticle());
+  if (particles.length > n) particles.length = n;
+
+  // Constant apparent-speed law: px/s = 4 x wind speed (m/s), at any zoom.
+  const c = map.getCenter();
+  const p1 = map.project([c.lng, c.lat]);
+  const p2 = map.project([c.lng + 5e-4, c.lat]);
+  const pxPerM = Math.hypot(p2.x - p1.x, p2.y - p1.y)
+               / (5e-4 * 111320 * Math.cos((c.lat * Math.PI) / 180));
+  const T = Math.min(4000, Math.max(8, 4.0 / Math.max(pxPerM, 1e-9)));
+
+  pCtx.globalCompositeOperation = "destination-in";
+  pCtx.fillStyle = "rgba(0,0,0,0.94)";
+  pCtx.fillRect(0, 0, w, h);
+  pCtx.globalCompositeOperation = "source-over";
+  pCtx.lineWidth = 1.5;
+  pCtx.strokeStyle = state.overlay === "none" || state.overlay === "effects"
+    ? "rgba(30,41,59,0.66)" : "rgba(255,255,255,0.85)";
+  const R = GRIDS.region, dxm = R.dx_m;
+  pCtx.beginPath();
   for (const p of particles) {
     const [u, v] = sampleUV(p.x, p.y);
-    const px0 = p.x * up, py0 = (g.ny - 1 - p.y) * up;
-    p.x += (u / dxm) * timeScale * dt;
-    p.y += (v / dxm) * timeScale * dt;
+    const g0 = gridToLngLat(R, p.x, p.y);
+    p.x += (u / dxm) * T * dt;
+    p.y += (v / dxm) * T * dt;
     p.age += dt;
-    if (p.x < 0 || p.x > g.nx - 1 || p.y < 0 || p.y > g.ny - 1 || p.age > p.life) {
+    if (p.x < 0 || p.x > R.nx - 1 || p.y < 0 || p.y > R.ny - 1 || p.age > p.life) {
       Object.assign(p, spawnParticle());
       continue;
     }
-    ctx.moveTo(px0, py0);
-    ctx.lineTo(p.x * up, (g.ny - 1 - p.y) * up);
+    const s0 = map.project(g0);
+    const s1 = map.project(gridToLngLat(R, p.x, p.y));
+    if (s1.x < -60 || s1.x > w + 60 || s1.y < -60 || s1.y > h + 60) {
+      Object.assign(p, spawnParticle());
+      continue;
+    }
+    pCtx.moveTo(s0.x, s0.y);
+    pCtx.lineTo(s1.x, s1.y);
   }
-  ctx.stroke();
+  pCtx.stroke();
 }
 
 /* ---------------- suburbs: markers, popup, table ---------------- */
@@ -542,18 +607,24 @@ function openSuburbPopup(name) {
   const c = suburbCoord(name);
   if (!r || !c) return;
   const b = badge(r);
+  const p = scoreParts(r);
   const tags = effectTags(r);
   const html = `
     <div class="popup-title">${r.suburb}</div>
     <div class="popup-sub">${r.group} · rank #${RUN.rankMap.get(r.suburb)} of ${RUN.ranking.length} · elev ${Math.round(r.elev_m)} m</div>
     <span class="popup-badge" style="background:${b.c}">${b.t}</span>
+    <span class="popup-badge" style="background:${scoreColor(r.score)}"
+      title="= ${p.mean.toFixed(0)} wind + ${p.gust.toFixed(0)} gusts + ${p.ti.toFixed(0)} turbulence">
+      score ${r.score}/100</span>
     <div class="popup-grid">
       <span class="k">Street wind</span><span>${fmtSpeed(r.speed10_mean, true)}</span>
       <span class="k">Gusts</span><span>${fmtSpeed(r.gust_mean, true)}</span>
       <span class="k">Speed-up</span><span>${r.speedup.toFixed(2)}×</span>
       <span class="k">Turbulence</span><span>${r.ti_mean.toFixed(2)}</span>
+      <span class="k">Speed-up</span><span>${r.speedup.toFixed(2)}× vs open sea</span>
       <span class="k">Flow turned</span><span>${Math.abs(r.deflection_mean).toFixed(0)}°</span>
     </div>
+    <div class="popup-tags">Score = ${p.mean.toFixed(0)} (mean wind) + ${p.gust.toFixed(0)} (gusts) + ${p.ti.toFixed(0)} (turbulence)</div>
     ${tags.length ? `<div class="popup-tags">${tags.map(([i, t]) => `${i} ${t}`).join("<br>")}</div>` : ""}`;
   if (popup) popup.remove();
   popup = new mapboxgl.Popup({ offset: 10 }).setLngLat(c).setHTML(html).addTo(map);
@@ -582,9 +653,9 @@ function renderTable() {
       <td><div class="sub-name"><span class="b" style="background:${b.c}" title="${b.t}"></span>
         <div><div>${r.suburb} <span class="tags">${tags}</span></div>
         <span class="g">${r.group}</span></div></div></td>
+      <td class="num"><span class="score-pill" style="background:${scoreColor(r.score)}">${r.score}</span></td>
       <td class="num">${fmtSpeed(r.speed10_mean)}</td>
       <td class="num">${fmtSpeed(r.gust_mean)}</td>
-      <td class="num">${r.speedup.toFixed(2)}</td>
       <td class="num">${r.ti_mean.toFixed(2)}</td>
     </tr>`;
   }).join("");
@@ -818,6 +889,14 @@ function wireControls() {
     a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
     a.download = `ranking_${SECTOR_LABELS[state.dirIdx]}_${state.strength}.csv`;
     a.click();
+  });
+  $("#scoreInfoBtn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    $("#scorePopover").hidden = !$("#scorePopover").hidden;
+  });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#scorePopover") && e.target.id !== "scoreInfoBtn")
+      $("#scorePopover").hidden = true;
   });
   $("#aboutBtn").addEventListener("click", () => ($("#aboutModal").hidden = false));
   $("#aboutClose").addEventListener("click", () => ($("#aboutModal").hidden = true));

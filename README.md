@@ -76,6 +76,14 @@ plus building-resolved CFD.
 python3 -m http.server 8741 -d web           # then open http://localhost:8741
 ```
 
+Set your Mapbox public token in `web/config.local.js`
+(`window.MAPBOX_TOKEN = "pk...."`) — it is kept out of `app.js`.
+
+The ranking is ordered by a transparent **windiness score** (0–100 = 55% mean
+street wind + 30% gusts + 15% turbulence, each capped) — the ⓘ next to the
+Score column explains it in-app and every suburb popup shows its breakdown.
+Wind particles render in screen space, so trails stay crisp at every zoom.
+
 Direction defaults to the summer south-easter; the "Winter north-wester"
 preset (or the compass) flips the scenario, with per-direction observed
 speeds *and stratification* (the SE is an inversion-capped stable layer;
