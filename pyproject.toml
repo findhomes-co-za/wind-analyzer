@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wind-analyzer"
+version = "0.1.0"
+description = "Terrain-driven wind dynamics model for Cape Town's south-easter (the Cape Doctor)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "requests",
+    "pillow",
+    "pyamg",
+]
+
+[project.scripts]
+wind-analyzer = "wind_analyzer.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

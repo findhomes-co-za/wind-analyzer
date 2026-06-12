@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cape Town Wind Explorer — the Cape Doctor, modelled</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌬️</text></svg>">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar">
+    <header>
+      <h1><span class="logo">🌬️</span> Cape Town Wind Explorer</h1>
+      <p class="tagline">How Table Mountain shapes the wind. Pick a direction on the
+        compass — see who gets blasted and who stays sheltered.</p>
+      <div class="header-actions">
+        <button id="unitsBtn" class="ghost" title="Toggle units">km/h</button>
+        <button id="aboutBtn" class="ghost">How it works</button>
+      </div>
+    </header>
+
+    <section class="presets">
+      <button class="chip" data-preset="se" title="The famous summer wind — the Cape Doctor">
+        ☀️ Summer south&#8209;easter</button>
+      <button class="chip" data-preset="nw" title="Winter cold fronts arrive from the north-west">
+        🌧️ Winter north&#8209;wester</button>
+    </section>
+
+    <section id="roseSection">
+      <h2>Wind direction <span class="hint">click the compass · ←/→ keys</span></h2>
+      <div id="rose"></div>
+      <p id="roseCaption" class="caption"></p>
+      <div class="rose-legend">
+        <span><i class="sw summer"></i>share of summer hours</span>
+        <span><i class="sw winter"></i>winter hours</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Strength</h2>
+      <div class="seg" id="strengthSeg">
+        <button data-strength="typical">Typical<small id="typSpeed"></small></button>
+        <button data-strength="strong">Strong<small id="strSpeed"></small></button>
+      </div>
+      <p class="caption">Typical = median of observed hours from this direction;
+        strong = top 10%.</p>
+    </section>
+
+    <section>
+      <h2>Map layer</h2>
+      <div id="overlayList"></div>
+      <div class="row-controls">
+        <label class="slider-label">Layer opacity
+          <input type="range" id="opacity" min="0" max="100" value="72">
+        </label>
+      </div>
+      <div class="row-controls">
+        <label class="check"><input type="checkbox" id="particlesChk" checked> Animate wind flow</label>
+        <button id="threeDBtn" class="ghost small">3D terrain</button>
+      </div>
+      <p class="caption">Dashed rectangle on the map = 75 m high-resolution zone around
+        the Table Mountain chain; the wider metro runs at 200 m.</p>
+    </section>
+
+    <section id="legendSection">
+      <div id="legendGradient">
+        <canvas id="legendCanvas" width="240" height="12"></canvas>
+        <div id="legendLabels"></div>
+      </div>
+      <div id="legendCategorical" hidden></div>
+    </section>
+
+    <section id="tableSection">
+      <h2>Suburb ranking <button id="csvBtn" class="ghost small" title="Download as CSV">CSV ⬇</button></h2>
+      <input type="search" id="suburbSearch" placeholder="Search 82 suburbs — try Khayelitsha, Stellenbosch…" autocomplete="off">
+      <div class="filters" id="groupFilters"></div>
+      <table id="rankTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th data-sort="suburb">Suburb</th>
+            <th data-sort="speed10_mean" class="num sorted desc" title="Mean wind at 10 m">Wind</th>
+            <th data-sort="gust_mean" class="num" title="Estimated gusts">Gust</th>
+            <th data-sort="speedup" class="num" title="Local wind / open-water wind">×</th>
+            <th data-sort="ti_mean" class="num" title="Turbulence index">Turb</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="caption">Click a row to fly there. Icons: ⏩ Venturi channeling ·
+        ↪️ Coanda deflection · 🌀 lee-rotor gusts · 🏙️ tall-building downwash.</p>
+    </section>
+
+    <footer>
+      Model: 3-D mass-consistent wind solver (200 m metro + 75 m city detail) ·
+      Terrain: SRTM (AWS Open Data) · Wind record: Open-Meteo, point over False Bay ·
+      Land cover: ESA WorldCover · Buildings © OpenStreetMap contributors ·
+      Basemap © Mapbox © OpenStreetMap
+    </footer>
+  </aside>
+
+  <main id="mapwrap">
+    <div id="map"></div>
+    <div id="scenarioChip"></div>
+    <div id="probe" hidden></div>
+    <div id="loading"><div class="spinner"></div><p>Loading wind fields…</p></div>
+  </main>
+</div>
+
+<div id="aboutModal" hidden>
+  <div class="modal-card">
+    <button class="modal-close" id="aboutClose">✕</button>
+    <h2>How this works</h2>
+    <h3>The short version</h3>
+    <p>Cape Town's famous summer wind — the <strong>south-easter</strong>, or
+    <em>Cape Doctor</em> — slams into Table Mountain, Devil's Peak, Lion's Head and
+    Signal Hill. The mountains squeeze it through gaps (the <strong>Venturi
+    effect</strong>), bend it around the peaks so it hugs the slopes (the
+    <strong>Coanda effect</strong>), and tumble it into rolling gusts on their
+    lee sides (<strong>rotors</strong> — why Vredehoek is nicknamed
+    "Windyhoek"). In winter the pattern flips: storm winds arrive from the
+    north-west and the sheltered and exposed suburbs swap roles.</p>
+    <p>This site shows a physics model of that, from Cape Point to Durbanville to
+    Stellenbosch. Colours = how hard the wind blows at street level. Moving
+    streaks = the wind's path. The dashed rectangle is a high-resolution
+    (75&nbsp;m) zone around the Table Mountain chain where valleys and ridges
+    that funnel wind are resolved in more detail.</p>
+    <h3>The numbers (for the curious)</h3>
+    <ul>
+      <li><strong>Model:</strong> a 3-D <em>mass-consistent</em> diagnostic wind model
+      (the NUATMOS / WindNinja family). The observed inflow profile is blocked by
+      real terrain, then minimally adjusted so mass is conserved exactly
+      (divergence driven below 10⁻¹⁰ s⁻¹ on a ~670,000-cell grid).</li>
+      <li><strong>Stratification:</strong> the south-easter is a stable, inversion-capped
+      layer (the "tablecloth"). A Froude-number ratio r² = Fr²/(1+Fr²) weights
+      vertical vs horizontal adjustment — low Fr forces air <em>around</em> peaks
+      rather than over them.</li>
+      <li><strong>Wind input:</strong> three years of hourly reanalysis (Open-Meteo) at a
+      point over False Bay, upwind of the peninsula. Each compass direction uses
+      its own observed median / 90th-percentile speed and gust factor — so the
+      north-wester is as strong as winter really makes it.</li>
+      <li><strong>Two nested grids:</strong> the metro region (Cape Point → Durbanville →
+      Stellenbosch/Helderberg) at 200 m, and a 75 m detail grid with finer
+      vertical levels over the Table Mountain chain. The map blends them as
+      you zoom.</li>
+      <li><strong>Street-level wind:</strong> the displayed speed is 10 m above ground
+      corrected through the <em>local</em> surface roughness from ESA WorldCover
+      10 m land cover — dense urban fabric, forest, vineyards and open water
+      all change what you feel on the ground.</li>
+      <li><strong>Large buildings:</strong> tall buildings (≥25 m, from OpenStreetMap
+      height tags) are far smaller than a grid cell, so they enter as local
+      physics: dense tall fabric slows the <em>mean</em> street wind (urban
+      canyon), while towers bring roof-height momentum down to street corners —
+      gusts approach ~75% of the wind at roof height (downwash, the magenta
+      cells in the Effect-zones layer). Exact corner accelerations need
+      building-resolved CFD; treat these cells as "gustier than the colour
+      suggests".</li>
+      <li><strong>Sheltered pockets (25 m):</strong> the flow solver runs at 75 m, but
+      the open elevation data carries real information down to ~30 m. The
+      pockets layer computes, for every 25 m pixel, the upwind horizon angle
+      to terrain within 1.2 km (the Winstral Sx shelter parameter, from
+      Copernicus GLO-30 elevations) and uses it to redistribute the solved
+      wind <em>within</em> each coarse cell — lighting up calm hollows, gully
+      mouths and lee toes. Below ~30 m the open data runs out: garden-scale
+      shelter (hedges, walls, single houses) would need LiDAR and
+      building-resolved CFD.</li>
+      <li><strong>Turbulence &amp; gusts:</strong> diagnosed from shear, wake deficit and a
+      lee-rotor criterion (peaks at Fr ≈ 1), calibrated to the observed
+      flat-terrain gust factor.</li>
+      <li><strong>Honest limitations:</strong> mass-consistent models conserve mass, not
+      momentum — separation and rotor dynamics are heuristics, and individual
+      streets are below even the 75 m grid. Trust the <em>relative ranking</em>
+      more than any single number.</li>
+    </ul>
+    <h3>Data &amp; credits</h3>
+    <p>Elevation: SRTM-derived terrarium tiles, AWS Open Data · Wind climatology:
+    Open-Meteo archive · Land cover: ESA WorldCover 2021 · Buildings: ©
+    OpenStreetMap contributors · Basemap: Mapbox / OpenStreetMap. Built with a
+    mass-consistent solver written in Python (NumPy/SciPy/PyAMG).</p>
+  </div>
+</div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<script src="app.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.egg
+
+# Data / cache
+data/cache/
+*.npz
+*.pkl
+
+# Output artifacts
+output/*.png
+output/*.csv
+output/fields.npz
+output-typical/*.png
+output-typical/*.csv
+output-typical/fields.npz
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/
