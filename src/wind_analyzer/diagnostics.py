@@ -166,6 +166,23 @@ def compute_surface(flow: FlowField, terrain: TerrainGrid, scn: WindScenario,
     v10 = v10 * ws
     speed10 = speed10 * ws
 
+    # --- lee wind shadow (sheltered wake) ------------------------------------
+    # The counterpart to the windstorm. A mass-consistent solve keeps flank and
+    # far-lee flow attached at near-inflow speed (it produces no real wake), so
+    # spots tucked deep behind a tall massif come out far too windy — Clifton,
+    # behind the Lion's Head / Twelve Apostles wall, is the textbook case
+    # (summer SE refuge). A cell is in the wind shadow when a TALL obstacle
+    # stands upwind (large `drop`) yet it is NOT on that obstacle's near
+    # reattachment slope (low ws_attach) — i.e. it sits in the deep lee, not on
+    # the gap-fed downslope apron (Vredehoek/Oranjezicht, which keep the boost).
+    # We damp the surface mean here and, below, the surface turbulence (the
+    # rotor rides over the top; the shadow itself is calm).
+    shadow = np.clip((drop - 450.0) / 500.0, 0.0, 1.0) * (1.0 - ws_attach)
+    shadow_factor = 1.0 - 0.62 * shadow                         # mean down to ~0.38x
+    u10 = u10 * shadow_factor
+    v10 = v10 * shadow_factor
+    speed10 = speed10 * shadow_factor
+
     ref10 = max(scn.speed_10m, 0.1)
     speedup = speed10 / ref10
 
@@ -184,10 +201,13 @@ def compute_surface(flow: FlowField, terrain: TerrainGrid, scn: WindScenario,
     ti_shear = GUST_PEAK_FACTOR * ustar / np.maximum(speed10, 1.0)
 
     # fr / fr_mod / drop computed above (windstorm block); rotors peak at Fr ~ 1.
-    rotor = np.clip((drop - 250.0) / 450.0, 0.0, 1.0) * fr_mod
+    # In the wind shadow the rotor rides over the top — the surface stays calm —
+    # so the lee-rotor turbulence is suppressed there (shadow computed above).
+    rotor = np.clip((drop - 250.0) / 450.0, 0.0, 1.0) * fr_mod * (1.0 - 0.85 * shadow)
 
     wake = np.clip(1.0 - speedup, 0.0, 1.0)
     ti = np.clip(ti_shear + 0.35 * rotor + 0.15 * wake, 0.0, 0.7)
+    ti = ti * (1.0 - 0.55 * shadow)   # detached shear layer overhead, calm below
     ti = gaussian_filter(ti, sigma=1.0)
 
     # Gust peak factor calibrated so flat-terrain gust ratio matches the

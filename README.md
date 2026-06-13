@@ -94,17 +94,27 @@ both key off the **windiness score**, and the wind-speed colour scale stretches
 to each scenario's own inflow so land variation fills the palette instead of
 washing out into the blue bottom third.
 
-### Downslope windstorm correction
+### Lee-flow corrections (windstorm + wind shadow)
 
-A pure mass-consistent solve puts a calm deficit in every lee, but the real
-Cape Doctor is a *downslope windstorm*: at Froude ≈ 1 the stable south-easter
-stays attached as it pours over the Table Mountain / Devil's Peak saddle and
-accelerates down the lee slope — which is why the upper City Bowl (Vredehoek,
-Oranjezicht) is so wind-blasted. `diagnostics.py` adds this attached lee-slope
-jet (mean boost up to ~1.9× where the upwind crest drop is moderate, tapering
-for high walls that separate). It is an empirical patch for the model family's
-known blind spot; the mean field is not yet calibrated against weather-station
-records (the planned next step), so the rankings remain *relative*.
+A pure mass-consistent solve gets lee flow backwards: it dumps a calm deficit
+exactly where the south-easter is strongest and keeps flank/far-lee flow
+attached at near-inflow speed where the real air is sheltered. `diagnostics.py`
+adds two empirical corrections keyed on the same upwind-crest geometry (`drop`,
+`ws_attach`):
+
+- **Downslope windstorm** — at Froude ≈ 1 the stable flow stays attached as it
+  pours over the Table Mountain / Devil's Peak saddle and accelerates down the
+  lee slope, so the gap-fed upper City Bowl (Vredehoek, Oranjezicht) gets a
+  mean boost up to ~1.9×.
+- **Wind shadow** — a cell deep behind a tall obstacle (large `drop`) that is
+  *not* on its near reattachment slope (low `ws_attach`) sits in a wake the
+  model can't produce, so its surface wind and turbulence are damped. This is
+  why Clifton, behind the Lion's Head / Twelve Apostles wall, comes out as the
+  calm summer SE refuge it really is rather than (wrongly) one of the windiest.
+
+These are patches for the model family's known lee blind spot; the mean field
+is not yet calibrated against weather-station records (the planned next step),
+so the rankings remain *relative*.
 
 Direction defaults to the summer south-easter; the "Winter north-wester"
 preset (or the compass) flips the scenario, with per-direction observed
