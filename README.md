@@ -62,14 +62,15 @@ Street-level wind uses local roughness from ESA WorldCover 10 m land cover,
 and OSM tall buildings (≥25 m) add urban-canyon damping of the mean wind plus
 a downwash gust diagnostic (street gusts approach ~75% of roof-height wind).
 
-The **"Sheltered pockets" overlay** goes one rung finer (25 m): a Winstral Sx
-upwind-horizon shelter parameter computed from Copernicus GLO-30 elevations
-redistributes the solved 75 m wind within each coarse cell, highlighting calm
-hollows, gully mouths and lee toes per wind direction
-(`scripts/compute_shelter.py`, ~1 min for all 16 directions). That is the
-information limit of open elevation data (~30 m); garden-scale shelter
-(hedges, walls, single houses) would need the City of Cape Town's 1–2 m LiDAR
-plus building-resolved CFD.
+The street-level wind and speed-up layers go one rung finer (25 m), fading in
+as you zoom: a Winstral Sx upwind-horizon shelter parameter computed from
+Copernicus GLO-30 elevations redistributes the solved 75 m wind within each
+coarse cell per wind direction (`scripts/compute_shelter.py`, ~1 min for all
+16 directions), so the wind map sharpens 200 m → 75 m → 25 m. Gust and
+turbulence layers stay at 75 m (rotor gusts penetrate sheltered hollows).
+That is the information limit of open elevation data (~30 m); garden-scale
+shelter (hedges, walls, single houses) would need the City of Cape Town's
+1–2 m LiDAR plus building-resolved CFD.
 
 ```bash
 .venv/bin/python scripts/precompute_web.py   # ~20 min: 64 solver runs -> web/data/
@@ -83,6 +84,27 @@ The ranking is ordered by a transparent **windiness score** (0–100 = 55% mean
 street wind + 30% gusts + 15% turbulence, each capped) — the ⓘ next to the
 Score column explains it in-app and every suburb popup shows its breakdown.
 Wind particles render in screen space, so trails stay crisp at every zoom.
+
+UI: the sidebar is two tabs (**Wind** = scenario controls, **Suburbs** =
+full-height ranking); 3D terrain and flow animation are map-corner buttons.
+The street-level wind layer sharpens to 25 m as you zoom and drops pins on the
+ten deepest reliably-calm pockets (low mean *and* low turbulence, so lee-rotor
+zones don't masquerade as picnic spots). Suburb marker colours and the ranking
+both key off the **windiness score**, and the wind-speed colour scale stretches
+to each scenario's own inflow so land variation fills the palette instead of
+washing out into the blue bottom third.
+
+### Downslope windstorm correction
+
+A pure mass-consistent solve puts a calm deficit in every lee, but the real
+Cape Doctor is a *downslope windstorm*: at Froude ≈ 1 the stable south-easter
+stays attached as it pours over the Table Mountain / Devil's Peak saddle and
+accelerates down the lee slope — which is why the upper City Bowl (Vredehoek,
+Oranjezicht) is so wind-blasted. `diagnostics.py` adds this attached lee-slope
+jet (mean boost up to ~1.9× where the upwind crest drop is moderate, tapering
+for high walls that separate). It is an empirical patch for the model family's
+known blind spot; the mean field is not yet calibrated against weather-station
+records (the planned next step), so the rankings remain *relative*.
 
 Direction defaults to the summer south-easter; the "Winter north-wester"
 preset (or the compass) flips the scenario, with per-direction observed

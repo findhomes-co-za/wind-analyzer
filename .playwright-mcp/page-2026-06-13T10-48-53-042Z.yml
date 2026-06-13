@@ -1,0 +1,102 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - heading "🌬️ Cape Town Wind Explorer" [level=1] [ref=e5]
+      - paragraph [ref=e6]: How Table Mountain shapes the wind. Pick a direction on the compass — see who gets blasted and who stays sheltered.
+      - generic [ref=e7]:
+        - button "km/h" [ref=e8] [cursor=pointer]
+        - button "How it works" [ref=e9] [cursor=pointer]
+    - tablist [ref=e10]:
+      - tab "🌬️ Wind" [ref=e11] [cursor=pointer]
+      - tab "📋 Suburbs" [ref=e12] [cursor=pointer]
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - button "☀️ Summer south‑easter" [ref=e15] [cursor=pointer]
+        - button "🌧️ Winter north‑wester" [ref=e16] [cursor=pointer]
+      - generic [ref=e17]:
+        - heading "Wind direction click the compass · ←/→ keys" [level=2] [ref=e18]
+        - group "wind direction compass" [ref=e20]:
+          - generic "N — 2% of summer hrs, 11% of winter · typical 26 km/h" [ref=e60] [cursor=pointer]
+          - generic "NNE — 0% of summer hrs, 1% of winter · typical 30 km/h" [ref=e61] [cursor=pointer]
+          - generic "NE — 0% of summer hrs, 0% of winter · typical 30 km/h" [ref=e62] [cursor=pointer]
+          - generic "ENE — 0% of summer hrs, 0% of winter · typical 30 km/h" [ref=e63] [cursor=pointer]
+          - generic "E — 0% of summer hrs, 1% of winter · typical 30 km/h" [ref=e64] [cursor=pointer]
+          - generic "ESE — 6% of summer hrs, 4% of winter · typical 36 km/h" [ref=e65] [cursor=pointer]
+          - generic "SE — 21% of summer hrs, 13% of winter · typical 39 km/h" [ref=e66] [cursor=pointer]
+          - generic "SSE — 29% of summer hrs, 13% of winter · typical 35 km/h" [ref=e67] [cursor=pointer]
+          - generic "S — 16% of summer hrs, 8% of winter · typical 24 km/h" [ref=e68] [cursor=pointer]
+          - generic "SSW — 6% of summer hrs, 4% of winter · typical 21 km/h" [ref=e69] [cursor=pointer]
+          - generic "SW — 4% of summer hrs, 3% of winter · typical 23 km/h" [ref=e70] [cursor=pointer]
+          - generic "WSW — 2% of summer hrs, 3% of winter · typical 26 km/h" [ref=e71] [cursor=pointer]
+          - generic "W — 2% of summer hrs, 4% of winter · typical 25 km/h" [ref=e72] [cursor=pointer]
+          - generic "WNW — 3% of summer hrs, 6% of winter · typical 25 km/h" [ref=e73] [cursor=pointer]
+          - generic "NW — 4% of summer hrs, 11% of winter · typical 26 km/h" [ref=e74] [cursor=pointer]
+          - generic "NNW — 4% of summer hrs, 18% of winter · typical 27 km/h" [ref=e75] [cursor=pointer]
+          - generic [ref=e76]: "N"
+          - generic [ref=e77]: E
+          - generic [ref=e78]: S
+          - generic [ref=e79]: W
+          - generic [ref=e81]: SE
+        - paragraph [ref=e82]: Blows 21% of summer hours · 13% of winter. Typical 39 km/h, strong 50 km/h.
+        - generic [ref=e83]:
+          - generic [ref=e84]: share of summer hours
+          - generic [ref=e86]: winter hours
+      - generic [ref=e88]:
+        - heading "Strength" [level=2] [ref=e89]
+        - generic [ref=e90]:
+          - button "Typical 39 km/h" [ref=e91] [cursor=pointer]:
+            - text: Typical
+            - generic [ref=e92]: 39 km/h
+          - button "Strong 50 km/h" [ref=e93] [cursor=pointer]:
+            - text: Strong
+            - generic [ref=e94]: 50 km/h
+        - paragraph [ref=e95]: Typical = median of observed hours from this direction; strong = top 10%.
+      - generic [ref=e96]:
+        - heading "Map layer" [level=2] [ref=e97]
+        - generic [ref=e98]:
+          - button "Street-level wind sharpens to 25 m as you zoom · pins mark the calmest pockets" [ref=e99] [cursor=pointer]:
+            - generic [ref=e101]:
+              - text: Street-level wind
+              - text: sharpens to 25 m as you zoom · pins mark the calmest pockets
+          - button "Gusts peak blasts — incl. tall-building downwash" [ref=e102] [cursor=pointer]:
+            - generic [ref=e104]:
+              - text: Gusts
+              - text: peak blasts — incl. tall-building downwash
+          - 'button "Speed-up vs open sea red: faster than the sea upwind · blue: slower (shelter + rough surface)" [ref=e105] [cursor=pointer]':
+            - generic [ref=e107]:
+              - text: Speed-up vs open sea
+              - text: "red: faster than the sea upwind · blue: slower (shelter + rough surface)"
+          - button "Turbulence bumpy, swirly air — rotors and eddies" [ref=e108] [cursor=pointer]:
+            - generic [ref=e110]:
+              - text: Turbulence
+              - text: bumpy, swirly air — rotors and eddies
+          - button "Effect zones Venturi · Coanda · rotors · building downwash" [ref=e111] [cursor=pointer]:
+            - generic [ref=e113]:
+              - text: Effect zones
+              - text: Venturi · Coanda · rotors · building downwash
+          - button "None just the terrain" [ref=e114] [cursor=pointer]:
+            - generic [ref=e116]:
+              - text: None
+              - text: just the terrain
+        - generic [ref=e118]:
+          - text: Layer opacity
+          - slider "Layer opacity" [ref=e119]: "72"
+        - paragraph [ref=e120]: "Dashed rectangle on the map = 75 m high-resolution zone around the Table Mountain chain; the wider metro runs at 200 m. 3D view and flow animation: buttons at the map's top-right corner."
+    - text: ▼
+    - generic [ref=e124]: "Model: 3-D mass-consistent wind solver (200 m metro + 75 m city detail) · Terrain: SRTM (AWS Open Data) · Wind record: Open-Meteo, point over False Bay · Land cover: ESA WorldCover · Buildings © OpenStreetMap contributors · Basemap © Mapbox © OpenStreetMap"
+  - main [ref=e125]:
+    - generic [ref=e126]:
+      - region "Map" [ref=e127]
+      - generic:
+        - generic:
+          - generic [ref=e128]:
+            - button "Zoom in" [ref=e129] [cursor=pointer]
+            - button "Zoom out" [ref=e131] [cursor=pointer]
+            - button "Reset bearing to north" [ref=e133]
+          - generic [ref=e135]:
+            - button "Toggle 3D terrain view" [ref=e136] [cursor=pointer]: 3D
+            - button "Toggle wind flow animation" [ref=e137] [cursor=pointer]: 〰
+        - link "Mapbox logo" [ref=e139] [cursor=pointer]:
+          - /url: https://www.mapbox.com/
+        - generic [ref=e140]: 5 km
+    - paragraph [ref=e143]: Loading wind fields…

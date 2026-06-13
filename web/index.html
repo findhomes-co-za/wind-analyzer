@@ -21,6 +21,12 @@
       </div>
     </header>
 
+    <nav class="tabbar" role="tablist">
+      <button data-tab="wind" class="on" role="tab">🌬️ Wind</button>
+      <button data-tab="suburbs" role="tab">📋 Suburbs</button>
+    </nav>
+
+    <div id="tab-wind" class="tabpane">
     <section class="presets">
       <button class="chip" data-preset="se" title="The famous summer wind — the Cape Doctor">
         ☀️ Summer south&#8209;easter</button>
@@ -56,12 +62,9 @@
           <input type="range" id="opacity" min="0" max="100" value="72">
         </label>
       </div>
-      <div class="row-controls">
-        <label class="check"><input type="checkbox" id="particlesChk" checked> Animate wind flow</label>
-        <button id="threeDBtn" class="ghost small">3D terrain</button>
-      </div>
       <p class="caption">Dashed rectangle on the map = 75 m high-resolution zone around
-        the Table Mountain chain; the wider metro runs at 200 m.</p>
+        the Table Mountain chain; the wider metro runs at 200 m. 3D view and
+        flow animation: buttons at the map's top-right corner.</p>
     </section>
 
     <section id="legendSection">
@@ -71,7 +74,9 @@
       </div>
       <div id="legendCategorical" hidden></div>
     </section>
+    </div><!-- /tab-wind -->
 
+    <div id="tab-suburbs" class="tabpane" hidden>
     <section id="tableSection">
       <h2>Suburb ranking <button id="csvBtn" class="ghost small" title="Download as CSV">CSV ⬇</button></h2>
       <input type="search" id="suburbSearch" placeholder="Search 82 suburbs — try Khayelitsha, Stellenbosch…" autocomplete="off">
@@ -83,10 +88,11 @@
           + <b>15%</b> turbulence index (capped at 0.7).</p>
         <p>Mean wind dominates; gusts and rotor turbulence add the "feels-like"
           violence that averages miss (why rotor suburbs like Vredehoek and
-          Clifton's slopes outrank their calm means). Each suburb's popup shows
-          its exact breakdown. Click any column header to re-sort — e.g. sort
-          by Wind for the pure mean-speed order; the # rank always follows the
-          score.</p>
+          Clifton's slopes outrank their calm means). Map markers are coloured
+          by this score too, so the dots and the table tell the same story.
+          Each suburb's popup shows its exact breakdown. Click any column
+          header to re-sort — e.g. sort by Wind for the pure mean-speed order;
+          the # rank always follows the score.</p>
       </div>
       <table id="rankTable">
         <thead>
@@ -105,6 +111,7 @@
       <p class="caption">Click a row to fly there. Icons: ⏩ Venturi channeling ·
         ↪️ Coanda deflection · 🌀 lee-rotor gusts · 🏙️ tall-building downwash.</p>
     </section>
+    </div><!-- /tab-suburbs -->
 
     <footer>
       Model: 3-D mass-consistent wind solver (200 m metro + 75 m city detail) ·
@@ -150,6 +157,15 @@
       layer (the "tablecloth"). A Froude-number ratio r² = Fr²/(1+Fr²) weights
       vertical vs horizontal adjustment — low Fr forces air <em>around</em> peaks
       rather than over them.</li>
+      <li><strong>Downslope windstorm:</strong> a pure mass-conserving model puts a
+      calm deficit in every lee — but at Froude ≈ 1 the stable south-easter
+      stays attached as it pours over the Table Mountain / Devil's Peak saddle
+      and <em>accelerates down</em> the lee slope, which is why the upper City
+      Bowl (Vredehoek, Oranjezicht) is so wind-blasted. We add this attached
+      lee-slope jet (mean boost up to ~1.9× where the upwind crest drop is
+      moderate, fading for very high walls that separate instead). It's an
+      empirical patch for the model family's known blind spot, not resolved
+      dynamics.</li>
       <li><strong>Wind input:</strong> three years of hourly reanalysis (Open-Meteo) at a
       point over False Bay, upwind of the peninsula. Each compass direction uses
       its own observed median / 90th-percentile speed and gust factor — so the
@@ -170,22 +186,34 @@
       cells in the Effect-zones layer). Exact corner accelerations need
       building-resolved CFD; treat these cells as "gustier than the colour
       suggests".</li>
-      <li><strong>Sheltered pockets (25 m):</strong> the flow solver runs at 75 m, but
-      the open elevation data carries real information down to ~30 m. The
-      pockets layer computes, for every 25 m pixel, the upwind horizon angle
-      to terrain within 1.2 km (the Winstral Sx shelter parameter, from
-      Copernicus GLO-30 elevations) and uses it to redistribute the solved
-      wind <em>within</em> each coarse cell — lighting up calm hollows, gully
-      mouths and lee toes. Below ~30 m the open data runs out: garden-scale
-      shelter (hedges, walls, single houses) would need LiDAR and
-      building-resolved CFD.</li>
+      <li><strong>Micro-resolution &amp; calm pockets (25 m):</strong> the flow solver
+      runs at 75 m, but the open elevation data carries real information down
+      to ~30 m — so the street-level wind (and speed-up) layers sharpen from
+      200 m → 75 m → 25 m as you zoom. For every 25 m pixel, the upwind
+      horizon angle to terrain within 1.2 km (the Winstral Sx shelter
+      parameter, from Copernicus GLO-30 elevations) redistributes the solved
+      wind <em>within</em> each coarse cell — revealing calm hollows, gully
+      mouths and lee toes. Green pins mark the ten deepest reliably-calm
+      pockets: low mean wind <em>and</em> low turbulence, so gusty lee-rotor
+      zones never count as calm. Gust and turbulence layers stay at 75 m —
+      rotor gusts penetrate sheltered hollows. Below ~30 m the open data runs
+      out: garden-scale shelter (hedges, walls, single houses) would need
+      LiDAR and building-resolved CFD.</li>
       <li><strong>Turbulence &amp; gusts:</strong> diagnosed from shear, wake deficit and a
       lee-rotor criterion (peaks at Fr ≈ 1), calibrated to the observed
       flat-terrain gust factor.</li>
+      <li><strong>Windiness score &amp; colours:</strong> the ranking and the suburb
+      marker colours use a 0–100 score (55% mean wind + 30% gusts + 15%
+      turbulence) — so a rotor suburb with a modest average but violent gusts
+      reads as windy, not calm. The wind-speed colour scale stretches to each
+      scenario's own inflow, so a calm day and a gale both use the full
+      palette rather than washing out.</li>
       <li><strong>Honest limitations:</strong> mass-consistent models conserve mass, not
-      momentum — separation and rotor dynamics are heuristics, and individual
-      streets are below even the 75 m grid. Trust the <em>relative ranking</em>
-      more than any single number.</li>
+      momentum — the downslope jet, separation and rotor dynamics are
+      empirical add-ons, not resolved, and individual streets are below even
+      the 75 m grid. The mean field is not yet calibrated against weather-station
+      records, so trust the <em>relative ranking</em> more than any single
+      number.</li>
     </ul>
     <h3>Data &amp; credits</h3>
     <p>Elevation: SRTM-derived terrarium tiles, AWS Open Data · Wind climatology:
@@ -197,6 +225,6 @@
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <script src="config.local.js"></script>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>

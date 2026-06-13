@@ -49,18 +49,28 @@ def _take_level(a3: np.ndarray, k: np.ndarray) -> np.ndarray:
     return np.take_along_axis(a3, k[None, :, :], axis=0)[0]
 
 
-def _upstream_max(zs, dx, dy, flow_u, flow_v, fetch=2500.0):
-    """Highest terrain within `fetch` metres upwind of every cell."""
+def _upstream_max(zs, dx, dy, flow_u, flow_v, fetch=2500.0, return_dist=False):
+    """Highest terrain within `fetch` metres upwind of every cell.
+
+    With return_dist, also returns the distance (m) at which that maximum
+    sits — i.e. how far away the sheltering/windstorm-driving crest is.
+    """
     mag = math.hypot(flow_u, flow_v)
     ux, uy = -flow_u / mag, -flow_v / mag
     ny, nx = zs.shape
     jj, ii = np.mgrid[0:ny, 0:nx].astype(float)
     zmax = zs.copy()
+    dmax = np.zeros_like(zs)
     step = min(dx, dy)
     for s in np.arange(step, fetch + 0.1, step):
         rows = jj + uy * s / dy
         cols = ii + ux * s / dx
-        zmax = np.maximum(zmax, map_coordinates(zs, [rows, cols], order=1, mode="nearest"))
+        shifted = map_coordinates(zs, [rows, cols], order=1, mode="nearest")
+        upd = shifted > zmax
+        zmax[upd] = shifted[upd]
+        dmax[upd] = s
+    if return_dist:
+        return zmax, dmax
     return zmax
 
 
@@ -102,16 +112,20 @@ def compute_surface(flow: FlowField, terrain: TerrainGrid, scn: WindScenario,
     #        (clipped: extrapolating from a near-surface cell must not
     #        amplify staircase noise near cliffs);
     #  f_r — roughness equilibrium: a boundary layer over rough urban/forest
-    #        surfaces carries less wind at 10 m than the marine inflow layer
-    #        does, for the same forcing aloft (blending height ~200 m),
-    #        normalised so open water = 1.
-    HB, Z0_SEA = 200.0, 2e-4
+    #        surfaces carries less wind at 10 m than the inflow layer does,
+    #        for the same forcing aloft (blending height ~200 m). Normalised
+    #        to the OBSERVED inflow's coastal roughness (scn.z0), not open
+    #        sea — the reference station already feels a blended surface, so
+    #        normalising to bare water over-damps all land (~0.63 urban);
+    #        with the inflow reference urban fabric sits near 0.73.
+    HB = 200.0
+    z0_ref = max(scn.z0, 1e-3)
     with np.errstate(divide="ignore", invalid="ignore"):
         f_h = np.log(10.0 / z0m) / np.log(np.maximum(z_agl, 4.0) / z0m)
         f_r = ((np.log(10.0 / z0m) / np.log(HB / z0m))
-               / (math.log(10.0 / Z0_SEA) / math.log(HB / Z0_SEA)))
+               / (math.log(10.0 / z0_ref) / math.log(HB / z0_ref)))
     f_h = np.clip(np.nan_to_num(f_h, nan=1.0), 0.6, 1.5)
-    fac = f_h * np.clip(np.nan_to_num(f_r, nan=1.0), 0.55, 1.05)
+    fac = f_h * np.clip(np.nan_to_num(f_r, nan=1.0), 0.55, 1.0)
     # Mild smoothing removes the staircase imprint of blocked cells.
     u10 = gaussian_filter(uc * fac, sigma=0.7)
     v10 = gaussian_filter(vc * fac, sigma=0.7)
@@ -126,6 +140,31 @@ def compute_surface(flow: FlowField, terrain: TerrainGrid, scn: WindScenario,
         u10 = u10 * damp
         v10 = v10 * damp
         speed10 = speed10 * damp
+
+    # --- downslope windstorm (mean enhancement) ------------------------------
+    # Mass-consistent solutions put a deficit in every lee, but at Fr ~ 1
+    # stably stratified flow pouring over a MODERATE crest (a saddle like the
+    # Table Mountain / Devil's Peak gap) stays attached and blasts the lee
+    # slope and its foot — the Cape Doctor's City Bowl jet. Flow over a very
+    # high wall (the Apostles above Camps Bay) separates instead: elevated
+    # rotors, gusty but with a calmer surface mean. We therefore boost the
+    # mean by up to ~1.9x where the upstream crest drop is moderate
+    # (~300-800 m), tapering off for deep-wall lees, scaled by the same
+    # Froude window that drives the rotor diagnostics.
+    fr = scn.froude()
+    fr_mod = math.exp(-(((fr - 1.0) / 0.6) ** 2))
+    # Rotor streamers off Table Mountain reach the full City Bowl: ~4 km fetch.
+    drop = _upstream_max(zs, dx, dy, *scn.components(1.0), fetch=4000.0) - zs
+    # ws_attach: flow stays attached over a MODERATE crest (saddle pour-over,
+    # ~300-800 m drop) and blasts the lee; very high walls separate and the
+    # surface mean stays lower (gusty rotors handled separately). ws_ramp
+    # gates out flat/near-flat lee. Boost up to ~1.9x, peaking at Fr ~ 1.
+    ws_attach = np.exp(-(((drop - 550.0) / 350.0) ** 2))
+    ws_ramp = np.clip((drop - 200.0) / 300.0, 0.0, 1.0)
+    ws = np.minimum(1.0 + 1.0 * fr_mod * ws_attach * ws_ramp, 1.9)
+    u10 = u10 * ws
+    v10 = v10 * ws
+    speed10 = speed10 * ws
 
     ref10 = max(scn.speed_10m, 0.1)
     speedup = speed10 / ref10
@@ -144,10 +183,7 @@ def compute_surface(flow: FlowField, terrain: TerrainGrid, scn: WindScenario,
     ustar = 0.4 * np.maximum(spd2 - spd_c, 0.0) / np.log(z2 / np.maximum(z_agl, 0.5))
     ti_shear = GUST_PEAK_FACTOR * ustar / np.maximum(speed10, 1.0)
 
-    fr = scn.froude()
-    fr_mod = math.exp(-(((fr - 1.0) / 0.6) ** 2))  # rotors peak when Fr ~ 1
-    # Rotor streamers off Table Mountain reach the full City Bowl: ~4 km fetch.
-    drop = _upstream_max(zs, dx, dy, *scn.components(1.0), fetch=4000.0) - zs
+    # fr / fr_mod / drop computed above (windstorm block); rotors peak at Fr ~ 1.
     rotor = np.clip((drop - 250.0) / 450.0, 0.0, 1.0) * fr_mod
 
     wake = np.clip(1.0 - speedup, 0.0, 1.0)

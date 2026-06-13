@@ -28,11 +28,13 @@ const state = {
   threeD: false,
   group: "all",
   search: "",
+  tab: "wind",
   sort: { key: "score", asc: false },
 };
 
 /* ---------------- colormaps ---------------- */
 const CMAPS = {
+  grays: [[242,244,247],[196,202,210],[138,146,157],[78,87,100],[35,42,54]],
   turbo: [[48,18,59],[70,107,227],[40,170,225],[28,220,154],[124,251,71],[217,221,28],[252,160,5],[230,80,4],[160,25,2],[122,4,3]],
   inferno: [[0,0,4],[31,12,72],[85,15,109],[136,34,106],[186,54,85],[227,89,51],[249,140,10],[249,201,50],[252,255,164]],
   rdbu_r: [[5,48,97],[33,102,172],[67,147,195],[146,197,222],[224,236,244],[247,247,247],[253,219,199],[244,165,130],[214,96,77],[178,24,43],[103,0,31]],
@@ -51,12 +53,11 @@ function cmapCss(name, t) {
 }
 
 const OVERLAYS = {
-  speed10: { label: "Street-level wind", sub: "what you feel on the ground (10 m, local roughness)", cmap: "turbo", range: [0, 35], unit: "speed", dot: cmapCss("turbo", 0.45) },
+  speed10: { label: "Street-level wind", sub: "sharpens to 25 m as you zoom · pins mark the calmest pockets", cmap: "turbo", range: [0, 35], unit: "speed", micro: true, dot: cmapCss("turbo", 0.45) },
   gust:    { label: "Gusts", sub: "peak blasts — incl. tall-building downwash", cmap: "turbo", range: [0, 45], unit: "speed", dot: cmapCss("turbo", 0.75) },
-  speedup: { label: "Speed-up vs open sea", sub: "red: faster than the sea upwind · blue: slower (shelter + rough surface)", cmap: "rdbu_r", range: [0, 2], unit: "x", dot: "#c43c39" },
+  speedup: { label: "Speed-up vs open sea", sub: "red: faster than the sea upwind · blue: slower (shelter + rough surface)", cmap: "rdbu_r", range: [0, 2], unit: "x", micro: true, dot: "#c43c39" },
   ti:      { label: "Turbulence", sub: "bumpy, swirly air — rotors and eddies", cmap: "inferno", range: [0, 0.7], unit: "", dot: "#b63679" },
   effects: { label: "Effect zones", sub: "Venturi · Coanda · rotors · building downwash", categorical: true, dot: "#ff6f00" },
-  pockets: { label: "Sheltered pockets", sub: "25 m micro-shelter — calm hollows & lee toes (zoom in)", pockets: true, dot: "#16a34a" },
   none:    { label: "None", sub: "just the terrain", dot: "#94a3b8" },
 };
 
@@ -164,7 +165,19 @@ function windScore(r) {
   return Math.round(p.mean + p.gust + p.ti);
 }
 function scoreColor(s) {
-  return `hsl(${Math.max(0, 120 - 1.55 * s)}, 65%, 40%)`;
+  return `hsl(${Math.max(0, 120 - 1.55 * s)}, 68%, 42%)`;
+}
+
+/* Display range for the colormap. Speed/gust scale to the scenario's inflow
+ * so land variation fills the palette (instead of all sitting in the blue
+ * bottom third of a fixed 0-35 m/s scale) and downslope jets reach red; the
+ * open-sea inflow lands at a consistent ~0.6 of the scale across scenarios.
+ * Speed-up and turbulence keep their fixed, physically-anchored ranges. */
+function overlayRange(key) {
+  const spec = OVERLAYS[key];
+  if (!RUN || !(key === "speed10" || key === "gust")) return spec.range;
+  const u = RUN.meta.speed_10m;
+  return key === "speed10" ? [0, Math.max(1.7 * u, 12)] : [0, Math.max(2.6 * u, 18)];
 }
 
 /* ---------------- units ---------------- */
@@ -246,6 +259,50 @@ function detailOpacityExpr() {
   return ["interpolate", ["linear"], ["zoom"],
           DETAIL_FADE[0], 0, DETAIL_FADE[1], state.overlay === "none" ? 0 : state.opacity];
 }
+/* Map-corner view controls: 3D terrain + wind animation (standard position
+ * for view toggles, right under zoom/compass). */
+class ViewControl {
+  onAdd() {
+    this._c = document.createElement("div");
+    this._c.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+    this._b3d = this._btn("3D", "Toggle 3D terrain view", () => { toggleThreeD(); this._sync(); });
+    this._bp = this._btn("〰", "Toggle wind flow animation", () => {
+      state.particles = !state.particles; this._sync();
+    });
+    this._sync();
+    return this._c;
+  }
+  _btn(label, title, fn) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = label;
+    b.title = title;
+    b.setAttribute("aria-label", title);
+    b.className = "view-ctrl-btn";
+    b.addEventListener("click", fn);
+    this._c.appendChild(b);
+    return b;
+  }
+  _sync() {
+    this._b3d.classList.toggle("on", state.threeD);
+    this._bp.classList.toggle("on", state.particles);
+  }
+  onRemove() { this._c.remove(); }
+}
+
+function toggleThreeD() {
+  state.threeD = !state.threeD;
+  if (state.threeD) {
+    if (!map.getSource("mapbox-dem"))
+      map.addSource("mapbox-dem", { type: "raster-dem", url: "mapbox://mapbox.mapbox-terrain-dem-v1", tileSize: 512, maxzoom: 14 });
+    map.setTerrain({ source: "mapbox-dem", exaggeration: 1.35 });
+    map.easeTo({ pitch: 62, bearing: 132, duration: 1400 });
+  } else {
+    map.setTerrain(null);
+    map.easeTo({ pitch: 0, bearing: 0, duration: 1000 });
+  }
+}
+
 function initMap() {
   mapboxgl.accessToken = MAPBOX_TOKEN;
   const B = GRIDS.region.bbox;
@@ -257,6 +314,7 @@ function initMap() {
     maxBounds: [[B.lon_min - 0.4, B.lat_min - 0.35], [B.lon_max + 0.4, B.lat_max + 0.35]],
   });
   map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), "top-right");
+  map.addControl(new ViewControl(), "top-right");
   map.addControl(new mapboxgl.ScaleControl({ unit: "metric" }), "bottom-right");
 
   map.on("load", () => {
@@ -326,6 +384,26 @@ function initMap() {
         .addTo(map);
     });
 
+    map.addSource("pocket-pins", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+    map.addLayer({
+      id: "pocket-pins", type: "circle", source: "pocket-pins",
+      layout: { visibility: "none" },
+      paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, 5.5, 14, 9],
+               "circle-color": "#15803d", "circle-stroke-width": 2.2, "circle-stroke-color": "#ffffff" },
+    });
+    map.on("click", "pocket-pins", (e) => {
+      const f = e.features[0];
+      map.flyTo({ center: f.geometry.coordinates, zoom: Math.max(map.getZoom(), 14.3), speed: 1.6 });
+      if (popup) popup.remove();
+      popup = new mapboxgl.Popup({ offset: 10 }).setLngLat(f.geometry.coordinates)
+        .setHTML(`<div class="popup-title">Calm pocket #${f.properties.n}</div>
+          <div class="popup-sub">~${fmtSpeed(f.properties.speed, true)} at 25 m scale, while the open sea
+          gets ${fmtSpeed(RUN.meta.speed_10m, true)}</div>`)
+        .addTo(map);
+    });
+    map.on("mouseenter", "pocket-pins", () => (map.getCanvas().style.cursor = "pointer"));
+    map.on("mouseleave", "pocket-pins", () => (map.getCanvas().style.cursor = ""));
+
     map.on("click", "suburb-circles", (e) => openSuburbPopup(e.features[0].properties.name));
     map.on("mouseenter", "suburb-circles", () => (map.getCanvas().style.cursor = "pointer"));
     map.on("mouseleave", "suburb-circles", () => (map.getCanvas().style.cursor = ""));
@@ -344,9 +422,10 @@ function initMap() {
 /* ---------------- field overlay rendering ---------------- */
 const offCanvas = document.createElement("canvas");
 const bigCanvas = document.createElement("canvas");
-function drawDomainField(domKey, overlayKey) {
+function drawDomainField(domKey, overlayKey, cmapOverride) {
   const g = GRIDS[domKey], run = RUN.domains[domKey];
   const spec = OVERLAYS[overlayKey];
+  const cmapName = cmapOverride || spec.cmap;
   offCanvas.width = g.nx; offCanvas.height = g.ny;
   const ctx = offCanvas.getContext("2d");
   const img = ctx.createImageData(g.nx, g.ny);
@@ -370,12 +449,12 @@ function drawDomainField(domKey, overlayKey) {
     }
   } else {
     const arr = run[overlayKey];
-    const [lo, hi] = spec.range;
+    const [lo, hi] = overlayRange(overlayKey);
     for (let j = 0; j < g.ny; j++) {
       const row = g.ny - 1 - j;
       for (let i = 0; i < g.nx; i++) {
         const src = j * g.nx + i, dst = 4 * (row * g.nx + i);
-        const c = cmap(spec.cmap, (arr[src] - lo) / (hi - lo));
+        const c = cmap(cmapName, (arr[src] - lo) / (hi - lo));
         d[dst] = c[0]; d[dst + 1] = c[1]; d[dst + 2] = c[2]; d[dst + 3] = 255;
       }
     }
@@ -390,31 +469,44 @@ function drawDomainField(domKey, overlayKey) {
   bctx.drawImage(offCanvas, 0, 0, bigCanvas.width, bigCanvas.height);
   return bigCanvas.toDataURL();
 }
+function microOpacityExpr() {
+  return ["interpolate", ["linear"], ["zoom"], 12.0, 0, 13.0,
+          state.overlay === "none" ? 0 : state.opacity];
+}
 function renderField() {
   if (!mapReady || !RUN) return;
-  // The pockets overlay draws on top of the normal street-level wind field.
-  const base = state.overlay === "pockets" ? "speed10" : state.overlay;
-  map.getSource("field-region").updateImage({ url: drawDomainField("region", base) });
-  map.getSource("field-detail").updateImage({ url: drawDomainField("detail", base) });
+  map.getSource("field-region").updateImage({ url: drawDomainField("region", state.overlay) });
+  map.getSource("field-detail").updateImage({ url: drawDomainField("detail", state.overlay) });
   map.setPaintProperty("field-region", "raster-opacity", state.overlay === "none" ? 0 : state.opacity);
   map.setPaintProperty("field-detail", "raster-opacity", detailOpacityExpr());
-  if (state.overlay === "pockets") {
+  // Mean-flow overlays sharpen to 25 m via the sub-grid shelter factor
+  // (gusts/turbulence stay 75 m: rotor gusts penetrate sheltered hollows).
+  if (OVERLAYS[state.overlay].micro) {
     const sh = shelterCache.get(state.dirIdx);
     if (sh) {
-      drawPockets(sh);
+      drawMicro(sh, state.overlay);
+      map.setPaintProperty("field-pockets", "raster-opacity", microOpacityExpr());
     } else {
       map.getSource("field-pockets").updateImage({ url: TRANSPARENT_PX });
+      const wanted = state.overlay;
       loadShelter(state.dirIdx)
-        .then(() => { if (state.overlay === "pockets" && mapReady) renderField(); })
+        .then(() => { if (state.overlay === wanted && mapReady) renderField(); })
         .catch(console.error);
     }
   } else {
     map.getSource("field-pockets").updateImage({ url: TRANSPARENT_PX });
+    setPinsVisible(false);
   }
 }
 
-function drawPockets(sh) {
+/* 25 m micro layer: the 75 m solved field redistributed by the sub-grid
+ * shelter factor, drawn with the SAME colormap as the active overlay so the
+ * wind map simply sharpens (200 m -> 75 m -> 25 m) as you zoom. Calm-pocket
+ * pins are extracted along the way (low mean AND low turbulence). */
+function drawMicro(sh, overlayKey) {
   const g = sh.grid, det = RUN.domains.detail, dg = GRIDS.detail;
+  const spec = OVERLAYS[overlayKey];
+  const [lo, hi] = overlayRange(overlayKey);
   const ref = Math.max(RUN.meta.speed_10m, 0.1);
   offCanvas.width = g.nx; offCanvas.height = g.ny;
   const ctx = offCanvas.getContext("2d");
@@ -430,21 +522,26 @@ function drawPockets(sh) {
     const lat = g.bbox.lat_min + (j + 0.5) * (g.bbox.lat_max - g.bbox.lat_min) / g.ny;
     fys[j] = (lat - dg.bbox.lat_min) / (dg.bbox.lat_max - dg.bbox.lat_min) * dg.ny - 0.5;
   }
+  const arr = det[overlayKey];
+  const collectPins = overlayKey === "speed10";
+  const cand = [];
   for (let j = 0; j < g.ny; j++) {
     const row = g.ny - 1 - j;
     for (let i = 0; i < g.nx; i++) {
-      const ratio = bilin(det.speed10, dg, fxs[i], fys[j]) * sh.factor[j * g.nx + i] / ref;
-      const dst = 4 * (row * g.nx + i);
-      // spotlight: calm pockets glow green, windy ground is dimmed
-      let r = 15, gg = 23, b = 42, a = 130;
-      if (ratio < 0.32) { r = 34; gg = 197; b = 94; a = 235; }
-      else if (ratio < 0.45) { r = 74; gg = 222; b = 128; a = 200; }
-      else if (ratio < 0.58) { r = 134; gg = 239; b = 172; a = 150; }
-      else if (ratio < 0.68) { a = 60; }
-      d[dst] = r; d[dst + 1] = gg; d[dst + 2] = b; d[dst + 3] = a;
+      const idx = j * g.nx + i, dst = 4 * (row * g.nx + i);
+      const v = bilin(arr, dg, fxs[i], fys[j]) * sh.factor[idx];
+      const c = cmap(spec.cmap, (v - lo) / (hi - lo));
+      d[dst] = c[0]; d[dst + 1] = c[1]; d[dst + 2] = c[2]; d[dst + 3] = 255;
+      if (collectPins && v / ref < 0.33
+          && bilin(det.ti, dg, fxs[i], fys[j]) < 0.45
+          && bilin(dg.elev, dg, fxs[i], fys[j]) > 2) {
+        cand.push([v / ref, i, j]);
+      }
     }
   }
   ctx.putImageData(img, 0, 0);
+  if (collectPins) updatePocketPins(sh, cand, ref);
+  else setPinsVisible(false);
   bigCanvas.width = g.nx * 2; bigCanvas.height = g.ny * 2;
   const bctx = bigCanvas.getContext("2d");
   bctx.imageSmoothingEnabled = true;
@@ -453,6 +550,33 @@ function drawPockets(sh) {
   const src = map.getSource("field-pockets");
   src.setCoordinates(corners(g.bbox));
   src.updateImage({ url: bigCanvas.toDataURL() });
+}
+
+/* Pins on the ~10 deepest calm pockets — visible at any zoom, click to fly. */
+function updatePocketPins(sh, cand, ref) {
+  const g = sh.grid;
+  cand.sort((a, b) => a[0] - b[0]);
+  const picked = [];
+  const minD2 = (800 / 25) ** 2;  // pins at least 800 m apart (25 m pixels)
+  for (const [ratio, i, j] of cand) {
+    if (picked.every((p) => (p.i - i) ** 2 + (p.j - j) ** 2 > minD2)) {
+      picked.push({ i, j, ratio });
+      if (picked.length >= 10) break;
+    }
+  }
+  const feats = picked.map((p, n) => {
+    const lon = g.bbox.lon_min + (p.i + 0.5) / g.nx * (g.bbox.lon_max - g.bbox.lon_min);
+    const lat = g.bbox.lat_min + (p.j + 0.5) / g.ny * (g.bbox.lat_max - g.bbox.lat_min);
+    return { type: "Feature", id: n,
+      properties: { speed: p.ratio * ref, n: n + 1 },
+      geometry: { type: "Point", coordinates: [lon, lat] } };
+  });
+  map.getSource("pocket-pins").setData({ type: "FeatureCollection", features: feats });
+  setPinsVisible(true);
+}
+function setPinsVisible(on) {
+  if (mapReady && map.getLayer("pocket-pins"))
+    map.setLayoutProperty("pocket-pins", "visibility", on ? "visible" : "none");
 }
 
 /* ---------------- particles (screen-space: crisp at every zoom) ----------------
@@ -544,7 +668,7 @@ function particleStep(t) {
   pCtx.fillRect(0, 0, w, h);
   pCtx.globalCompositeOperation = "source-over";
   pCtx.lineWidth = 1.5;
-  pCtx.strokeStyle = state.overlay === "none" || state.overlay === "effects"
+  pCtx.strokeStyle = ["none", "effects"].includes(state.overlay)
     ? "rgba(30,41,59,0.66)" : "rgba(255,255,255,0.85)";
   const R = GRIDS.region, dxm = R.dx_m;
   pCtx.beginPath();
@@ -575,12 +699,15 @@ function suburbCoord(name) {
   const s = STATIC.suburbs.find((x) => x.name === name);
   return s ? [s.lon, s.lat] : null;
 }
-/* Thresholds are relative to the open-sea inflow; land sits below 1.0 by
- * roughness alone, so "fully exposed" land is ~0.75+, deep shelter <0.45. */
+/* Badges describe LIVED exposure, so they key off the windiness score (mean
+ * + gusts + turbulence), not mean speed alone — a rotor suburb like Vredehoek
+ * has a modest mean but violent gusts and must not read as "Sheltered".
+ * A high-turbulence suburb is called out as gusty rather than merely windy. */
 function badge(r) {
-  if (r.speedup >= 0.75) return { t: "Wind-blasted", c: "#dc2626" };
-  if (r.speedup >= 0.6) return { t: "Exposed", c: "#ea580c" };
-  if (r.speedup >= 0.45) return { t: "Part-sheltered", c: "#ca8a04" };
+  const s = r.score, gusty = r.ti_mean >= 0.50;
+  if (s >= 55) return { t: gusty ? "Gust-blasted" : "Wind-blasted", c: "#b91c1c" };
+  if (s >= 45) return { t: gusty ? "Gusty" : "Exposed", c: "#ea580c" };
+  if (s >= 38) return { t: "Part-sheltered", c: "#ca8a04" };
   return { t: "Sheltered", c: "#16a34a" };
 }
 function effectTags(r) {
@@ -593,11 +720,12 @@ function effectTags(r) {
 }
 function updateSuburbSource() {
   if (!mapReady || !RUN) return;
+  // Marker colour = windiness score (the ranking quantity), so the map and
+  // the table tell the same story — windy suburbs are hot, calm ones cool.
   const features = RUN.ranking.map((r) => ({
     type: "Feature",
     id: r.suburb,
-    properties: { name: r.suburb, speed: r.speed10_mean,
-                  color: cmapCss("turbo", (r.speed10_mean - 4) / 14) },
+    properties: { name: r.suburb, score: r.score, color: scoreColor(r.score) },
     geometry: { type: "Point", coordinates: suburbCoord(r.suburb) },
   }));
   map.getSource("suburbs").setData({ type: "FeatureCollection", features });
@@ -682,16 +810,6 @@ function renderLegend() {
   const spec = OVERLAYS[state.overlay];
   const grad = $("#legendGradient"), cat = $("#legendCategorical");
   if (state.overlay === "none") { grad.hidden = true; cat.hidden = true; return; }
-  if (spec.pockets) {
-    grad.hidden = true; cat.hidden = false;
-    cat.innerHTML = `
-      <span><i style="background:#22c55e"></i>deep calm (&lt;32% of inflow)</span>
-      <span><i style="background:#4ade80"></i>calm pocket (&lt;45%)</span>
-      <span><i style="background:#86efac"></i>relative lull (&lt;58%)</span>
-      <span><i style="background:#0f172a"></i>windy ground (dimmed)</span>
-      <span style="flex-basis:100%">25 m terrain shelter × 75 m flow — zoom into the dashed zone</span>`;
-    return;
-  }
   if (spec.categorical) {
     grad.hidden = true; cat.hidden = false;
     cat.innerHTML = `
@@ -707,10 +825,16 @@ function renderLegend() {
     ctx.fillStyle = cmapCss(spec.cmap, x / (canvas.width - 1));
     ctx.fillRect(x, 0, 1, canvas.height);
   }
-  const [lo, hi] = spec.range, mid = (lo + hi) / 2;
+  const [lo, hi] = overlayRange(state.overlay), mid = (lo + hi) / 2;
   const f = (v) => spec.unit === "speed" ? fmtSpeed(v) + " " + UNITS[state.units].lbl
     : spec.unit === "x" ? v.toFixed(1) + "×" : v.toFixed(2);
   $("#legendLabels").innerHTML = `<span>${f(lo)}</span><span>${f(mid)}</span><span>${f(hi)}</span>`;
+  if (state.overlay === "speed10") {
+    cat.hidden = false;
+    cat.innerHTML = `<span style="flex-basis:100%"><i style="background:#15803d"></i>
+      pins = the 10 deepest reliably-calm pockets (low mean + low turbulence; click to fly).
+      Detail sharpens 200 m → 75 m → 25 m as you zoom.</span>`;
+  }
 }
 
 /* ---------------- probe ---------------- */
@@ -734,7 +858,7 @@ function onProbeMove(e) {
     const [sx, sy] = lngLatToGrid(sh.grid, e.lngLat.lng, e.lngLat.lat);
     if (sx >= 0 && sy >= 0 && sx <= sh.grid.nx - 1 && sy <= sh.grid.ny - 1) {
       const v = bilin(run.speed10, g, fx, fy) * bilin(sh.factor, sh.grid, sx, sy);
-      micro = ` · 25 m pocket ${fmtSpeed(v, true)}`;
+      micro = ` · 25 m ≈ ${fmtSpeed(v, true)}`;
     }
   }
   probe.innerHTML = `⛰ ${Math.round(elev)} m · 💨 ${fmtSpeed(bilin(run.speed10, g, fx, fy), true)} · ` +
@@ -757,7 +881,7 @@ function updateChip() {
 }
 function syncHash() {
   history.replaceState(null, "",
-    `#d=${SECTOR_LABELS[state.dirIdx]}&s=${state.strength}&o=${state.overlay}&u=${state.units}`);
+    `#d=${SECTOR_LABELS[state.dirIdx]}&s=${state.strength}&o=${state.overlay}&u=${state.units}&t=${state.tab}`);
 }
 function parseHash() {
   const p = new URLSearchParams(location.hash.slice(1));
@@ -766,6 +890,7 @@ function parseHash() {
   if (["typical", "strong"].includes(p.get("s"))) state.strength = p.get("s");
   if (OVERLAYS[p.get("o")]) state.overlay = p.get("o");
   if (UNITS[p.get("u")]) state.units = p.get("u");
+  if (["wind", "suburbs"].includes(p.get("t"))) state.tab = p.get("t");
 }
 
 /* ---------------- orchestration ---------------- */
@@ -795,6 +920,14 @@ function renderAll() {
   updateChip();
   syncHash();
   if (popup) { popup.remove(); popup = null; }
+}
+function setTab(t) {
+  state.tab = t;
+  document.querySelectorAll(".tabbar button").forEach((b) =>
+    b.classList.toggle("on", b.dataset.tab === t));
+  $("#tab-wind").hidden = t !== "wind";
+  $("#tab-suburbs").hidden = t !== "suburbs";
+  syncHash();
 }
 function updateStrengthSeg() {
   $("#strengthSeg").querySelectorAll("button").forEach((b) =>
@@ -847,21 +980,8 @@ function wireControls() {
       map.setPaintProperty("field-detail", "raster-opacity", detailOpacityExpr());
     }
   });
-  $("#particlesChk").checked = state.particles;
-  $("#particlesChk").addEventListener("change", (e) => (state.particles = e.target.checked));
-  $("#threeDBtn").addEventListener("click", () => {
-    state.threeD = !state.threeD;
-    $("#threeDBtn").classList.toggle("on", state.threeD);
-    if (state.threeD) {
-      if (!map.getSource("mapbox-dem"))
-        map.addSource("mapbox-dem", { type: "raster-dem", url: "mapbox://mapbox.mapbox-terrain-dem-v1", tileSize: 512, maxzoom: 14 });
-      map.setTerrain({ source: "mapbox-dem", exaggeration: 1.35 });
-      map.easeTo({ pitch: 62, bearing: 132, duration: 1400 });
-    } else {
-      map.setTerrain(null);
-      map.easeTo({ pitch: 0, bearing: 0, duration: 1000 });
-    }
-  });
+  document.querySelectorAll(".tabbar button").forEach((b) =>
+    b.addEventListener("click", () => setTab(b.dataset.tab)));
   $("#unitsBtn").addEventListener("click", () => {
     state.units = state.units === "kmh" ? "ms" : state.units === "ms" ? "kt" : "kmh";
     $("#unitsBtn").textContent = UNITS[state.units].lbl;
@@ -927,6 +1047,7 @@ async function boot() {
     buildOverlayList();
     buildGroupFilters();
     wireControls();
+    setTab(state.tab);
     updateStrengthSeg();
     initMap();
     initParticles();
