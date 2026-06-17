@@ -6,27 +6,36 @@
 <title>Cape Town Wind Explorer — the Cape Doctor, modelled</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌬️</text></svg>">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 <div id="app">
   <aside id="sidebar">
     <header>
       <h1><span class="logo">🌬️</span> Cape Town Wind Explorer</h1>
-      <p class="tagline">How Table Mountain shapes the wind. Pick a direction on the
-        compass — see who gets blasted and who stays sheltered.</p>
+      <p class="tagline">How Table Mountain shapes the wind — pick a direction and
+        see who gets blasted and who stays sheltered.</p>
       <div class="header-actions">
-        <button id="unitsBtn" class="ghost" title="Toggle units">km/h</button>
         <button id="aboutBtn" class="ghost">How it works</button>
+        <button id="settingsBtn" class="ghost" title="Units &amp; map settings">⚙ Settings</button>
+      </div>
+      <div id="settingsPanel" hidden>
+        <div class="settings-row">
+          <span class="settings-lbl">Units</span>
+          <div class="seg small" id="unitsSeg">
+            <button data-unit="kmh">km/h</button>
+            <button data-unit="ms">m/s</button>
+            <button data-unit="kt">kt</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <label class="slider-label">Map opacity
+            <input type="range" id="opacity" min="0" max="100" value="72">
+          </label>
+        </div>
       </div>
     </header>
 
-    <nav class="tabbar" role="tablist">
-      <button data-tab="wind" class="on" role="tab">🌬️ Wind</button>
-      <button data-tab="suburbs" role="tab">📋 Suburbs</button>
-    </nav>
-
-    <div id="tab-wind" class="tabpane">
     <section class="presets">
       <button class="chip" data-preset="se" title="The famous summer wind — the Cape Doctor">
         ☀️ Summer south&#8209;easter</button>
@@ -44,41 +53,19 @@
       </div>
     </section>
 
-    <section>
-      <h2>Strength</h2>
-      <div class="seg" id="strengthSeg">
-        <button data-strength="typical">Typical<small id="typSpeed"></small></button>
-        <button data-strength="strong">Strong<small id="strSpeed"></small></button>
+    <section id="viewSection">
+      <h2>View</h2>
+      <div class="seg" id="viewSeg">
+        <button data-view="2d" type="button">🗺️ 2D map</button>
+        <button data-view="3d" type="button">⛰️ 3D terrain</button>
       </div>
-      <p class="caption">Typical = median of observed hours from this direction;
-        strong = top 10%.</p>
     </section>
 
-    <section>
-      <h2>Map layer</h2>
-      <div id="overlayList"></div>
-      <div class="row-controls">
-        <label class="slider-label">Layer opacity
-          <input type="range" id="opacity" min="0" max="100" value="72">
-        </label>
-      </div>
-      <p class="caption">Dashed rectangle on the map = 75 m high-resolution zone around
-        the Table Mountain chain; the wider metro runs at 200 m. 3D view and
-        flow animation: buttons at the map's top-right corner.</p>
-    </section>
-
-    <section id="legendSection">
-      <div id="legendGradient">
-        <canvas id="legendCanvas" width="240" height="12"></canvas>
-        <div id="legendLabels"></div>
-      </div>
-      <div id="legendCategorical" hidden></div>
-    </section>
-    </div><!-- /tab-wind -->
-
-    <div id="tab-suburbs" class="tabpane" hidden>
+    <!-- Ranking lives directly under the controls now (no tabs): change the
+         compass above and the ranking below re-sorts live. -->
     <section id="tableSection">
-      <h2>Suburb ranking <button id="csvBtn" class="ghost small" title="Download as CSV">CSV ⬇</button></h2>
+      <h2>Suburb ranking <span class="hint" id="rankDirNote"></span>
+        <button id="csvBtn" class="ghost small" title="Download as CSV">CSV ⬇</button></h2>
       <input type="search" id="suburbSearch" placeholder="Search 82 suburbs — try Khayelitsha, Stellenbosch…" autocomplete="off">
       <div class="filters" id="groupFilters"></div>
       <div id="scorePopover" hidden>
@@ -94,36 +81,42 @@
           header to re-sort — e.g. sort by Wind for the pure mean-speed order;
           the # rank always follows the score.</p>
       </div>
-      <table id="rankTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th data-sort="suburb">Suburb</th>
-            <th data-sort="score" class="num sorted" title="Windiness score 0–100 — the ranking order">
-              Score<button id="scoreInfoBtn" type="button" title="How is the score calculated?">ⓘ</button></th>
-            <th data-sort="speed10_mean" class="num" title="Mean street-level wind">Wind</th>
-            <th data-sort="gust_mean" class="num" title="Estimated gusts">Gust</th>
-            <th data-sort="ti_mean" class="num" title="Turbulence index">Turb</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <p class="caption">Click a row to fly there. Icons: ⏩ Venturi channeling ·
-        ↪️ Coanda deflection · 🌀 lee-rotor gusts · 🏙️ tall-building downwash.</p>
+      <div id="tableScroll">
+        <table id="rankTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th data-sort="suburb">Suburb</th>
+              <th data-sort="score" class="num sorted" title="Windiness score 0–100 — the ranking order">
+                Score<button id="scoreInfoBtn" type="button" title="How is the score calculated?">ⓘ</button></th>
+              <th data-sort="speed10_mean" class="num" title="Mean street-level wind">Wind</th>
+              <th data-sort="gust_mean" class="num" title="Estimated gusts">Gust</th>
+              <th data-sort="ti_mean" class="num" title="Turbulence index">Turb</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p class="caption">Click a row to fly there. Icons: ⏩ Venturi channeling ·
+          ↪️ Coanda deflection · 🌀 lee-rotor gusts · 🏙️ tall-building downwash.</p>
+        <footer>
+          Model: 3-D mass-consistent wind solver (200 m metro + 75 m city detail) ·
+          Terrain: SRTM (AWS Open Data) · Wind record: Open-Meteo, point over False Bay ·
+          Land cover: ESA WorldCover · Buildings © OpenStreetMap contributors ·
+          Basemap © Mapbox © OpenStreetMap
+        </footer>
+      </div>
     </section>
-    </div><!-- /tab-suburbs -->
-
-    <footer>
-      Model: 3-D mass-consistent wind solver (200 m metro + 75 m city detail) ·
-      Terrain: SRTM (AWS Open Data) · Wind record: Open-Meteo, point over False Bay ·
-      Land cover: ESA WorldCover · Buildings © OpenStreetMap contributors ·
-      Basemap © Mapbox © OpenStreetMap
-    </footer>
   </aside>
 
   <main id="mapwrap">
     <div id="map"></div>
     <div id="scenarioChip"></div>
+    <div id="mapLegend">
+      <div class="legend-title">Street-level wind</div>
+      <canvas id="legendCanvas" width="200" height="10"></canvas>
+      <div id="legendLabels"></div>
+      <div class="legend-note"><i></i>pins = the 10 calmest pockets · click to fly</div>
+    </div>
     <div id="probe" hidden></div>
     <div id="loading"><div class="spinner"></div><p>Loading wind fields…</p></div>
   </main>
@@ -144,9 +137,9 @@
     north-west and the sheltered and exposed suburbs swap roles.</p>
     <p>This site shows a physics model of that, from Cape Point to Durbanville to
     Stellenbosch. Colours = how hard the wind blows at street level. Moving
-    streaks = the wind's path. The dashed rectangle is a high-resolution
-    (75&nbsp;m) zone around the Table Mountain chain where valleys and ridges
-    that funnel wind are resolved in more detail.</p>
+    streaks = the wind's path. Around the Table Mountain chain the model runs at
+    a higher resolution (75&nbsp;m, sharpening to 25&nbsp;m as you zoom) so the
+    valleys and ridges that funnel wind are resolved in more detail.</p>
     <h3>The numbers (for the curious)</h3>
     <ul>
       <li><strong>Model:</strong> a 3-D <em>mass-consistent</em> diagnostic wind model
@@ -176,8 +169,9 @@
       north-wester is as strong as winter really makes it.</li>
       <li><strong>Two nested grids:</strong> the metro region (Cape Point → Durbanville →
       Stellenbosch/Helderberg) at 200 m, and a 75 m detail grid with finer
-      vertical levels over the Table Mountain chain. The map blends them as
-      you zoom.</li>
+      vertical levels over the Table Mountain chain. They are composited into
+      one seamless field — the finer grids over the mountain chain, the coarse
+      grid everywhere else, at matched opacity.</li>
       <li><strong>Street-level wind:</strong> the displayed speed is 10 m above ground
       corrected through the <em>local</em> surface roughness from ESA WorldCover
       10 m land cover — dense urban fabric, forest, vineyards and open water
@@ -229,6 +223,6 @@
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <script src="config.local.js"></script>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>

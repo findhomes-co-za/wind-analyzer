@@ -45,10 +45,14 @@ Outputs land in `output/`: `REPORT.md`, `ranking.csv`, `terrain.png`,
 
 ## Interactive website
 
-`web/` is a static explorer (Mapbox GL) with animated flow particles, five
-overlays, a climatological wind-rose direction picker (16 directions x
-typical/strong, all precomputed), suburb popups, a hover probe, a searchable
-sortable ranking table (~82 suburbs in 9 groups) and 3D terrain.
+`web/` is a static explorer (Mapbox GL) showing a single street-level wind map
+with animated flow particles, a climatological wind-rose direction picker (16
+directions at the strong / top-10% blow, all precomputed), suburb popups, a
+hover probe, a searchable sortable ranking table (~82 suburbs in 9 groups) and
+3D terrain. (Gusts, speed-up, turbulence and effect-zones are computed and feed
+the suburb ranking, hover probe and popups, but are no longer separate map
+layers — the displayed field is near-linear in inflow, so the single strong
+street-level layer carries the map; see `docs/ux-panel-analysis.md`.)
 
 Two nested model domains per scenario:
 
@@ -62,12 +66,11 @@ Street-level wind uses local roughness from ESA WorldCover 10 m land cover,
 and OSM tall buildings (≥25 m) add urban-canyon damping of the mean wind plus
 a downwash gust diagnostic (street gusts approach ~75% of roof-height wind).
 
-The street-level wind and speed-up layers go one rung finer (25 m), fading in
-as you zoom: a Winstral Sx upwind-horizon shelter parameter computed from
-Copernicus GLO-30 elevations redistributes the solved 75 m wind within each
-coarse cell per wind direction (`scripts/compute_shelter.py`, ~1 min for all
-16 directions), so the wind map sharpens 200 m → 75 m → 25 m. Gust and
-turbulence layers stay at 75 m (rotor gusts penetrate sheltered hollows).
+The street-level wind map goes one rung finer (25 m), fading in as you zoom:
+a Winstral Sx upwind-horizon shelter parameter computed from Copernicus GLO-30
+elevations redistributes the solved 75 m wind within each coarse cell per wind
+direction (`scripts/compute_shelter.py`, ~1 min for all 16 directions), so the
+wind map sharpens 200 m → 75 m → 25 m.
 That is the information limit of open elevation data (~30 m); garden-scale
 shelter (hedges, walls, single houses) would need the City of Cape Town's
 1–2 m LiDAR plus building-resolved CFD.
@@ -85,8 +88,10 @@ street wind + 30% gusts + 15% turbulence, each capped) — the ⓘ next to the
 Score column explains it in-app and every suburb popup shows its breakdown.
 Wind particles render in screen space, so trails stay crisp at every zoom.
 
-UI: the sidebar is two tabs (**Wind** = scenario controls, **Suburbs** =
-full-height ranking); 3D terrain and flow animation are map-corner buttons.
+UI: the sidebar is one panel — the compass + a 2D/3D switch stay pinned at the
+top while the suburb ranking scrolls in its own region directly below and
+re-sorts live as you change wind direction. 3D terrain also has a map-corner
+button; wind-flow animation is always on.
 The street-level wind layer sharpens to 25 m as you zoom and drops pins on the
 ten deepest reliably-calm pockets (low mean *and* low turbulence, so lee-rotor
 zones don't masquerade as picnic spots). Suburb marker colours and the ranking

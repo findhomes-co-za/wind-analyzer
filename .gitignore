@@ -31,3 +31,4 @@ output-typical/fields.npz
 .pytest_cache/
 .coverage
 htmlcov/
+.playwright-mcp

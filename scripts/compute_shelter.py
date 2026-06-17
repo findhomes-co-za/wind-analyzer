@@ -19,7 +19,8 @@ from wind_analyzer.shelter import fetch_micro_dem, shelter_factor
 from wind_analyzer.winddata import SECTOR_LABELS
 
 # Must match the "detail" domain bbox in precompute_web.py.
-BBOX = dict(lon_min=18.30, lon_max=18.50, lat_min=-34.10, lat_max=-33.84)
+# Must match the "detail" domain bbox in precompute_web.py.
+BBOX = dict(lon_min=18.30, lon_max=18.52, lat_min=-34.40, lat_max=-33.84)
 RES_M = 25.0
 
 

@@ -1,34 +1,34 @@
 /* Cape Town Wind Explorer — frontend.
  * Two nested precomputed domains per scenario: a metro "region" grid (200 m,
  * Cape Point to Durbanville to Stellenbosch) and a "detail" grid (75 m) over
- * the Table Mountain chain, blended by zoom. 16 directions x 2 strengths.
- * Street-level wind: 10 m AGL over WorldCover roughness, with OSM
- * tall-building canyon/downwash diagnostics.
+ * the Table Mountain chain, blended by zoom. 16 directions, strong strength
+ * only (the displayed field is near-linear in inflow — see
+ * docs/ux-panel-analysis.md §0). The map shows street-level wind: 10 m AGL over
+ * WorldCover roughness, with OSM tall-building canyon/downwash diagnostics.
  */
 "use strict";
 
 // Token comes from web/config.local.js (window.MAPBOX_TOKEN) — keep it out of app.js
 const MAPBOX_TOKEN = window.MAPBOX_TOKEN || "YOUR_MAPBOX_TOKEN";
+// Bump when web/data/* is regenerated so browsers refetch instead of caching.
+const DATA_VERSION = "2026-06-17-peninsula";
 const SECTOR_LABELS = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
 const TRANSPARENT_PX = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 const GROUP_ORDER = ["City Bowl", "Atlantic Seaboard", "Southern Suburbs", "South Peninsula",
                      "Cape Flats", "Northern Suburbs", "Helderberg", "Winelands"];
 const UPSCALE = { region: 3, detail: 5 };
-const DETAIL_FADE = [10.5, 11.7];   // zoom range over which the 75 m layer fades in
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const state = {
   dirIdx: 6,            // SE
-  strength: "strong",
-  overlay: "speed10",
+  strength: "strong",   // fixed: the top-10% blow (see docs/ux-panel-analysis.md §0)
   units: "kmh",
   opacity: 0.72,
   particles: !reduceMotion,
   threeD: false,
   group: "all",
   search: "",
-  tab: "wind",
   sort: { key: "score", asc: false },
 };
 
@@ -52,13 +52,13 @@ function cmapCss(name, t) {
   return `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
 }
 
+// Single map layer: street-level wind. (Gusts / speed-up / turbulence /
+// effect-zones were removed as map layers — the displayed field is near-linear
+// in inflow and the colour scale auto-stretches, so the extra layers added
+// clutter, not information. Gusts & turbulence live on as suburb-ranking inputs
+// and in the hover probe / suburb popups.)
 const OVERLAYS = {
-  speed10: { label: "Street-level wind", sub: "sharpens to 25 m as you zoom · pins mark the calmest pockets", cmap: "turbo", range: [0, 35], unit: "speed", micro: true, dot: cmapCss("turbo", 0.45) },
-  gust:    { label: "Gusts", sub: "peak blasts — incl. tall-building downwash", cmap: "turbo", range: [0, 45], unit: "speed", dot: cmapCss("turbo", 0.75) },
-  speedup: { label: "Speed-up vs open sea", sub: "red: faster than the sea upwind · blue: slower (shelter + rough surface)", cmap: "rdbu_r", range: [0, 2], unit: "x", micro: true, dot: "#c43c39" },
-  ti:      { label: "Turbulence", sub: "bumpy, swirly air — rotors and eddies", cmap: "inferno", range: [0, 0.7], unit: "", dot: "#b63679" },
-  effects: { label: "Effect zones", sub: "Venturi · Coanda · rotors · building downwash", categorical: true, dot: "#ff6f00" },
-  none:    { label: "None", sub: "just the terrain", dot: "#94a3b8" },
+  speed10: { label: "Street-level wind", cmap: "turbo", range: [0, 35], unit: "speed" },
 };
 
 /* ---------------- data ---------------- */
@@ -68,6 +68,7 @@ const runCache = new Map();
 const shelterCache = new Map();   // dirIdx -> {grid:{bbox,nx,ny}, factor}
 let map = null, mapReady = false, loadSeq = 0;
 let hoverFeatureId = null, popup = null;
+let viewControl = null;     // map-corner 3D / animation toggles (synced to panel)
 
 function b64ToU8(b64) {
   const bin = atob(b64);
@@ -112,20 +113,18 @@ function gridToLngLat(g, fx, fy) {
 async function loadRun(dirIdx, strength) {
   const key = `${dirIdx}_${strength}`;
   if (runCache.has(key)) return runCache.get(key);
-  const resp = await fetch(`data/run_${String(dirIdx).padStart(2, "0")}_${strength}.json`);
+  const resp = await fetch(`data/run_${String(dirIdx).padStart(2, "0")}_${strength}.json?v=${DATA_VERSION}`);
   if (!resp.ok) throw new Error(`run fetch failed: ${resp.status}`);
   const j = await resp.json();
   const run = { meta: j.meta, ranking: j.ranking, domains: {} };
   for (const [name, d] of Object.entries(j.domains)) {
     run.domains[name] = {
       speed10: dequant(d.fields.speed10),
-      gust: dequant(d.fields.gust),
+      gust: dequant(d.fields.gust),     // hover probe + suburb popups
       speedup: dequant(d.fields.speedup),
-      ti: dequant(d.fields.ti),
-      rotor: dequant(d.fields.rotor),
+      ti: dequant(d.fields.ti),         // probe + calm-pocket detection
       u10: dequant(d.fields.u10),
-      v10: dequant(d.fields.v10),
-      effects: b64ToU8(d.fields.effects.b64),
+      v10: dequant(d.fields.v10),       // wind-flow particles
     };
   }
   run.ranking.forEach((r) => { r.score = windScore(r); });
@@ -139,7 +138,7 @@ async function loadRun(dirIdx, strength) {
 
 async function loadShelter(dirIdx) {
   if (shelterCache.has(dirIdx)) return shelterCache.get(dirIdx);
-  const resp = await fetch(`data/shelter_${String(dirIdx).padStart(2, "0")}.json`);
+  const resp = await fetch(`data/shelter_${String(dirIdx).padStart(2, "0")}.json?v=${DATA_VERSION}`);
   if (!resp.ok) throw new Error(`shelter fetch failed: ${resp.status}`);
   const j = await resp.json();
   const s = { grid: { bbox: j.bbox, nx: j.shape[1], ny: j.shape[0] }, factor: dequant(j.factor) };
@@ -168,16 +167,13 @@ function scoreColor(s) {
   return `hsl(${Math.max(0, 120 - 1.55 * s)}, 68%, 42%)`;
 }
 
-/* Display range for the colormap. Speed/gust scale to the scenario's inflow
- * so land variation fills the palette (instead of all sitting in the blue
+/* Display range for the street-level wind colormap. It scales to the scenario's
+ * inflow so land variation fills the palette (instead of sitting in the blue
  * bottom third of a fixed 0-35 m/s scale) and downslope jets reach red; the
- * open-sea inflow lands at a consistent ~0.6 of the scale across scenarios.
- * Speed-up and turbulence keep their fixed, physically-anchored ranges. */
-function overlayRange(key) {
-  const spec = OVERLAYS[key];
-  if (!RUN || !(key === "speed10" || key === "gust")) return spec.range;
-  const u = RUN.meta.speed_10m;
-  return key === "speed10" ? [0, Math.max(1.7 * u, 12)] : [0, Math.max(2.6 * u, 18)];
+ * open-sea inflow lands at a consistent ~0.6 of the scale across scenarios. */
+function overlayRange() {
+  if (!RUN) return OVERLAYS.speed10.range;
+  return [0, Math.max(1.7 * RUN.meta.speed_10m, 12)];
 }
 
 /* ---------------- units ---------------- */
@@ -242,10 +238,8 @@ function updateRose() {
     `<path d="M${x2},${y2} L${hx1},${hy1} L${hx2},${hy2} Z" fill="#dc2626"/>`;
   $("#roseDirLbl").textContent = s.label;
   $("#roseCaption").textContent = s.sparse
-    ? `${s.label} rarely blows here — sparse record, overall speeds used.`
-    : `Blows ${Math.round(s.summer_share * 100)}% of summer hours · ${Math.round(s.winter_share * 100)}% of winter. Typical ${fmtSpeed(s.speed_median, true)}, strong ${fmtSpeed(s.speed_p90, true)}.`;
-  $("#typSpeed").textContent = fmtSpeed(s.speed_median, true);
-  $("#strSpeed").textContent = fmtSpeed(s.speed_p90, true);
+    ? `${s.label} rarely blows here — sparse record, overall speeds used. Map shows a strong blow.`
+    : `Blows ${Math.round(s.summer_share * 100)}% of summer hours · ${Math.round(s.winter_share * 100)}% of winter. Map shows the strong blow (~${fmtSpeed(s.speed_p90, true)}); typical is ~${fmtSpeed(s.speed_median, true)}.`;
 }
 
 /* ---------------- map ---------------- */
@@ -255,20 +249,13 @@ function corners(bbox) {
     [bbox.lon_max, bbox.lat_min], [bbox.lon_min, bbox.lat_min],
   ];
 }
-function detailOpacityExpr() {
-  return ["interpolate", ["linear"], ["zoom"],
-          DETAIL_FADE[0], 0, DETAIL_FADE[1], state.overlay === "none" ? 0 : state.opacity];
-}
-/* Map-corner view controls: 3D terrain + wind animation (standard position
- * for view toggles, right under zoom/compass). */
+/* Map-corner view control: 2D/3D terrain toggle (standard position, right under
+ * zoom/compass). Wind-flow animation is always on, so it has no button. */
 class ViewControl {
   onAdd() {
     this._c = document.createElement("div");
     this._c.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-    this._b3d = this._btn("3D", "Toggle 3D terrain view", () => { toggleThreeD(); this._sync(); });
-    this._bp = this._btn("〰", "Toggle wind flow animation", () => {
-      state.particles = !state.particles; this._sync();
-    });
+    this._b3d = this._btn("3D", "Toggle 3D terrain view", () => { toggleThreeD(); syncViewButtons(); });
     this._sync();
     return this._c;
   }
@@ -285,7 +272,6 @@ class ViewControl {
   }
   _sync() {
     this._b3d.classList.toggle("on", state.threeD);
-    this._bp.classList.toggle("on", state.particles);
   }
   onRemove() { this._c.remove(); }
 }
@@ -314,7 +300,8 @@ function initMap() {
     maxBounds: [[B.lon_min - 0.4, B.lat_min - 0.35], [B.lon_max + 0.4, B.lat_max + 0.35]],
   });
   map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), "top-right");
-  map.addControl(new ViewControl(), "top-right");
+  viewControl = new ViewControl();
+  map.addControl(viewControl, "top-right");
   map.addControl(new mapboxgl.ScaleControl({ unit: "metric" }), "bottom-right");
 
   map.on("load", () => {
@@ -325,22 +312,11 @@ function initMap() {
       paint: { "raster-opacity": state.opacity, "raster-fade-duration": 120 } }, beforeId);
     map.addSource("field-detail", { type: "image", url: TRANSPARENT_PX, coordinates: corners(GRIDS.detail.bbox) });
     map.addLayer({ id: "field-detail", type: "raster", source: "field-detail",
-      paint: { "raster-opacity": detailOpacityExpr(), "raster-fade-duration": 120 } }, beforeId);
+      paint: { "raster-opacity": 0, "raster-fade-duration": 120 } }, beforeId);
 
     map.addSource("field-pockets", { type: "image", url: TRANSPARENT_PX, coordinates: corners(GRIDS.detail.bbox) });
     map.addLayer({ id: "field-pockets", type: "raster", source: "field-pockets",
-      paint: { "raster-opacity": ["interpolate", ["linear"], ["zoom"], 11, 0, 12.2, 0.92],
-               "raster-fade-duration": 120 } }, beforeId);
-
-    // 75 m high-resolution zone outline
-    const D = GRIDS.detail.bbox;
-    map.addSource("detail-outline", { type: "geojson", data: {
-      type: "Feature", properties: {},
-      geometry: { type: "LineString", coordinates: [
-        [D.lon_min, D.lat_min], [D.lon_max, D.lat_min], [D.lon_max, D.lat_max],
-        [D.lon_min, D.lat_max], [D.lon_min, D.lat_min]] } } });
-    map.addLayer({ id: "detail-outline", type: "line", source: "detail-outline",
-      paint: { "line-color": "#4f46e5", "line-width": 1, "line-dasharray": [3, 3], "line-opacity": 0.5 } });
+      paint: { "raster-opacity": 0, "raster-fade-duration": 120 } }, beforeId);
 
     map.addSource("suburbs", { type: "geojson", data: { type: "FeatureCollection", features: [] }, promoteId: "name" });
     map.addLayer({
@@ -422,40 +398,41 @@ function initMap() {
 /* ---------------- field overlay rendering ---------------- */
 const offCanvas = document.createElement("canvas");
 const bigCanvas = document.createElement("canvas");
-function drawDomainField(domKey, overlayKey, cmapOverride) {
+// Cells of the region grid that the detail box covers — punched transparent
+// so the region and detail layers never overlap (no opacity stacking / seam).
+function detailHoleInRegion() {
+  const R = GRIDS.region.bbox, D = GRIDS.detail.bbox, g = GRIDS.region;
+  const lonr = R.lon_max - R.lon_min, latr = R.lat_max - R.lat_min;
+  const c0 = Math.ceil((D.lon_min - R.lon_min) / lonr * g.nx);
+  const c1 = Math.floor((D.lon_max - R.lon_min) / lonr * g.nx);
+  const r0 = Math.ceil(g.ny - 0.5 - (D.lat_max - R.lat_min) / latr * g.ny);
+  const r1 = Math.floor(g.ny - 0.5 - (D.lat_min - R.lat_min) / latr * g.ny);
+  return { c0, c1, r0, r1 };
+}
+
+function drawDomainField(domKey) {
   const g = GRIDS[domKey], run = RUN.domains[domKey];
-  const spec = OVERLAYS[overlayKey];
-  const cmapName = cmapOverride || spec.cmap;
+  const cmapName = OVERLAYS.speed10.cmap;
   offCanvas.width = g.nx; offCanvas.height = g.ny;
   const ctx = offCanvas.getContext("2d");
   const img = ctx.createImageData(g.nx, g.ny);
   const d = img.data;
-  if (overlayKey === "none") {
-    // fully transparent
-  } else if (spec.categorical) {
-    for (let j = 0; j < g.ny; j++) {
-      const row = g.ny - 1 - j;
-      for (let i = 0; i < g.nx; i++) {
-        const src = j * g.nx + i, dst = 4 * (row * g.nx + i);
-        const rot = run.rotor[src], eff = run.effects[src];
-        let r = 0, gg = 0, b = 0, a = 0;
-        if (rot > 0.15) { r = 220; gg = 38; b = 38; a = Math.min(0.6, rot * 0.65) * 255; }
-        if (eff & 4) { r = 217; gg = 70; b = 239; a = 235; }
-        else if ((eff & 3) === 3) { r = 142; gg = 68; b = 173; a = 225; }
-        else if (eff & 1) { r = 255; gg = 111; b = 0; a = 215; }
-        else if (eff & 2) { r = 0; gg = 172; b = 196; a = 215; }
-        d[dst] = r; d[dst + 1] = gg; d[dst + 2] = b; d[dst + 3] = a;
-      }
+  const arr = run.speed10;
+  const [lo, hi] = overlayRange();
+  for (let j = 0; j < g.ny; j++) {
+    const row = g.ny - 1 - j;
+    for (let i = 0; i < g.nx; i++) {
+      const src = j * g.nx + i, dst = 4 * (row * g.nx + i);
+      const c = cmap(cmapName, (arr[src] - lo) / (hi - lo));
+      d[dst] = c[0]; d[dst + 1] = c[1]; d[dst + 2] = c[2]; d[dst + 3] = 255;
     }
-  } else {
-    const arr = run[overlayKey];
-    const [lo, hi] = overlayRange(overlayKey);
-    for (let j = 0; j < g.ny; j++) {
-      const row = g.ny - 1 - j;
-      for (let i = 0; i < g.nx; i++) {
-        const src = j * g.nx + i, dst = 4 * (row * g.nx + i);
-        const c = cmap(cmapName, (arr[src] - lo) / (hi - lo));
-        d[dst] = c[0]; d[dst + 1] = c[1]; d[dst + 2] = c[2]; d[dst + 3] = 255;
+  }
+  // Region layer: punch a transparent hole where the detail box overlays it.
+  if (domKey === "region") {
+    const h = detailHoleInRegion();
+    for (let r = Math.max(h.r0, 0); r < Math.min(h.r1, g.ny); r++) {
+      for (let c = Math.max(h.c0, 0); c < Math.min(h.c1, g.nx); c++) {
+        d[4 * (r * g.nx + c) + 3] = 0;
       }
     }
   }
@@ -469,44 +446,45 @@ function drawDomainField(domKey, overlayKey, cmapOverride) {
   bctx.drawImage(offCanvas, 0, 0, bigCanvas.width, bigCanvas.height);
   return bigCanvas.toDataURL();
 }
-function microOpacityExpr() {
-  return ["interpolate", ["linear"], ["zoom"], 12.0, 0, 13.0,
-          state.overlay === "none" ? 0 : state.opacity];
-}
 function renderField() {
   if (!mapReady || !RUN) return;
-  map.getSource("field-region").updateImage({ url: drawDomainField("region", state.overlay) });
-  map.getSource("field-detail").updateImage({ url: drawDomainField("detail", state.overlay) });
-  map.setPaintProperty("field-region", "raster-opacity", state.overlay === "none" ? 0 : state.opacity);
-  map.setPaintProperty("field-detail", "raster-opacity", detailOpacityExpr());
-  // Mean-flow overlays sharpen to 25 m via the sub-grid shelter factor
-  // (gusts/turbulence stay 75 m: rotor gusts penetrate sheltered hollows).
-  if (OVERLAYS[state.overlay].micro) {
-    const sh = shelterCache.get(state.dirIdx);
-    if (sh) {
-      drawMicro(sh, state.overlay);
-      map.setPaintProperty("field-pockets", "raster-opacity", microOpacityExpr());
-    } else {
-      map.getSource("field-pockets").updateImage({ url: TRANSPARENT_PX });
-      const wanted = state.overlay;
-      loadShelter(state.dirIdx)
-        .then(() => { if (state.overlay === wanted && mapReady) renderField(); })
-        .catch(console.error);
-    }
+  // Single uniform opacity for both field layers. The region image has a
+  // transparent hole where the detail box sits, and exactly ONE layer fills
+  // that box (the 25 m micro field once the shelter file is loaded, otherwise
+  // the 75 m detail field) — so the layers never overlap and there is no
+  // opacity seam at the box edge.
+  const op = state.opacity;
+  map.getSource("field-region").updateImage({ url: drawDomainField("region") });
+  map.setPaintProperty("field-region", "raster-opacity", op);
+
+  const sh = shelterCache.get(state.dirIdx);
+  if (sh) {
+    drawMicro(sh);                                 // fills the box at 25 m
+    map.getSource("field-detail").updateImage({ url: TRANSPARENT_PX });
+    map.setPaintProperty("field-pockets", "raster-opacity", op);
+    map.setPaintProperty("field-detail", "raster-opacity", 0);
   } else {
+    map.getSource("field-detail").updateImage({ url: drawDomainField("detail") });
     map.getSource("field-pockets").updateImage({ url: TRANSPARENT_PX });
+    map.setPaintProperty("field-detail", "raster-opacity", op);
+    map.setPaintProperty("field-pockets", "raster-opacity", 0);
     setPinsVisible(false);
+    // shelter file still loading: show 75 m now, swap to 25 m micro on arrival.
+    const wanted = state.dirIdx;
+    loadShelter(state.dirIdx)
+      .then(() => { if (state.dirIdx === wanted && mapReady) renderField(); })
+      .catch(console.error);
   }
 }
 
-/* 25 m micro layer: the 75 m solved field redistributed by the sub-grid
- * shelter factor, drawn with the SAME colormap as the active overlay so the
- * wind map simply sharpens (200 m -> 75 m -> 25 m) as you zoom. Calm-pocket
- * pins are extracted along the way (low mean AND low turbulence). */
-function drawMicro(sh, overlayKey) {
+/* 25 m micro layer: the 75 m solved street-level field redistributed by the
+ * sub-grid shelter factor, so the wind map simply sharpens (200 m -> 75 m ->
+ * 25 m) as you zoom. Calm-pocket pins are extracted along the way (low mean
+ * AND low turbulence). */
+function drawMicro(sh) {
   const g = sh.grid, det = RUN.domains.detail, dg = GRIDS.detail;
-  const spec = OVERLAYS[overlayKey];
-  const [lo, hi] = overlayRange(overlayKey);
+  const spec = OVERLAYS.speed10;
+  const [lo, hi] = overlayRange();
   const ref = Math.max(RUN.meta.speed_10m, 0.1);
   offCanvas.width = g.nx; offCanvas.height = g.ny;
   const ctx = offCanvas.getContext("2d");
@@ -522,8 +500,7 @@ function drawMicro(sh, overlayKey) {
     const lat = g.bbox.lat_min + (j + 0.5) * (g.bbox.lat_max - g.bbox.lat_min) / g.ny;
     fys[j] = (lat - dg.bbox.lat_min) / (dg.bbox.lat_max - dg.bbox.lat_min) * dg.ny - 0.5;
   }
-  const arr = det[overlayKey];
-  const collectPins = overlayKey === "speed10";
+  const arr = det.speed10;
   const cand = [];
   for (let j = 0; j < g.ny; j++) {
     const row = g.ny - 1 - j;
@@ -532,7 +509,7 @@ function drawMicro(sh, overlayKey) {
       const v = bilin(arr, dg, fxs[i], fys[j]) * sh.factor[idx];
       const c = cmap(spec.cmap, (v - lo) / (hi - lo));
       d[dst] = c[0]; d[dst + 1] = c[1]; d[dst + 2] = c[2]; d[dst + 3] = 255;
-      if (collectPins && v / ref < 0.33
+      if (v / ref < 0.33
           && bilin(det.ti, dg, fxs[i], fys[j]) < 0.45
           && bilin(dg.elev, dg, fxs[i], fys[j]) > 2) {
         cand.push([v / ref, i, j]);
@@ -540,8 +517,7 @@ function drawMicro(sh, overlayKey) {
     }
   }
   ctx.putImageData(img, 0, 0);
-  if (collectPins) updatePocketPins(sh, cand, ref);
-  else setPinsVisible(false);
+  updatePocketPins(sh, cand, ref);
   bigCanvas.width = g.nx * 2; bigCanvas.height = g.ny * 2;
   const bctx = bigCanvas.getContext("2d");
   bctx.imageSmoothingEnabled = true;
@@ -668,8 +644,7 @@ function particleStep(t) {
   pCtx.fillRect(0, 0, w, h);
   pCtx.globalCompositeOperation = "source-over";
   pCtx.lineWidth = 1.5;
-  pCtx.strokeStyle = ["none", "effects"].includes(state.overlay)
-    ? "rgba(30,41,59,0.66)" : "rgba(255,255,255,0.85)";
+  pCtx.strokeStyle = "rgba(255,255,255,0.85)";
   const R = GRIDS.region, dxm = R.dx_m;
   pCtx.beginPath();
   for (const p of particles) {
@@ -747,9 +722,8 @@ function openSuburbPopup(name) {
     <div class="popup-grid">
       <span class="k">Street wind</span><span>${fmtSpeed(r.speed10_mean, true)}</span>
       <span class="k">Gusts</span><span>${fmtSpeed(r.gust_mean, true)}</span>
-      <span class="k">Speed-up</span><span>${r.speedup.toFixed(2)}×</span>
-      <span class="k">Turbulence</span><span>${r.ti_mean.toFixed(2)}</span>
       <span class="k">Speed-up</span><span>${r.speedup.toFixed(2)}× vs open sea</span>
+      <span class="k">Turbulence</span><span>${r.ti_mean.toFixed(2)}</span>
       <span class="k">Flow turned</span><span>${Math.abs(r.deflection_mean).toFixed(0)}°</span>
     </div>
     <div class="popup-tags">Score = ${p.mean.toFixed(0)} (mean wind) + ${p.gust.toFixed(0)} (gusts) + ${p.ti.toFixed(0)} (turbulence)</div>
@@ -760,6 +734,8 @@ function openSuburbPopup(name) {
 
 function renderTable() {
   if (!RUN) return;
+  // Reinforce the coupling: the ranking reflects the direction set above.
+  $("#rankDirNote").textContent = `· for the ${RUN.meta.dir_label} wind`;
   const tbody = $("#rankTable tbody");
   let rows = [...RUN.ranking];
   if (state.group !== "all") rows = rows.filter((r) => r.group === state.group);
@@ -805,36 +781,18 @@ function setHover(name) {
   if (name) map.setFeatureState({ source: "suburbs", id: name }, { hover: true });
 }
 
-/* ---------------- legend ---------------- */
+/* ---------------- legend (fixed, pinned on the map) ----------------
+ * One layer ⇒ one key. The turbo gradient scales to the scenario inflow; the
+ * pin note is static HTML in index.html. */
 function renderLegend() {
-  const spec = OVERLAYS[state.overlay];
-  const grad = $("#legendGradient"), cat = $("#legendCategorical");
-  if (state.overlay === "none") { grad.hidden = true; cat.hidden = true; return; }
-  if (spec.categorical) {
-    grad.hidden = true; cat.hidden = false;
-    cat.innerHTML = `
-      <span><i style="background:#ff6f00"></i>Venturi channeling</span>
-      <span><i style="background:#00acc4"></i>Coanda deflection</span>
-      <span><i style="background:#dc2626"></i>lee-rotor zone</span>
-      <span><i style="background:#d946ef"></i>building downwash</span>`;
-    return;
-  }
-  grad.hidden = false; cat.hidden = true;
   const canvas = $("#legendCanvas"), ctx = canvas.getContext("2d");
   for (let x = 0; x < canvas.width; x++) {
-    ctx.fillStyle = cmapCss(spec.cmap, x / (canvas.width - 1));
+    ctx.fillStyle = cmapCss(OVERLAYS.speed10.cmap, x / (canvas.width - 1));
     ctx.fillRect(x, 0, 1, canvas.height);
   }
-  const [lo, hi] = overlayRange(state.overlay), mid = (lo + hi) / 2;
-  const f = (v) => spec.unit === "speed" ? fmtSpeed(v) + " " + UNITS[state.units].lbl
-    : spec.unit === "x" ? v.toFixed(1) + "×" : v.toFixed(2);
+  const [lo, hi] = overlayRange(), mid = (lo + hi) / 2;
+  const f = (v) => fmtSpeed(v) + " " + UNITS[state.units].lbl;
   $("#legendLabels").innerHTML = `<span>${f(lo)}</span><span>${f(mid)}</span><span>${f(hi)}</span>`;
-  if (state.overlay === "speed10") {
-    cat.hidden = false;
-    cat.innerHTML = `<span style="flex-basis:100%"><i style="background:#15803d"></i>
-      pins = the 10 deepest reliably-calm pockets (low mean + low turbulence; click to fly).
-      Detail sharpens 200 m → 75 m → 25 m as you zoom.</span>`;
-  }
 }
 
 /* ---------------- probe ---------------- */
@@ -874,32 +832,27 @@ function updateChip() {
   const season = s.summer_share > s.winter_share * 1.4 ? "☀️ summer wind" :
                  s.winter_share > s.summer_share * 1.4 ? "🌧️ winter wind" : "year-round";
   $("#scenarioChip").innerHTML =
-    `<b>${m.dir_label}</b> ${Math.round(m.dir_deg)}° · ${m.strength === "strong" ? "strong (top 10%)" : "typical"} · ` +
+    `<b>${m.dir_label}</b> ${Math.round(m.dir_deg)}° · strong (top 10%) · ` +
     `inflow ${fmtSpeed(m.speed_10m, true)} · ${season}` +
     (m.air_note ? ` <span class="muted">· ${m.air_note}</span>` : "") +
     (m.sparse ? ` <span class="warn">· few observed hours</span>` : "");
 }
 function syncHash() {
   history.replaceState(null, "",
-    `#d=${SECTOR_LABELS[state.dirIdx]}&s=${state.strength}&o=${state.overlay}&u=${state.units}&t=${state.tab}`);
+    `#d=${SECTOR_LABELS[state.dirIdx]}&u=${state.units}`);
 }
 function parseHash() {
   const p = new URLSearchParams(location.hash.slice(1));
   const d = SECTOR_LABELS.indexOf((p.get("d") || "").toUpperCase());
   if (d >= 0) state.dirIdx = d;
-  if (["typical", "strong"].includes(p.get("s"))) state.strength = p.get("s");
-  if (OVERLAYS[p.get("o")]) state.overlay = p.get("o");
   if (UNITS[p.get("u")]) state.units = p.get("u");
-  if (["wind", "suburbs"].includes(p.get("t"))) state.tab = p.get("t");
 }
 
 /* ---------------- orchestration ---------------- */
 async function setDirection(k) { state.dirIdx = ((k % 16) + 16) % 16; await refreshRun(); }
-async function setStrength(s) { state.strength = s; await refreshRun(); }
 async function refreshRun() {
   const seq = ++loadSeq;
   updateRose();
-  updateStrengthSeg();
   try {
     const run = await loadRun(state.dirIdx, state.strength);
     if (seq !== loadSeq) return;
@@ -921,33 +874,22 @@ function renderAll() {
   syncHash();
   if (popup) { popup.remove(); popup = null; }
 }
-function setTab(t) {
-  state.tab = t;
-  document.querySelectorAll(".tabbar button").forEach((b) =>
-    b.classList.toggle("on", b.dataset.tab === t));
-  $("#tab-wind").hidden = t !== "wind";
-  $("#tab-suburbs").hidden = t !== "suburbs";
-  syncHash();
+/* Keep the panel "View" 2D/3D switch and the map-corner 3D button showing the
+ * same state, whichever surface the user clicked. */
+function syncViewButtons() {
+  if (viewControl) viewControl._sync();
+  document.querySelectorAll("#viewSeg button").forEach((b) =>
+    b.classList.toggle("on", (b.dataset.view === "3d") === state.threeD));
 }
-function updateStrengthSeg() {
-  $("#strengthSeg").querySelectorAll("button").forEach((b) =>
-    b.classList.toggle("on", b.dataset.strength === state.strength));
+/* Set 3D on/off to a specific value (the panel switch); toggleThreeD just flips
+ * it (the map-corner button), so only call it when the state actually changes. */
+function setThreeD(on) {
+  if (state.threeD !== on) toggleThreeD();
+  syncViewButtons();
 }
-function buildOverlayList() {
-  const wrap = $("#overlayList");
-  wrap.innerHTML = "";
-  for (const [key, spec] of Object.entries(OVERLAYS)) {
-    const btn = document.createElement("button");
-    btn.className = "overlay-opt" + (key === state.overlay ? " on" : "");
-    btn.innerHTML = `<span class="dot" style="background:${spec.dot}"></span>
-      <span><span class="lbl">${spec.label}</span><br><span class="sub">${spec.sub}</span></span>`;
-    btn.addEventListener("click", () => {
-      state.overlay = key;
-      wrap.querySelectorAll(".overlay-opt").forEach((b) => b.classList.toggle("on", b === btn));
-      renderField(); renderLegend(); syncHash();
-    });
-    wrap.appendChild(btn);
-  }
+function updateUnitsSeg() {
+  $("#unitsSeg").querySelectorAll("button").forEach((b) =>
+    b.classList.toggle("on", b.dataset.unit === state.units));
 }
 function buildGroupFilters() {
   const wrap = $("#groupFilters");
@@ -967,26 +909,37 @@ function buildGroupFilters() {
 function wireControls() {
   document.querySelectorAll(".presets .chip").forEach((b) =>
     b.addEventListener("click", async () => {
-      if (b.dataset.preset === "se") { state.dirIdx = 6; state.strength = "strong"; }
-      else { state.dirIdx = 14; state.strength = "strong"; }
+      state.dirIdx = b.dataset.preset === "se" ? 6 : 14;
       await refreshRun();
     }));
-  $("#strengthSeg").querySelectorAll("button").forEach((b) =>
-    b.addEventListener("click", () => setStrength(b.dataset.strength)));
   $("#opacity").addEventListener("input", (e) => {
     state.opacity = e.target.value / 100;
-    if (mapReady && state.overlay !== "none") {
+    if (mapReady) {
+      // Apply to whichever box layer is active; the inactive one stays at 0.
+      const microActive = shelterCache.has(state.dirIdx);
       map.setPaintProperty("field-region", "raster-opacity", state.opacity);
-      map.setPaintProperty("field-detail", "raster-opacity", detailOpacityExpr());
+      map.setPaintProperty("field-detail", "raster-opacity", microActive ? 0 : state.opacity);
+      map.setPaintProperty("field-pockets", "raster-opacity", microActive ? state.opacity : 0);
     }
   });
-  document.querySelectorAll(".tabbar button").forEach((b) =>
-    b.addEventListener("click", () => setTab(b.dataset.tab)));
-  $("#unitsBtn").addEventListener("click", () => {
-    state.units = state.units === "kmh" ? "ms" : state.units === "ms" ? "kt" : "kmh";
-    $("#unitsBtn").textContent = UNITS[state.units].lbl;
-    updateRose(); renderTable(); renderLegend(); updateChip(); syncHash();
+  // Settings popover (units + map opacity) — demoted set-once controls.
+  $("#settingsBtn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    $("#settingsPanel").hidden = !$("#settingsPanel").hidden;
   });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#settingsPanel") && !e.target.closest("#settingsBtn"))
+      $("#settingsPanel").hidden = true;
+  });
+  $("#unitsSeg").querySelectorAll("button").forEach((b) =>
+    b.addEventListener("click", () => {
+      state.units = b.dataset.unit;
+      updateUnitsSeg();
+      updateRose(); renderTable(); renderLegend(); updateChip(); syncHash();
+    }));
+  // Panel 2D/3D switch mirrors the map-corner 3D button.
+  $("#viewSeg").querySelectorAll("button").forEach((b) =>
+    b.addEventListener("click", () => setThreeD(b.dataset.view === "3d")));
   $("#suburbSearch").addEventListener("input", (e) => {
     state.search = e.target.value.trim();
     renderTable();
@@ -1029,14 +982,15 @@ function wireControls() {
     if (e.key === "ArrowLeft") setDirection(state.dirIdx - 1);
     if (e.key === "ArrowRight") setDirection(state.dirIdx + 1);
   });
-  $("#unitsBtn").textContent = UNITS[state.units].lbl;
+  $("#opacity").value = Math.round(state.opacity * 100);
+  updateUnitsSeg();
 }
 
 /* ---------------- boot ---------------- */
 async function boot() {
   parseHash();
   try {
-    const resp = await fetch("data/static.json");
+    const resp = await fetch(`data/static.json?v=${DATA_VERSION}`);
     if (!resp.ok) throw new Error(`static.json: HTTP ${resp.status} — did you run scripts/precompute_web.py?`);
     STATIC = await resp.json();
     GRIDS = {
@@ -1044,15 +998,12 @@ async function boot() {
       detail: gridFromStatic(STATIC.domains.detail),
     };
     buildRose();
-    buildOverlayList();
     buildGroupFilters();
     wireControls();
-    setTab(state.tab);
-    updateStrengthSeg();
     initMap();
     initParticles();
+    syncViewButtons();
     await refreshRun();
-    loadRun(state.dirIdx, state.strength === "strong" ? "typical" : "strong");  // warm cache
     loadShelter(state.dirIdx).catch(() => {});  // warm the pocket layer + probe
   } catch (err) {
     console.error(err);

@@ -5,9 +5,12 @@ Two nested model domains per scenario:
   detail — the Table Mountain chain / City Bowl / Atlantic Seaboard at 75 m
            with finer vertical levels, to resolve valley and ridge funneling.
 
-16 compass directions x 2 strengths, each with that sector's observed speed
-statistics, per-direction stratification, WorldCover roughness for
-street-level wind, and OSM tall buildings (canyon + downwash diagnostics).
+16 compass directions, each at the sector's strong (90th-percentile) speed —
+the displayed street-level field is near-linear in inflow and the web colour
+scale auto-stretches, so a single strength carries the map (see
+docs/ux-panel-analysis.md §0). Per-direction stratification, WorldCover
+roughness for street-level wind, and OSM tall buildings (canyon + downwash
+diagnostics).
 
 Usage:  .venv/bin/python scripts/precompute_web.py [--only-dir SE]
 """
@@ -38,7 +41,10 @@ DOMAINS = {
         zoom=12,
     ),
     "detail": dict(
-        domain=Domain(lon_min=18.30, lon_max=18.50, lat_min=-34.10, lat_max=-33.84,
+        # Extends down the whole Cape Peninsula to take in Muizenberg and
+        # Cape Point (lat_min -34.40 gives the Cape Point headland margin from
+        # the boundary; lon_max 18.52) — still nested inside the region domain.
+        domain=Domain(lon_min=18.30, lon_max=18.52, lat_min=-34.40, lat_max=-33.84,
                       resolution_m=75.0, z_top=4700.0, dz0=10.0, dz_ratio=1.17),
         zoom=13,
     ),
@@ -157,9 +163,9 @@ def main():
     for k, sec in enumerate(sectors):
         if args.only_dir and sec["label"] != args.only_dir.upper():
             continue
-        for strength in ("typical", "strong"):
+        for strength in ("strong",):   # strong only — see module docstring
             t0 = time.time()
-            speed = sec["speed_median"] if strength == "typical" else sec["speed_p90"]
+            speed = sec["speed_p90"]
             scn = WindScenario(
                 direction_deg=sec["direction"], speed_10m=speed,
                 gust_factor=sec["gust_factor"],
