@@ -28,6 +28,17 @@ from .terrain import TerrainGrid
 Z0_SURFACE = 0.05  # roughness used for the 10 m log-law correction (m)
 GUST_PEAK_FACTOR = 2.5
 
+# Downslope-windstorm / lee-shadow shelter geometry.
+# The shelter that keeps a spot like Clifton calm comes from a BROAD upwind
+# massif, not a single peak on the exact inflow bearing — so we probe an
+# angular fan, not one ray. And a downslope windstorm is a NEAR-crest effect,
+# so its boost tapers with distance to the crest (a moderate bump at the very
+# edge of the fetch window must not drive a jet onto a far lee).
+WS_FAN_HALF = 36.0    # half-width (deg) of the upwind-barrier fan probe
+WS_FAN_N = 7          # rays across the fan
+WS_NEAR = 3000.0      # boost fully effective when the crest is within this (m)
+WS_FAR = 4000.0       # ... tapering to zero by here (the fetch edge)
+
 
 @dataclass
 class SurfaceFields:
@@ -72,6 +83,24 @@ def _upstream_max(zs, dx, dy, flow_u, flow_v, fetch=2500.0, return_dist=False):
     if return_dist:
         return zmax, dmax
     return zmax
+
+
+def _upstream_fan_max(zs, dx, dy, flow_u, flow_v, fetch=2500.0,
+                      half_deg=WS_FAN_HALF, n=WS_FAN_N):
+    """Highest terrain within `fetch` upwind, taken as the MAX over a +/-half_deg
+    fan of inflow azimuths — i.e. the tallest barrier anywhere in a broad upwind
+    arc, not just on the exact inflow bearing. This is what actually shelters a
+    spot tucked behind a continuous massif: a single ray slips off the massif
+    when the wind backs a sector or two, but the fan keeps seeing it.
+    """
+    out = None
+    for a in np.linspace(-half_deg, half_deg, n):
+        ca, sa = math.cos(math.radians(a)), math.sin(math.radians(a))
+        fu = flow_u * ca - flow_v * sa
+        fv = flow_u * sa + flow_v * ca
+        zm = _upstream_max(zs, dx, dy, fu, fv, fetch=fetch)
+        out = zm if out is None else np.maximum(out, zm)
+    return out
 
 
 def _side_max(zs, dx, dy, nx_hat, ny_hat, dists):
@@ -153,15 +182,28 @@ def compute_surface(flow: FlowField, terrain: TerrainGrid, scn: WindScenario,
     # Froude window that drives the rotor diagnostics.
     fr = scn.froude()
     fr_mod = math.exp(-(((fr - 1.0) / 0.6) ** 2))
-    # Rotor streamers off Table Mountain reach the full City Bowl: ~4 km fetch.
-    drop = _upstream_max(zs, dx, dy, *scn.components(1.0), fetch=4000.0) - zs
+    # Along-flow crest height AND how far upwind it sits (rotor streamers off
+    # Table Mountain reach the full City Bowl: ~4 km fetch).
+    crest, crest_dist = _upstream_max(zs, dx, dy, *scn.components(1.0),
+                                      fetch=4000.0, return_dist=True)
+    drop = crest - zs
+    # Broad upwind barrier over an angular fan — the tallest terrain anywhere in
+    # a +/-36 deg arc upwind. Unlike the single-ray `drop`, this still "sees" a
+    # continuous massif when the wind backs a sector (Clifton stays behind the
+    # Apostles for SE *and* SSE), so the shelter doesn't flicker on and off.
+    wall = _upstream_fan_max(zs, dx, dy, *scn.components(1.0), fetch=4000.0) - zs
+
     # ws_attach: flow stays attached over a MODERATE crest (saddle pour-over,
     # ~300-800 m drop) and blasts the lee; very high walls separate and the
-    # surface mean stays lower (gusty rotors handled separately). ws_ramp
-    # gates out flat/near-flat lee. Boost up to ~1.9x, peaking at Fr ~ 1.
+    # surface mean stays lower (gusty rotors handled separately). ws_ramp gates
+    # out flat/near-flat lee. near_gate makes the boost a NEAR-crest effect: a
+    # moderate bump at the edge of the 4 km fetch can't drive a downslope jet on
+    # a far lee (that was the spurious SSE-Clifton gust). Boost up to ~1.9x.
     ws_attach = np.exp(-(((drop - 550.0) / 350.0) ** 2))
     ws_ramp = np.clip((drop - 200.0) / 300.0, 0.0, 1.0)
-    ws = np.minimum(1.0 + 1.0 * fr_mod * ws_attach * ws_ramp, 1.9)
+    near_gate = np.clip((WS_FAR - crest_dist) / (WS_FAR - WS_NEAR), 0.0, 1.0)
+    boost = ws_attach * ws_ramp * near_gate                     # 0..1 apron geometry
+    ws = np.minimum(1.0 + fr_mod * boost, 1.9)
     u10 = u10 * ws
     v10 = v10 * ws
     speed10 = speed10 * ws
@@ -171,13 +213,14 @@ def compute_surface(flow: FlowField, terrain: TerrainGrid, scn: WindScenario,
     # far-lee flow attached at near-inflow speed (it produces no real wake), so
     # spots tucked deep behind a tall massif come out far too windy — Clifton,
     # behind the Lion's Head / Twelve Apostles wall, is the textbook case
-    # (summer SE refuge). A cell is in the wind shadow when a TALL obstacle
-    # stands upwind (large `drop`) yet it is NOT on that obstacle's near
-    # reattachment slope (low ws_attach) — i.e. it sits in the deep lee, not on
-    # the gap-fed downslope apron (Vredehoek/Oranjezicht, which keep the boost).
-    # We damp the surface mean here and, below, the surface turbulence (the
-    # rotor rides over the top; the shadow itself is calm).
-    shadow = np.clip((drop - 450.0) / 500.0, 0.0, 1.0) * (1.0 - ws_attach)
+    # (summer SE refuge). A cell is in the wind shadow when a tall BROAD wall
+    # stands upwind (large `wall`, the fan probe) yet it is NOT on a downslope
+    # apron (low `boost`) — i.e. it sits in the deep lee, not on the gap-fed
+    # slope (Vredehoek/Oranjezicht, which keep the boost). The (1 - boost)^2
+    # gate lets a genuine apron keep its boost even when a tall peak also looms
+    # off-axis in the fan (Devil's Peak above Vredehoek). We damp the surface
+    # mean here and, below, the surface turbulence.
+    shadow = np.clip((wall - 450.0) / 500.0, 0.0, 1.0) * (1.0 - boost) ** 2
     shadow_factor = 1.0 - 0.62 * shadow                         # mean down to ~0.38x
     u10 = u10 * shadow_factor
     v10 = v10 * shadow_factor

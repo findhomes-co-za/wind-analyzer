@@ -14,8 +14,8 @@
       "peak_ms": 5.9,
       "obs_se_resp": 0.535,
       "obs_sse_resp": 0.904,
-      "model_se_speedup": 0.427,
-      "model_sse_speedup": 1.086
+      "model_se_speedup": 0.265,
+      "model_sse_speedup": 0.377
     },
     {
       "suburb": "Camps Bay",
@@ -24,8 +24,8 @@
       "peak_ms": 16.1,
       "obs_se_resp": 1.308,
       "obs_sse_resp": 2.263,
-      "model_se_speedup": 0.533,
-      "model_sse_speedup": 0.93
+      "model_se_speedup": 0.522,
+      "model_sse_speedup": 0.813
     },
     {
       "suburb": "Bakoven",
@@ -34,8 +34,8 @@
       "peak_ms": 4.6,
       "obs_se_resp": 2.734,
       "obs_sse_resp": 2.291,
-      "model_se_speedup": 0.675,
-      "model_sse_speedup": 0.941
+      "model_se_speedup": 0.683,
+      "model_sse_speedup": 0.975
     },
     {
       "suburb": "Sea Point",
@@ -44,8 +44,8 @@
       "peak_ms": 6.2,
       "obs_se_resp": 1.377,
       "obs_sse_resp": 0.843,
-      "model_se_speedup": 0.603,
-      "model_sse_speedup": 0.815
+      "model_se_speedup": 0.552,
+      "model_sse_speedup": 0.592
     },
     {
       "suburb": "Vredehoek",
@@ -54,8 +54,8 @@
       "peak_ms": 10.5,
       "obs_se_resp": 2.933,
       "obs_sse_resp": 3.156,
-      "model_se_speedup": 0.644,
-      "model_sse_speedup": 0.617
+      "model_se_speedup": 0.676,
+      "model_sse_speedup": 0.636
     },
     {
       "suburb": "Oranjezicht",
@@ -64,8 +64,8 @@
       "peak_ms": 10.5,
       "obs_se_resp": 2.933,
       "obs_sse_resp": 3.156,
-      "model_se_speedup": 0.842,
-      "model_sse_speedup": 0.33
+      "model_se_speedup": 0.855,
+      "model_sse_speedup": 0.387
     },
     {
       "suburb": "Gardens",
@@ -74,8 +74,8 @@
       "peak_ms": 4.3,
       "obs_se_resp": 1.757,
       "obs_sse_resp": 1.852,
-      "model_se_speedup": 0.662,
-      "model_sse_speedup": 0.329
+      "model_se_speedup": 0.525,
+      "model_sse_speedup": 0.279
     },
     {
       "suburb": "Tamboerskloof",
@@ -84,8 +84,8 @@
       "peak_ms": 5.9,
       "obs_se_resp": 0.535,
       "obs_sse_resp": 0.904,
-      "model_se_speedup": 0.806,
-      "model_sse_speedup": 0.492
+      "model_se_speedup": 0.278,
+      "model_sse_speedup": 0.364
     },
     {
       "suburb": "Hout Bay",
@@ -94,8 +94,8 @@
       "peak_ms": 10.0,
       "obs_se_resp": 1.59,
       "obs_sse_resp": 1.58,
-      "model_se_speedup": 0.981,
-      "model_sse_speedup": 1.054
+      "model_se_speedup": 0.715,
+      "model_sse_speedup": 0.662
     },
     {
       "suburb": "Constantia",
@@ -104,8 +104,8 @@
       "peak_ms": 3.4,
       "obs_se_resp": 1.836,
       "obs_sse_resp": 2.001,
-      "model_se_speedup": 0.603,
-      "model_sse_speedup": 0.624
+      "model_se_speedup": 0.601,
+      "model_sse_speedup": 0.623
     },
     {
       "suburb": "Bloubergstrand",

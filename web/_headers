@@ -1,0 +1,6 @@
+# Cloudflare Pages headers.
+# Every data fetch in app.js is cache-busted with ?v=DATA_VERSION, so the JSON
+# is safe to cache forever — repeat visits then never refetch the ~MB-each wind
+# fields. Bumping DATA_VERSION (on regen) changes the URL and forces a refresh.
+/data/*
+  Cache-Control: public, max-age=31536000, immutable

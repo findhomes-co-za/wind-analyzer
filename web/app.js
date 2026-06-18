@@ -11,7 +11,7 @@
 // Token comes from web/config.local.js (window.MAPBOX_TOKEN) — keep it out of app.js
 const MAPBOX_TOKEN = window.MAPBOX_TOKEN || "YOUR_MAPBOX_TOKEN";
 // Bump when web/data/* is regenerated so browsers refetch instead of caching.
-const DATA_VERSION = "2026-06-17-peninsula";
+const DATA_VERSION = "2026-06-17-fanshelter";
 const SECTOR_LABELS = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
 const TRANSPARENT_PX = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 const GROUP_ORDER = ["City Bowl", "Atlantic Seaboard", "Southern Suburbs", "South Peninsula",
