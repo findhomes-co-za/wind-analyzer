@@ -1,0 +1,4696 @@
+{
+  "window": [
+    20241210,
+    20250115
+  ],
+  "min_hours": 6,
+  "min_input_speed": 4.0,
+  "stations": [
+    {
+      "id": "ICITYO10",
+      "name": "City of Cape Town",
+      "lat": -34.097,
+      "lon": 18.389,
+      "by_dir": {
+        "N": {
+          "n": 19,
+          "obs_dir": 328.0,
+          "obs_speed": 1.61,
+          "obs_speed_p90": 2.74,
+          "model_dir": 354.8,
+          "model_speedup": 0.694,
+          "model_speed": 8.01,
+          "dir_err": 26.9
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 59.2,
+          "obs_speed": 2.2,
+          "obs_speed_p90": 3.06,
+          "model_dir": 130.2,
+          "model_speedup": 0.467,
+          "model_speed": 6.65,
+          "dir_err": 71.0
+        },
+        "SE": {
+          "n": 61,
+          "obs_dir": 97.6,
+          "obs_speed": 2.84,
+          "obs_speed_p90": 4.56,
+          "model_dir": 146.6,
+          "model_speedup": 0.537,
+          "model_speed": 7.45,
+          "dir_err": 49.0
+        },
+        "SSE": {
+          "n": 122,
+          "obs_dir": 119.5,
+          "obs_speed": 2.65,
+          "obs_speed_p90": 4.53,
+          "model_dir": 159.6,
+          "model_speedup": 0.566,
+          "model_speed": 7.54,
+          "dir_err": 40.1
+        },
+        "S": {
+          "n": 90,
+          "obs_dir": 146.9,
+          "obs_speed": 2.18,
+          "obs_speed_p90": 4.04,
+          "model_dir": 172.0,
+          "model_speedup": 0.53,
+          "model_speed": 5.15,
+          "dir_err": 25.1
+        },
+        "SSW": {
+          "n": 46,
+          "obs_dir": 201.9,
+          "obs_speed": 1.51,
+          "obs_speed_p90": 2.49,
+          "model_dir": 191.8,
+          "model_speedup": 0.449,
+          "model_speed": 3.85,
+          "dir_err": 10.1
+        },
+        "SW": {
+          "n": 41,
+          "obs_dir": 281.4,
+          "obs_speed": 1.18,
+          "obs_speed_p90": 1.94,
+          "model_dir": 213.5,
+          "model_speedup": 0.366,
+          "model_speed": 3.66,
+          "dir_err": 67.8
+        },
+        "WSW": {
+          "n": 11,
+          "obs_dir": 336.8,
+          "obs_speed": 1.24,
+          "obs_speed_p90": 1.86,
+          "model_dir": 248.0,
+          "model_speedup": 0.341,
+          "model_speed": 3.9,
+          "dir_err": 88.8
+        },
+        "W": {
+          "n": 15,
+          "obs_dir": 291.5,
+          "obs_speed": 1.64,
+          "obs_speed_p90": 2.09,
+          "model_dir": 283.6,
+          "model_speedup": 0.385,
+          "model_speed": 4.58,
+          "dir_err": 8.0
+        },
+        "WNW": {
+          "n": 27,
+          "obs_dir": 289.6,
+          "obs_speed": 2.04,
+          "obs_speed_p90": 2.88,
+          "model_dir": 309.1,
+          "model_speedup": 0.49,
+          "model_speed": 5.39,
+          "dir_err": 19.5
+        },
+        "NW": {
+          "n": 19,
+          "obs_dir": 318.5,
+          "obs_speed": 2.09,
+          "obs_speed_p90": 3.44,
+          "model_dir": 326.0,
+          "model_speedup": 0.456,
+          "model_speed": 5.19,
+          "dir_err": 7.6
+        },
+        "NNW": {
+          "n": 20,
+          "obs_dir": 326.5,
+          "obs_speed": 2.68,
+          "obs_speed_p90": 6.34,
+          "model_dir": 340.6,
+          "model_speedup": 0.608,
+          "model_speed": 7.27,
+          "dir_err": 14.1
+        }
+      }
+    },
+    {
+      "id": "IWESTERN280",
+      "name": "Cape Town",
+      "lat": -34.06337,
+      "lon": 18.46495,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 47.8,
+          "obs_speed": 0.83,
+          "obs_speed_p90": 1.68,
+          "model_dir": 359.1,
+          "model_speedup": 0.886,
+          "model_speed": 10.23,
+          "dir_err": 48.7
+        },
+        "ESE": {
+          "n": 6,
+          "obs_dir": 247.5,
+          "obs_speed": 0.24,
+          "obs_speed_p90": 0.56,
+          "model_dir": 113.0,
+          "model_speedup": 0.885,
+          "model_speed": 12.63,
+          "dir_err": 134.5
+        },
+        "SE": {
+          "n": 84,
+          "obs_dir": 167.8,
+          "obs_speed": 1.37,
+          "obs_speed_p90": 2.47,
+          "model_dir": 135.0,
+          "model_speedup": 0.893,
+          "model_speed": 12.39,
+          "dir_err": 32.7
+        },
+        "SSE": {
+          "n": 184,
+          "obs_dir": 169.4,
+          "obs_speed": 1.53,
+          "obs_speed_p90": 2.69,
+          "model_dir": 157.2,
+          "model_speedup": 0.893,
+          "model_speed": 11.9,
+          "dir_err": 12.2
+        },
+        "S": {
+          "n": 142,
+          "obs_dir": 163.8,
+          "obs_speed": 1.26,
+          "obs_speed_p90": 2.22,
+          "model_dir": 179.0,
+          "model_speedup": 0.877,
+          "model_speed": 8.53,
+          "dir_err": 15.2
+        },
+        "SSW": {
+          "n": 80,
+          "obs_dir": 237.9,
+          "obs_speed": 0.9,
+          "obs_speed_p90": 1.78,
+          "model_dir": 201.2,
+          "model_speedup": 0.97,
+          "model_speed": 8.31,
+          "dir_err": 36.7
+        },
+        "SW": {
+          "n": 60,
+          "obs_dir": 271.5,
+          "obs_speed": 0.88,
+          "obs_speed_p90": 1.79,
+          "model_dir": 224.9,
+          "model_speedup": 0.869,
+          "model_speed": 8.69,
+          "dir_err": 46.6
+        },
+        "WSW": {
+          "n": 20,
+          "obs_dir": 299.7,
+          "obs_speed": 0.57,
+          "obs_speed_p90": 1.48,
+          "model_dir": 247.1,
+          "model_speedup": 0.87,
+          "model_speed": 9.96,
+          "dir_err": 52.6
+        },
+        "W": {
+          "n": 42,
+          "obs_dir": 314.9,
+          "obs_speed": 0.99,
+          "obs_speed_p90": 1.89,
+          "model_dir": 270.9,
+          "model_speedup": 0.878,
+          "model_speed": 10.46,
+          "dir_err": 44.0
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 339.1,
+          "obs_speed": 1.45,
+          "obs_speed_p90": 2.54,
+          "model_dir": 293.6,
+          "model_speedup": 0.886,
+          "model_speed": 9.74,
+          "dir_err": 45.5
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 346.7,
+          "obs_speed": 1.1,
+          "obs_speed_p90": 2.22,
+          "model_dir": 316.1,
+          "model_speedup": 0.894,
+          "model_speed": 10.18,
+          "dir_err": 30.6
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 6.4,
+          "obs_speed": 1.51,
+          "obs_speed_p90": 3.09,
+          "model_dir": 336.8,
+          "model_speedup": 0.894,
+          "model_speed": 10.69,
+          "dir_err": 29.5
+        }
+      }
+    },
+    {
+      "id": "ICAPET64",
+      "name": "Cape Town",
+      "lat": -34.051,
+      "lon": 18.453,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 2.5,
+          "obs_speed": 1.39,
+          "obs_speed_p90": 2.41,
+          "model_dir": 1.1,
+          "model_speedup": 0.705,
+          "model_speed": 8.14,
+          "dir_err": 1.4
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 167.4,
+          "obs_speed": 1.56,
+          "obs_speed_p90": 2.76,
+          "model_dir": 112.5,
+          "model_speedup": 0.681,
+          "model_speed": 9.71,
+          "dir_err": 54.9
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 172.9,
+          "obs_speed": 2.48,
+          "obs_speed_p90": 4.18,
+          "model_dir": 135.3,
+          "model_speedup": 0.689,
+          "model_speed": 9.56,
+          "dir_err": 37.6
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 176.4,
+          "obs_speed": 2.9,
+          "obs_speed_p90": 4.66,
+          "model_dir": 158.2,
+          "model_speedup": 0.697,
+          "model_speed": 9.28,
+          "dir_err": 18.2
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 174.0,
+          "obs_speed": 2.48,
+          "obs_speed_p90": 4.36,
+          "model_dir": 181.3,
+          "model_speedup": 0.702,
+          "model_speed": 6.82,
+          "dir_err": 7.4
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 216.3,
+          "obs_speed": 1.29,
+          "obs_speed_p90": 2.28,
+          "model_dir": 201.6,
+          "model_speedup": 0.702,
+          "model_speed": 6.01,
+          "dir_err": 14.8
+        },
+        "SW": {
+          "n": 61,
+          "obs_dir": 238.4,
+          "obs_speed": 1.02,
+          "obs_speed_p90": 1.89,
+          "model_dir": 224.2,
+          "model_speedup": 0.697,
+          "model_speed": 6.97,
+          "dir_err": 14.1
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 259.3,
+          "obs_speed": 0.56,
+          "obs_speed_p90": 1.5,
+          "model_dir": 247.0,
+          "model_speedup": 0.691,
+          "model_speed": 7.92,
+          "dir_err": 12.3
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 291.1,
+          "obs_speed": 1.75,
+          "obs_speed_p90": 3.14,
+          "model_dir": 268.9,
+          "model_speedup": 0.689,
+          "model_speed": 8.21,
+          "dir_err": 22.2
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 300.9,
+          "obs_speed": 2.84,
+          "obs_speed_p90": 3.62,
+          "model_dir": 292.2,
+          "model_speedup": 0.689,
+          "model_speed": 7.58,
+          "dir_err": 8.7
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 309.7,
+          "obs_speed": 2.46,
+          "obs_speed_p90": 5.78,
+          "model_dir": 315.7,
+          "model_speedup": 0.692,
+          "model_speed": 7.89,
+          "dir_err": 6.0
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 344.3,
+          "obs_speed": 2.69,
+          "obs_speed_p90": 6.21,
+          "model_dir": 338.3,
+          "model_speedup": 0.7,
+          "model_speed": 8.37,
+          "dir_err": 6.0
+        }
+      }
+    },
+    {
+      "id": "ICAPET171",
+      "name": "Cape Town",
+      "lat": -34.05,
+      "lon": 18.45,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 18.4,
+          "obs_speed": 0.82,
+          "obs_speed_p90": 1.62,
+          "model_dir": 358.9,
+          "model_speedup": 0.732,
+          "model_speed": 8.46,
+          "dir_err": 19.4
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 96.2,
+          "obs_speed": 0.92,
+          "obs_speed_p90": 1.51,
+          "model_dir": 112.4,
+          "model_speedup": 0.719,
+          "model_speed": 10.26,
+          "dir_err": 16.2
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 153.2,
+          "obs_speed": 1.83,
+          "obs_speed_p90": 2.9,
+          "model_dir": 135.8,
+          "model_speedup": 0.725,
+          "model_speed": 10.05,
+          "dir_err": 17.4
+        },
+        "SSE": {
+          "n": 191,
+          "obs_dir": 162.7,
+          "obs_speed": 2.25,
+          "obs_speed_p90": 3.69,
+          "model_dir": 158.0,
+          "model_speedup": 0.732,
+          "model_speed": 9.76,
+          "dir_err": 4.8
+        },
+        "S": {
+          "n": 141,
+          "obs_dir": 156.8,
+          "obs_speed": 1.78,
+          "obs_speed_p90": 3.06,
+          "model_dir": 178.7,
+          "model_speedup": 0.725,
+          "model_speed": 7.04,
+          "dir_err": 22.0
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 226.9,
+          "obs_speed": 2.01,
+          "obs_speed_p90": 3.83,
+          "model_dir": 202.2,
+          "model_speedup": 0.724,
+          "model_speed": 6.21,
+          "dir_err": 24.7
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 248.5,
+          "obs_speed": 1.82,
+          "obs_speed_p90": 3.18,
+          "model_dir": 224.9,
+          "model_speedup": 0.721,
+          "model_speed": 7.21,
+          "dir_err": 23.5
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 262.3,
+          "obs_speed": 1.03,
+          "obs_speed_p90": 2.61,
+          "model_dir": 246.9,
+          "model_speedup": 0.724,
+          "model_speed": 8.28,
+          "dir_err": 15.5
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 308.9,
+          "obs_speed": 1.37,
+          "obs_speed_p90": 2.25,
+          "model_dir": 271.0,
+          "model_speedup": 0.724,
+          "model_speed": 8.62,
+          "dir_err": 37.9
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 331.8,
+          "obs_speed": 1.57,
+          "obs_speed_p90": 2.17,
+          "model_dir": 292.1,
+          "model_speedup": 0.724,
+          "model_speed": 7.96,
+          "dir_err": 39.7
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 348.0,
+          "obs_speed": 1.01,
+          "obs_speed_p90": 2.06,
+          "model_dir": 316.0,
+          "model_speedup": 0.732,
+          "model_speed": 8.33,
+          "dir_err": 32.1
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 11.5,
+          "obs_speed": 0.98,
+          "obs_speed_p90": 2.06,
+          "model_dir": 338.0,
+          "model_speedup": 0.732,
+          "model_speed": 8.76,
+          "dir_err": 33.4
+        }
+      }
+    },
+    {
+      "id": "IHOUTB9",
+      "name": "Hout Bay",
+      "lat": -34.045,
+      "lon": 18.345,
+      "by_dir": {
+        "SE": {
+          "n": 36,
+          "obs_dir": 237.1,
+          "obs_speed": 2.24,
+          "obs_speed_p90": 3.53,
+          "model_dir": 157.7,
+          "model_speedup": 0.272,
+          "model_speed": 3.77,
+          "dir_err": 79.4
+        },
+        "SSE": {
+          "n": 93,
+          "obs_dir": 203.0,
+          "obs_speed": 2.22,
+          "obs_speed_p90": 3.69,
+          "model_dir": 173.2,
+          "model_speedup": 0.438,
+          "model_speed": 5.83,
+          "dir_err": 29.7
+        },
+        "S": {
+          "n": 62,
+          "obs_dir": 240.8,
+          "obs_speed": 1.6,
+          "obs_speed_p90": 2.33,
+          "model_dir": 182.5,
+          "model_speedup": 0.639,
+          "model_speed": 6.21,
+          "dir_err": 58.3
+        },
+        "SSW": {
+          "n": 51,
+          "obs_dir": 238.3,
+          "obs_speed": 1.18,
+          "obs_speed_p90": 1.67,
+          "model_dir": 192.5,
+          "model_speedup": 0.627,
+          "model_speed": 5.37,
+          "dir_err": 45.8
+        },
+        "SW": {
+          "n": 23,
+          "obs_dir": 228.2,
+          "obs_speed": 1.22,
+          "obs_speed_p90": 1.67,
+          "model_dir": 203.1,
+          "model_speedup": 0.541,
+          "model_speed": 5.41,
+          "dir_err": 25.1
+        },
+        "WSW": {
+          "n": 11,
+          "obs_dir": 242.7,
+          "obs_speed": 0.75,
+          "obs_speed_p90": 1.19,
+          "model_dir": 222.9,
+          "model_speedup": 0.376,
+          "model_speed": 4.31,
+          "dir_err": 19.8
+        },
+        "W": {
+          "n": 32,
+          "obs_dir": 189.1,
+          "obs_speed": 1.1,
+          "obs_speed_p90": 1.77,
+          "model_dir": 261.7,
+          "model_speedup": 0.284,
+          "model_speed": 3.38,
+          "dir_err": 72.5
+        }
+      }
+    },
+    {
+      "id": "IHOUTBAY3",
+      "name": "Hout Bay",
+      "lat": -34.04285,
+      "lon": 18.35079,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 25.5,
+          "obs_speed": 1.89,
+          "obs_speed_p90": 3.94,
+          "model_dir": 4.1,
+          "model_speedup": 0.883,
+          "model_speed": 10.2,
+          "dir_err": 21.4
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 103.1,
+          "obs_speed": 2.09,
+          "obs_speed_p90": 3.11,
+          "model_dir": 123.7,
+          "model_speedup": 0.347,
+          "model_speed": 4.95,
+          "dir_err": 20.6
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 173.2,
+          "obs_speed": 2.21,
+          "obs_speed_p90": 3.39,
+          "model_dir": 155.0,
+          "model_speedup": 0.306,
+          "model_speed": 4.24,
+          "dir_err": 18.3
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 201.4,
+          "obs_speed": 2.13,
+          "obs_speed_p90": 3.22,
+          "model_dir": 173.4,
+          "model_speedup": 0.552,
+          "model_speed": 7.35,
+          "dir_err": 27.9
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 216.7,
+          "obs_speed": 2.48,
+          "obs_speed_p90": 3.69,
+          "model_dir": 184.8,
+          "model_speedup": 0.889,
+          "model_speed": 8.64,
+          "dir_err": 31.9
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 198.7,
+          "obs_speed": 1.73,
+          "obs_speed_p90": 2.67,
+          "model_dir": 194.3,
+          "model_speedup": 0.878,
+          "model_speed": 7.53,
+          "dir_err": 4.4
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 196.7,
+          "obs_speed": 1.57,
+          "obs_speed_p90": 2.63,
+          "model_dir": 207.0,
+          "model_speedup": 0.764,
+          "model_speed": 7.64,
+          "dir_err": 10.3
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 165.8,
+          "obs_speed": 1.02,
+          "obs_speed_p90": 1.64,
+          "model_dir": 226.8,
+          "model_speedup": 0.555,
+          "model_speed": 6.35,
+          "dir_err": 61.0
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 289.2,
+          "obs_speed": 1.59,
+          "obs_speed_p90": 2.18,
+          "model_dir": 260.8,
+          "model_speedup": 0.48,
+          "model_speed": 5.71,
+          "dir_err": 28.4
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 13.0,
+          "obs_speed": 1.93,
+          "obs_speed_p90": 2.63,
+          "model_dir": 303.1,
+          "model_speedup": 0.534,
+          "model_speed": 5.87,
+          "dir_err": 69.9
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 357.8,
+          "obs_speed": 1.67,
+          "obs_speed_p90": 2.97,
+          "model_dir": 332.9,
+          "model_speedup": 0.55,
+          "model_speed": 6.26,
+          "dir_err": 24.9
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 29.3,
+          "obs_speed": 2.9,
+          "obs_speed_p90": 5.29,
+          "model_dir": 350.8,
+          "model_speedup": 0.747,
+          "model_speed": 8.93,
+          "dir_err": 38.5
+        }
+      }
+    },
+    {
+      "id": "ICAPET58",
+      "name": "Cape Town",
+      "lat": -34.038,
+      "lon": 18.468,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 101.8,
+          "obs_speed": 0.8,
+          "obs_speed_p90": 1.75,
+          "model_dir": 1.2,
+          "model_speedup": 0.646,
+          "model_speed": 7.46,
+          "dir_err": 100.6
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 233.3,
+          "obs_speed": 0.37,
+          "obs_speed_p90": 0.78,
+          "model_dir": 111.3,
+          "model_speedup": 0.636,
+          "model_speed": 9.07,
+          "dir_err": 122.0
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 233.8,
+          "obs_speed": 0.84,
+          "obs_speed_p90": 1.45,
+          "model_dir": 134.6,
+          "model_speedup": 0.629,
+          "model_speed": 8.73,
+          "dir_err": 99.2
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 236.7,
+          "obs_speed": 1.2,
+          "obs_speed_p90": 2.08,
+          "model_dir": 158.2,
+          "model_speedup": 0.628,
+          "model_speed": 8.36,
+          "dir_err": 78.4
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 234.6,
+          "obs_speed": 1.02,
+          "obs_speed_p90": 1.83,
+          "model_dir": 181.5,
+          "model_speedup": 0.638,
+          "model_speed": 6.2,
+          "dir_err": 53.2
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 267.4,
+          "obs_speed": 0.47,
+          "obs_speed_p90": 1.0,
+          "model_dir": 202.8,
+          "model_speedup": 0.652,
+          "model_speed": 5.58,
+          "dir_err": 64.7
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 296.2,
+          "obs_speed": 0.47,
+          "obs_speed_p90": 0.97,
+          "model_dir": 224.7,
+          "model_speedup": 0.663,
+          "model_speed": 6.63,
+          "dir_err": 71.4
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 315.4,
+          "obs_speed": 0.22,
+          "obs_speed_p90": 0.78,
+          "model_dir": 247.1,
+          "model_speedup": 0.669,
+          "model_speed": 7.66,
+          "dir_err": 68.3
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 345.9,
+          "obs_speed": 0.85,
+          "obs_speed_p90": 1.54,
+          "model_dir": 268.6,
+          "model_speedup": 0.66,
+          "model_speed": 7.85,
+          "dir_err": 77.3
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 357.1,
+          "obs_speed": 1.2,
+          "obs_speed_p90": 1.71,
+          "model_dir": 291.1,
+          "model_speedup": 0.647,
+          "model_speed": 7.12,
+          "dir_err": 66.1
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 36.0,
+          "obs_speed": 1.1,
+          "obs_speed_p90": 3.31,
+          "model_dir": 314.1,
+          "model_speedup": 0.637,
+          "model_speed": 7.26,
+          "dir_err": 81.9
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 62.9,
+          "obs_speed": 1.5,
+          "obs_speed_p90": 3.48,
+          "model_dir": 337.7,
+          "model_speedup": 0.637,
+          "model_speed": 7.61,
+          "dir_err": 85.1
+        }
+      }
+    },
+    {
+      "id": "IHOUTB7",
+      "name": "Hout Bay",
+      "lat": -34.033,
+      "lon": 18.359,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 0.0,
+          "obs_speed": 2.29,
+          "obs_speed_p90": 4.67,
+          "model_dir": 1.1,
+          "model_speedup": 0.732,
+          "model_speed": 8.46,
+          "dir_err": 1.1
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 92.6,
+          "obs_speed": 3.02,
+          "obs_speed_p90": 5.62,
+          "model_dir": 131.2,
+          "model_speedup": 0.561,
+          "model_speed": 7.99,
+          "dir_err": 38.6
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 119.8,
+          "obs_speed": 2.98,
+          "obs_speed_p90": 5.38,
+          "model_dir": 157.2,
+          "model_speedup": 0.595,
+          "model_speed": 8.25,
+          "dir_err": 37.3
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 170.4,
+          "obs_speed": 2.58,
+          "obs_speed_p90": 4.53,
+          "model_dir": 171.8,
+          "model_speedup": 0.422,
+          "model_speed": 5.62,
+          "dir_err": 1.5
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 196.0,
+          "obs_speed": 2.91,
+          "obs_speed_p90": 4.85,
+          "model_dir": 181.5,
+          "model_speedup": 0.612,
+          "model_speed": 5.95,
+          "dir_err": 14.5
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 206.7,
+          "obs_speed": 2.35,
+          "obs_speed_p90": 3.86,
+          "model_dir": 189.8,
+          "model_speedup": 0.755,
+          "model_speed": 6.47,
+          "dir_err": 16.9
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 205.4,
+          "obs_speed": 2.11,
+          "obs_speed_p90": 3.69,
+          "model_dir": 201.9,
+          "model_speedup": 0.556,
+          "model_speed": 5.56,
+          "dir_err": 3.5
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 204.4,
+          "obs_speed": 1.08,
+          "obs_speed_p90": 2.92,
+          "model_dir": 223.4,
+          "model_speedup": 0.483,
+          "model_speed": 5.53,
+          "dir_err": 19.0
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 304.5,
+          "obs_speed": 1.83,
+          "obs_speed_p90": 3.06,
+          "model_dir": 262.3,
+          "model_speedup": 0.355,
+          "model_speed": 4.23,
+          "dir_err": 42.1
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 339.0,
+          "obs_speed": 2.4,
+          "obs_speed_p90": 4.13,
+          "model_dir": 309.6,
+          "model_speedup": 0.338,
+          "model_speed": 3.72,
+          "dir_err": 29.4
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 44.9,
+          "obs_speed": 2.69,
+          "obs_speed_p90": 6.33,
+          "model_dir": 336.3,
+          "model_speedup": 0.556,
+          "model_speed": 6.34,
+          "dir_err": 68.5
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 9.7,
+          "obs_speed": 3.31,
+          "obs_speed_p90": 6.05,
+          "model_dir": 350.5,
+          "model_speedup": 0.513,
+          "model_speed": 6.13,
+          "dir_err": 19.2
+        }
+      }
+    },
+    {
+      "id": "ICAPET177",
+      "name": "Cape Town",
+      "lat": -34.02551,
+      "lon": 18.44778,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 359.7,
+          "obs_speed": 1.22,
+          "obs_speed_p90": 2.23,
+          "model_dir": 2.3,
+          "model_speedup": 0.9,
+          "model_speed": 10.4,
+          "dir_err": 2.6
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 200.1,
+          "obs_speed": 0.92,
+          "obs_speed_p90": 1.64,
+          "model_dir": 114.7,
+          "model_speedup": 0.719,
+          "model_speed": 10.26,
+          "dir_err": 85.4
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 161.7,
+          "obs_speed": 1.86,
+          "obs_speed_p90": 3.53,
+          "model_dir": 140.4,
+          "model_speedup": 0.773,
+          "model_speed": 10.72,
+          "dir_err": 21.3
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 162.0,
+          "obs_speed": 2.19,
+          "obs_speed_p90": 3.69,
+          "model_dir": 163.4,
+          "model_speedup": 0.847,
+          "model_speed": 11.28,
+          "dir_err": 1.4
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 159.8,
+          "obs_speed": 2.1,
+          "obs_speed_p90": 3.67,
+          "model_dir": 182.8,
+          "model_speedup": 0.894,
+          "model_speed": 8.69,
+          "dir_err": 23.0
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 213.7,
+          "obs_speed": 1.23,
+          "obs_speed_p90": 2.25,
+          "model_dir": 199.4,
+          "model_speedup": 0.898,
+          "model_speed": 7.69,
+          "dir_err": 14.3
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 227.4,
+          "obs_speed": 1.26,
+          "obs_speed_p90": 2.43,
+          "model_dir": 218.6,
+          "model_speedup": 0.845,
+          "model_speed": 8.45,
+          "dir_err": 8.8
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 243.5,
+          "obs_speed": 0.82,
+          "obs_speed_p90": 1.97,
+          "model_dir": 241.5,
+          "model_speedup": 0.778,
+          "model_speed": 8.91,
+          "dir_err": 2.1
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 260.5,
+          "obs_speed": 1.46,
+          "obs_speed_p90": 2.26,
+          "model_dir": 267.2,
+          "model_speedup": 0.729,
+          "model_speed": 8.68,
+          "dir_err": 6.7
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 268.2,
+          "obs_speed": 1.99,
+          "obs_speed_p90": 2.6,
+          "model_dir": 294.9,
+          "model_speedup": 0.727,
+          "model_speed": 8.0,
+          "dir_err": 26.7
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 283.6,
+          "obs_speed": 1.65,
+          "obs_speed_p90": 4.47,
+          "model_dir": 321.3,
+          "model_speedup": 0.787,
+          "model_speed": 8.96,
+          "dir_err": 37.7
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 336.8,
+          "obs_speed": 1.92,
+          "obs_speed_p90": 4.42,
+          "model_dir": 343.3,
+          "model_speedup": 0.854,
+          "model_speed": 10.21,
+          "dir_err": 6.5
+        }
+      }
+    },
+    {
+      "id": "ICAPET148",
+      "name": "Cape Town",
+      "lat": -34.022,
+      "lon": 18.473,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 180.0,
+          "obs_speed": 1.27,
+          "obs_speed_p90": 1.97,
+          "model_dir": 1.2,
+          "model_speedup": 0.67,
+          "model_speed": 7.74,
+          "dir_err": 178.8
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 180.0,
+          "obs_speed": 0.65,
+          "obs_speed_p90": 1.22,
+          "model_dir": 117.5,
+          "model_speedup": 0.543,
+          "model_speed": 7.74,
+          "dir_err": 62.5
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 180.0,
+          "obs_speed": 1.51,
+          "obs_speed_p90": 2.48,
+          "model_dir": 142.8,
+          "model_speedup": 0.594,
+          "model_speed": 8.24,
+          "dir_err": 37.2
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 180.0,
+          "obs_speed": 1.92,
+          "obs_speed_p90": 2.94,
+          "model_dir": 163.3,
+          "model_speedup": 0.646,
+          "model_speed": 8.61,
+          "dir_err": 16.7
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 180.0,
+          "obs_speed": 1.78,
+          "obs_speed_p90": 2.73,
+          "model_dir": 181.4,
+          "model_speedup": 0.669,
+          "model_speed": 6.5,
+          "dir_err": 1.4
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 180.0,
+          "obs_speed": 1.12,
+          "obs_speed_p90": 1.78,
+          "model_dir": 199.6,
+          "model_speedup": 0.662,
+          "model_speed": 5.67,
+          "dir_err": 19.6
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 180.0,
+          "obs_speed": 1.08,
+          "obs_speed_p90": 1.81,
+          "model_dir": 218.4,
+          "model_speedup": 0.616,
+          "model_speed": 6.16,
+          "dir_err": 38.4
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 180.0,
+          "obs_speed": 0.52,
+          "obs_speed_p90": 1.03,
+          "model_dir": 241.9,
+          "model_speedup": 0.562,
+          "model_speed": 6.44,
+          "dir_err": 61.9
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 180.0,
+          "obs_speed": 1.17,
+          "obs_speed_p90": 1.89,
+          "model_dir": 269.0,
+          "model_speedup": 0.529,
+          "model_speed": 6.3,
+          "dir_err": 89.0
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 180.0,
+          "obs_speed": 1.47,
+          "obs_speed_p90": 1.98,
+          "model_dir": 296.9,
+          "model_speedup": 0.549,
+          "model_speed": 6.04,
+          "dir_err": 116.9
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 180.0,
+          "obs_speed": 1.36,
+          "obs_speed_p90": 2.94,
+          "model_dir": 321.3,
+          "model_speedup": 0.601,
+          "model_speed": 6.85,
+          "dir_err": 141.3
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 180.0,
+          "obs_speed": 2.07,
+          "obs_speed_p90": 4.07,
+          "model_dir": 342.3,
+          "model_speedup": 0.647,
+          "model_speed": 7.74,
+          "dir_err": 162.3
+        }
+      }
+    },
+    {
+      "id": "IHOUTB4",
+      "name": "Hout Bay",
+      "lat": -34.011,
+      "lon": 18.361,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 242.1,
+          "obs_speed": 1.1,
+          "obs_speed_p90": 1.49,
+          "model_dir": 342.5,
+          "model_speedup": 0.32,
+          "model_speed": 3.7,
+          "dir_err": 100.4
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 109.5,
+          "obs_speed": 1.54,
+          "obs_speed_p90": 2.18,
+          "model_dir": 102.1,
+          "model_speedup": 0.603,
+          "model_speed": 8.6,
+          "dir_err": 7.5
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 116.7,
+          "obs_speed": 2.18,
+          "obs_speed_p90": 3.54,
+          "model_dir": 112.4,
+          "model_speedup": 0.541,
+          "model_speed": 7.5,
+          "dir_err": 4.3
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 122.6,
+          "obs_speed": 1.94,
+          "obs_speed_p90": 3.36,
+          "model_dir": 128.6,
+          "model_speedup": 0.489,
+          "model_speed": 6.51,
+          "dir_err": 6.0
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 143.4,
+          "obs_speed": 1.36,
+          "obs_speed_p90": 2.37,
+          "model_dir": 159.9,
+          "model_speedup": 0.229,
+          "model_speed": 2.22,
+          "dir_err": 16.4
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 121.2,
+          "obs_speed": 0.73,
+          "obs_speed_p90": 1.42,
+          "model_dir": 214.8,
+          "model_speedup": 0.233,
+          "model_speed": 1.99,
+          "dir_err": 93.6
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 211.5,
+          "obs_speed": 0.66,
+          "obs_speed_p90": 1.22,
+          "model_dir": 246.7,
+          "model_speedup": 0.385,
+          "model_speed": 3.85,
+          "dir_err": 35.2
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 299.4,
+          "obs_speed": 0.5,
+          "obs_speed_p90": 1.64,
+          "model_dir": 261.7,
+          "model_speedup": 0.48,
+          "model_speed": 5.5,
+          "dir_err": 37.7
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 290.0,
+          "obs_speed": 0.92,
+          "obs_speed_p90": 1.5,
+          "model_dir": 272.0,
+          "model_speedup": 0.547,
+          "model_speed": 6.52,
+          "dir_err": 18.1
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 313.4,
+          "obs_speed": 1.3,
+          "obs_speed_p90": 2.16,
+          "model_dir": 281.8,
+          "model_speedup": 0.544,
+          "model_speed": 5.98,
+          "dir_err": 31.5
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 63.6,
+          "obs_speed": 1.55,
+          "obs_speed_p90": 2.67,
+          "model_dir": 294.8,
+          "model_speedup": 0.429,
+          "model_speed": 4.89,
+          "dir_err": 128.8
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 199.9,
+          "obs_speed": 1.43,
+          "obs_speed_p90": 2.33,
+          "model_dir": 310.7,
+          "model_speedup": 0.396,
+          "model_speed": 4.74,
+          "dir_err": 110.9
+        }
+      }
+    },
+    {
+      "id": "ICAPET7",
+      "name": "Cape Town",
+      "lat": -33.996,
+      "lon": 18.456,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 62.7,
+          "obs_speed": 1.2,
+          "obs_speed_p90": 2.14,
+          "model_dir": 9.2,
+          "model_speedup": 0.414,
+          "model_speed": 4.78,
+          "dir_err": 53.5
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 184.9,
+          "obs_speed": 0.95,
+          "obs_speed_p90": 1.31,
+          "model_dir": 111.9,
+          "model_speedup": 0.429,
+          "model_speed": 6.12,
+          "dir_err": 73.0
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 159.2,
+          "obs_speed": 1.3,
+          "obs_speed_p90": 2.17,
+          "model_dir": 141.1,
+          "model_speedup": 0.452,
+          "model_speed": 6.27,
+          "dir_err": 18.1
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 154.4,
+          "obs_speed": 1.63,
+          "obs_speed_p90": 2.83,
+          "model_dir": 168.4,
+          "model_speedup": 0.515,
+          "model_speed": 6.86,
+          "dir_err": 14.0
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 146.2,
+          "obs_speed": 1.58,
+          "obs_speed_p90": 2.56,
+          "model_dir": 188.2,
+          "model_speedup": 0.586,
+          "model_speed": 5.7,
+          "dir_err": 42.1
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 165.2,
+          "obs_speed": 0.94,
+          "obs_speed_p90": 1.75,
+          "model_dir": 205.7,
+          "model_speedup": 0.618,
+          "model_speed": 5.3,
+          "dir_err": 40.5
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 173.6,
+          "obs_speed": 1.1,
+          "obs_speed_p90": 1.75,
+          "model_dir": 220.6,
+          "model_speedup": 0.603,
+          "model_speed": 6.03,
+          "dir_err": 47.0
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 173.4,
+          "obs_speed": 0.62,
+          "obs_speed_p90": 1.0,
+          "model_dir": 239.5,
+          "model_speedup": 0.447,
+          "model_speed": 5.11,
+          "dir_err": 66.1
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 220.2,
+          "obs_speed": 1.12,
+          "obs_speed_p90": 1.65,
+          "model_dir": 263.0,
+          "model_speedup": 0.337,
+          "model_speed": 4.01,
+          "dir_err": 42.9
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 272.8,
+          "obs_speed": 1.57,
+          "obs_speed_p90": 2.11,
+          "model_dir": 288.6,
+          "model_speedup": 0.219,
+          "model_speed": 2.4,
+          "dir_err": 15.8
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 356.4,
+          "obs_speed": 1.69,
+          "obs_speed_p90": 3.78,
+          "model_dir": 324.9,
+          "model_speedup": 0.219,
+          "model_speed": 2.5,
+          "dir_err": 31.4
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 23.4,
+          "obs_speed": 1.84,
+          "obs_speed_p90": 3.74,
+          "model_dir": 345.6,
+          "model_speedup": 0.25,
+          "model_speed": 2.99,
+          "dir_err": 37.8
+        }
+      }
+    },
+    {
+      "id": "ICAPET108",
+      "name": "Cape Town",
+      "lat": -33.995,
+      "lon": 18.474,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 15.7,
+          "obs_speed": 0.97,
+          "obs_speed_p90": 1.67,
+          "model_dir": 1.1,
+          "model_speedup": 0.683,
+          "model_speed": 7.88,
+          "dir_err": 14.6
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 183.3,
+          "obs_speed": 0.47,
+          "obs_speed_p90": 0.72,
+          "model_dir": 114.7,
+          "model_speedup": 0.605,
+          "model_speed": 8.62,
+          "dir_err": 68.6
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 164.2,
+          "obs_speed": 0.62,
+          "obs_speed_p90": 0.97,
+          "model_dir": 138.0,
+          "model_speedup": 0.632,
+          "model_speed": 8.77,
+          "dir_err": 26.2
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 158.3,
+          "obs_speed": 0.76,
+          "obs_speed_p90": 1.21,
+          "model_dir": 160.3,
+          "model_speedup": 0.664,
+          "model_speed": 8.84,
+          "dir_err": 2.1
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 154.4,
+          "obs_speed": 0.66,
+          "obs_speed_p90": 1.06,
+          "model_dir": 181.3,
+          "model_speedup": 0.687,
+          "model_speed": 6.68,
+          "dir_err": 26.9
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 178.6,
+          "obs_speed": 0.63,
+          "obs_speed_p90": 1.39,
+          "model_dir": 200.3,
+          "model_speedup": 0.684,
+          "model_speed": 5.86,
+          "dir_err": 21.7
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 190.6,
+          "obs_speed": 0.8,
+          "obs_speed_p90": 1.39,
+          "model_dir": 222.2,
+          "model_speedup": 0.655,
+          "model_speed": 6.55,
+          "dir_err": 31.6
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 193.5,
+          "obs_speed": 0.41,
+          "obs_speed_p90": 0.72,
+          "model_dir": 243.7,
+          "model_speedup": 0.628,
+          "model_speed": 7.19,
+          "dir_err": 50.2
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 218.3,
+          "obs_speed": 0.91,
+          "obs_speed_p90": 1.36,
+          "model_dir": 268.8,
+          "model_speedup": 0.605,
+          "model_speed": 7.2,
+          "dir_err": 50.4
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 252.4,
+          "obs_speed": 1.21,
+          "obs_speed_p90": 1.6,
+          "model_dir": 293.6,
+          "model_speedup": 0.608,
+          "model_speed": 6.69,
+          "dir_err": 41.2
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 282.1,
+          "obs_speed": 1.38,
+          "obs_speed_p90": 2.72,
+          "model_dir": 318.5,
+          "model_speedup": 0.632,
+          "model_speed": 7.2,
+          "dir_err": 36.4
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 327.7,
+          "obs_speed": 1.7,
+          "obs_speed_p90": 3.54,
+          "model_dir": 340.1,
+          "model_speedup": 0.664,
+          "model_speed": 7.94,
+          "dir_err": 12.4
+        }
+      }
+    },
+    {
+      "id": "ICAPET161",
+      "name": "Cape Town",
+      "lat": -33.98424,
+      "lon": 18.48487,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 356.3,
+          "obs_speed": 2.63,
+          "obs_speed_p90": 3.77,
+          "model_dir": 0.8,
+          "model_speedup": 0.953,
+          "model_speed": 11.0,
+          "dir_err": 4.5
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 214.5,
+          "obs_speed": 1.71,
+          "obs_speed_p90": 2.26,
+          "model_dir": 116.5,
+          "model_speedup": 0.782,
+          "model_speed": 11.16,
+          "dir_err": 98.0
+        },
+        "SE": {
+          "n": 89,
+          "obs_dir": 194.8,
+          "obs_speed": 2.61,
+          "obs_speed_p90": 3.77,
+          "model_dir": 141.5,
+          "model_speedup": 0.847,
+          "model_speed": 11.74,
+          "dir_err": 53.3
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 193.6,
+          "obs_speed": 3.01,
+          "obs_speed_p90": 4.36,
+          "model_dir": 162.4,
+          "model_speedup": 0.917,
+          "model_speed": 12.21,
+          "dir_err": 31.2
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 186.6,
+          "obs_speed": 2.82,
+          "obs_speed_p90": 4.03,
+          "model_dir": 181.0,
+          "model_speedup": 0.957,
+          "model_speed": 9.3,
+          "dir_err": 5.7
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 210.0,
+          "obs_speed": 2.09,
+          "obs_speed_p90": 2.94,
+          "model_dir": 199.1,
+          "model_speedup": 0.939,
+          "model_speed": 8.05,
+          "dir_err": 10.9
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 225.6,
+          "obs_speed": 2.12,
+          "obs_speed_p90": 3.3,
+          "model_dir": 218.7,
+          "model_speedup": 0.88,
+          "model_speed": 8.8,
+          "dir_err": 6.9
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 246.4,
+          "obs_speed": 1.29,
+          "obs_speed_p90": 2.17,
+          "model_dir": 242.0,
+          "model_speedup": 0.815,
+          "model_speed": 9.33,
+          "dir_err": 4.4
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 286.3,
+          "obs_speed": 2.22,
+          "obs_speed_p90": 3.42,
+          "model_dir": 269.0,
+          "model_speedup": 0.78,
+          "model_speed": 9.29,
+          "dir_err": 17.3
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 337.3,
+          "obs_speed": 3.44,
+          "obs_speed_p90": 4.5,
+          "model_dir": 296.6,
+          "model_speedup": 0.791,
+          "model_speed": 8.7,
+          "dir_err": 40.7
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 353.6,
+          "obs_speed": 3.13,
+          "obs_speed_p90": 5.08,
+          "model_dir": 320.8,
+          "model_speedup": 0.855,
+          "model_speed": 9.73,
+          "dir_err": 32.8
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 352.1,
+          "obs_speed": 3.36,
+          "obs_speed_p90": 5.73,
+          "model_dir": 342.0,
+          "model_speedup": 0.917,
+          "model_speed": 10.97,
+          "dir_err": 10.1
+        }
+      }
+    },
+    {
+      "id": "ICAPET72",
+      "name": "Cape Town",
+      "lat": -33.982,
+      "lon": 18.44,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 110.4,
+          "obs_speed": 1.56,
+          "obs_speed_p90": 3.57,
+          "model_dir": 17.3,
+          "model_speedup": 0.461,
+          "model_speed": 5.32,
+          "dir_err": 93.2
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 260.9,
+          "obs_speed": 1.27,
+          "obs_speed_p90": 1.93,
+          "model_dir": 97.1,
+          "model_speedup": 0.329,
+          "model_speed": 4.69,
+          "dir_err": 163.9
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 251.9,
+          "obs_speed": 1.33,
+          "obs_speed_p90": 2.0,
+          "model_dir": 140.7,
+          "model_speedup": 0.287,
+          "model_speed": 3.99,
+          "dir_err": 111.2
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 238.9,
+          "obs_speed": 1.55,
+          "obs_speed_p90": 2.63,
+          "model_dir": 177.7,
+          "model_speedup": 0.364,
+          "model_speed": 4.84,
+          "dir_err": 61.3
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 224.1,
+          "obs_speed": 1.3,
+          "obs_speed_p90": 1.94,
+          "model_dir": 201.5,
+          "model_speedup": 0.469,
+          "model_speed": 4.55,
+          "dir_err": 22.6
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 214.8,
+          "obs_speed": 1.2,
+          "obs_speed_p90": 2.25,
+          "model_dir": 213.2,
+          "model_speedup": 0.448,
+          "model_speed": 3.84,
+          "dir_err": 1.6
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 219.6,
+          "obs_speed": 1.64,
+          "obs_speed_p90": 2.8,
+          "model_dir": 224.9,
+          "model_speedup": 0.507,
+          "model_speed": 5.07,
+          "dir_err": 5.3
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 223.7,
+          "obs_speed": 0.78,
+          "obs_speed_p90": 1.56,
+          "model_dir": 235.7,
+          "model_speedup": 0.623,
+          "model_speed": 7.13,
+          "dir_err": 12.1
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 217.0,
+          "obs_speed": 1.58,
+          "obs_speed_p90": 2.42,
+          "model_dir": 252.8,
+          "model_speedup": 0.455,
+          "model_speed": 5.42,
+          "dir_err": 35.8
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 144.9,
+          "obs_speed": 1.65,
+          "obs_speed_p90": 2.24,
+          "model_dir": 280.8,
+          "model_speedup": 0.236,
+          "model_speed": 2.59,
+          "dir_err": 135.8
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 198.6,
+          "obs_speed": 1.72,
+          "obs_speed_p90": 3.19,
+          "model_dir": 320.0,
+          "model_speedup": 0.206,
+          "model_speed": 2.34,
+          "dir_err": 121.3
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 112.9,
+          "obs_speed": 1.77,
+          "obs_speed_p90": 2.88,
+          "model_dir": 355.6,
+          "model_speedup": 0.369,
+          "model_speed": 4.42,
+          "dir_err": 117.4
+        }
+      }
+    },
+    {
+      "id": "ICAPETOW72",
+      "name": "Cape Town",
+      "lat": -33.97806,
+      "lon": 18.47861,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 217.2,
+          "obs_speed": 2.03,
+          "obs_speed_p90": 2.84,
+          "model_dir": 0.8,
+          "model_speedup": 0.943,
+          "model_speed": 10.89,
+          "dir_err": 143.7
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 72.8,
+          "obs_speed": 1.01,
+          "obs_speed_p90": 1.41,
+          "model_dir": 113.7,
+          "model_speedup": 0.848,
+          "model_speed": 12.09,
+          "dir_err": 40.9
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 9.2,
+          "obs_speed": 1.4,
+          "obs_speed_p90": 2.26,
+          "model_dir": 138.8,
+          "model_speedup": 0.876,
+          "model_speed": 12.15,
+          "dir_err": 129.6
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 2.3,
+          "obs_speed": 1.84,
+          "obs_speed_p90": 3.02,
+          "model_dir": 161.1,
+          "model_speedup": 0.915,
+          "model_speed": 12.19,
+          "dir_err": 158.8
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 349.8,
+          "obs_speed": 1.97,
+          "obs_speed_p90": 3.0,
+          "model_dir": 181.0,
+          "model_speedup": 0.943,
+          "model_speed": 9.16,
+          "dir_err": 168.8
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 33.4,
+          "obs_speed": 1.14,
+          "obs_speed_p90": 1.94,
+          "model_dir": 201.7,
+          "model_speedup": 0.94,
+          "model_speed": 8.05,
+          "dir_err": 168.3
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 76.6,
+          "obs_speed": 1.22,
+          "obs_speed_p90": 2.08,
+          "model_dir": 222.2,
+          "model_speedup": 0.912,
+          "model_speed": 9.12,
+          "dir_err": 145.6
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 75.1,
+          "obs_speed": 0.6,
+          "obs_speed_p90": 1.33,
+          "model_dir": 245.4,
+          "model_speedup": 0.878,
+          "model_speed": 10.06,
+          "dir_err": 170.3
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 131.9,
+          "obs_speed": 1.38,
+          "obs_speed_p90": 2.11,
+          "model_dir": 269.0,
+          "model_speedup": 0.759,
+          "model_speed": 9.04,
+          "dir_err": 137.1
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 186.2,
+          "obs_speed": 1.91,
+          "obs_speed_p90": 2.7,
+          "model_dir": 293.6,
+          "model_speedup": 0.756,
+          "model_speed": 8.31,
+          "dir_err": 107.5
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 199.9,
+          "obs_speed": 2.12,
+          "obs_speed_p90": 3.44,
+          "model_dir": 317.8,
+          "model_speedup": 0.788,
+          "model_speed": 8.97,
+          "dir_err": 117.9
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 186.7,
+          "obs_speed": 2.42,
+          "obs_speed_p90": 3.63,
+          "model_dir": 340.6,
+          "model_speedup": 0.852,
+          "model_speed": 10.19,
+          "dir_err": 153.9
+        }
+      }
+    },
+    {
+      "id": "ICAPET8",
+      "name": "Cape Town",
+      "lat": -33.978,
+      "lon": 18.474,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 39.0,
+          "obs_speed": 0.68,
+          "obs_speed_p90": 2.53,
+          "model_dir": 2.9,
+          "model_speedup": 0.804,
+          "model_speed": 9.29,
+          "dir_err": 36.1
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": null,
+          "obs_speed": 0.04,
+          "obs_speed_p90": 0.16,
+          "model_dir": 114.2,
+          "model_speedup": 0.692,
+          "model_speed": 9.86,
+          "dir_err": null
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 215.8,
+          "obs_speed": 0.19,
+          "obs_speed_p90": 0.53,
+          "model_dir": 140.1,
+          "model_speedup": 0.718,
+          "model_speed": 9.96,
+          "dir_err": 75.6
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 209.4,
+          "obs_speed": 0.49,
+          "obs_speed_p90": 1.54,
+          "model_dir": 162.1,
+          "model_speedup": 0.765,
+          "model_speed": 10.19,
+          "dir_err": 47.2
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 196.5,
+          "obs_speed": 0.32,
+          "obs_speed_p90": 1.12,
+          "model_dir": 183.4,
+          "model_speedup": 0.804,
+          "model_speed": 7.82,
+          "dir_err": 13.1
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 249.6,
+          "obs_speed": 0.2,
+          "obs_speed_p90": 0.78,
+          "model_dir": 201.3,
+          "model_speedup": 0.812,
+          "model_speed": 6.96,
+          "dir_err": 48.3
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 241.6,
+          "obs_speed": 0.46,
+          "obs_speed_p90": 1.33,
+          "model_dir": 220.8,
+          "model_speedup": 0.786,
+          "model_speed": 7.86,
+          "dir_err": 20.8
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": null,
+          "obs_speed": 0.1,
+          "obs_speed_p90": 0.11,
+          "model_dir": 244.0,
+          "model_speedup": 0.656,
+          "model_speed": 7.51,
+          "dir_err": null
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 263.4,
+          "obs_speed": 0.64,
+          "obs_speed_p90": 2.4,
+          "model_dir": 268.1,
+          "model_speedup": 0.381,
+          "model_speed": 4.54,
+          "dir_err": 4.7
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 22.2,
+          "obs_speed": 0.51,
+          "obs_speed_p90": 1.59,
+          "model_dir": 293.3,
+          "model_speedup": 0.423,
+          "model_speed": 4.66,
+          "dir_err": 88.9
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 9.9,
+          "obs_speed": 1.65,
+          "obs_speed_p90": 6.14,
+          "model_dir": 318.7,
+          "model_speedup": 0.487,
+          "model_speed": 5.55,
+          "dir_err": 51.2
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 26.5,
+          "obs_speed": 2.04,
+          "obs_speed_p90": 4.45,
+          "model_dir": 342.1,
+          "model_speedup": 0.506,
+          "model_speed": 6.05,
+          "dir_err": 44.4
+        }
+      }
+    },
+    {
+      "id": "ICAPET104",
+      "name": "Cape Town",
+      "lat": -33.968,
+      "lon": 18.38,
+      "by_dir": {
+        "N": {
+          "n": 18,
+          "obs_dir": 109.3,
+          "obs_speed": 0.89,
+          "obs_speed_p90": 1.79,
+          "model_dir": 14.2,
+          "model_speedup": 0.547,
+          "model_speed": 6.32,
+          "dir_err": 95.1
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 159.5,
+          "obs_speed": 1.6,
+          "obs_speed_p90": 2.91,
+          "model_dir": 104.8,
+          "model_speedup": 0.481,
+          "model_speed": 6.85,
+          "dir_err": 54.8
+        },
+        "SE": {
+          "n": 95,
+          "obs_dir": 168.3,
+          "obs_speed": 2.18,
+          "obs_speed_p90": 3.91,
+          "model_dir": 144.4,
+          "model_speedup": 0.608,
+          "model_speed": 8.43,
+          "dir_err": 23.8
+        },
+        "SSE": {
+          "n": 175,
+          "obs_dir": 166.9,
+          "obs_speed": 2.01,
+          "obs_speed_p90": 3.56,
+          "model_dir": 174.8,
+          "model_speedup": 0.791,
+          "model_speed": 10.53,
+          "dir_err": 7.9
+        },
+        "S": {
+          "n": 112,
+          "obs_dir": 155.6,
+          "obs_speed": 1.23,
+          "obs_speed_p90": 2.27,
+          "model_dir": 195.7,
+          "model_speedup": 1.023,
+          "model_speed": 9.94,
+          "dir_err": 40.1
+        },
+        "SSW": {
+          "n": 65,
+          "obs_dir": 213.7,
+          "obs_speed": 1.22,
+          "obs_speed_p90": 2.77,
+          "model_dir": 209.7,
+          "model_speedup": 0.829,
+          "model_speed": 7.1,
+          "dir_err": 4.0
+        },
+        "SW": {
+          "n": 53,
+          "obs_dir": 260.7,
+          "obs_speed": 1.76,
+          "obs_speed_p90": 3.42,
+          "model_dir": 220.3,
+          "model_speedup": 0.453,
+          "model_speed": 4.53,
+          "dir_err": 40.4
+        },
+        "WSW": {
+          "n": 14,
+          "obs_dir": 258.3,
+          "obs_speed": 0.97,
+          "obs_speed_p90": 1.98,
+          "model_dir": 236.4,
+          "model_speedup": 0.531,
+          "model_speed": 6.08,
+          "dir_err": 22.0
+        },
+        "W": {
+          "n": 44,
+          "obs_dir": 211.4,
+          "obs_speed": 0.94,
+          "obs_speed_p90": 1.46,
+          "model_dir": 256.5,
+          "model_speedup": 0.463,
+          "model_speed": 5.51,
+          "dir_err": 45.1
+        },
+        "WNW": {
+          "n": 18,
+          "obs_dir": 94.2,
+          "obs_speed": 0.64,
+          "obs_speed_p90": 1.09,
+          "model_dir": 285.8,
+          "model_speedup": 0.38,
+          "model_speed": 4.18,
+          "dir_err": 168.4
+        },
+        "NW": {
+          "n": 19,
+          "obs_dir": 120.1,
+          "obs_speed": 1.11,
+          "obs_speed_p90": 2.26,
+          "model_dir": 322.5,
+          "model_speedup": 0.378,
+          "model_speed": 4.3,
+          "dir_err": 157.6
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 104.2,
+          "obs_speed": 1.47,
+          "obs_speed_p90": 2.49,
+          "model_dir": 353.3,
+          "model_speedup": 0.455,
+          "model_speed": 5.44,
+          "dir_err": 110.8
+        }
+      }
+    },
+    {
+      "id": "ICAPET87",
+      "name": "Cape Town",
+      "lat": -33.953,
+      "lon": 18.477,
+      "by_dir": {
+        "N": {
+          "n": 19,
+          "obs_dir": 47.2,
+          "obs_speed": 0.21,
+          "obs_speed_p90": 0.39,
+          "model_dir": 1.3,
+          "model_speedup": 0.879,
+          "model_speed": 10.16,
+          "dir_err": 45.9
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 97.5,
+          "obs_speed": 0.49,
+          "obs_speed_p90": 1.48,
+          "model_dir": 120.6,
+          "model_speedup": 0.664,
+          "model_speed": 9.46,
+          "dir_err": 23.1
+        },
+        "SE": {
+          "n": 80,
+          "obs_dir": 61.5,
+          "obs_speed": 0.28,
+          "obs_speed_p90": 1.01,
+          "model_dir": 145.8,
+          "model_speedup": 0.758,
+          "model_speed": 10.51,
+          "dir_err": 84.4
+        },
+        "SSE": {
+          "n": 175,
+          "obs_dir": 60.3,
+          "obs_speed": 0.49,
+          "obs_speed_p90": 1.76,
+          "model_dir": 164.6,
+          "model_speedup": 0.844,
+          "model_speed": 11.24,
+          "dir_err": 104.4
+        },
+        "S": {
+          "n": 114,
+          "obs_dir": 42.0,
+          "obs_speed": 0.57,
+          "obs_speed_p90": 1.69,
+          "model_dir": 181.5,
+          "model_speedup": 0.887,
+          "model_speed": 8.62,
+          "dir_err": 139.5
+        },
+        "SSW": {
+          "n": 45,
+          "obs_dir": 96.0,
+          "obs_speed": 0.44,
+          "obs_speed_p90": 1.36,
+          "model_dir": 197.2,
+          "model_speedup": 0.855,
+          "model_speed": 7.33,
+          "dir_err": 101.2
+        },
+        "SW": {
+          "n": 41,
+          "obs_dir": 113.0,
+          "obs_speed": 0.35,
+          "obs_speed_p90": 1.11,
+          "model_dir": 216.6,
+          "model_speedup": 0.457,
+          "model_speed": 4.57,
+          "dir_err": 103.5
+        },
+        "WSW": {
+          "n": 11,
+          "obs_dir": null,
+          "obs_speed": 0.01,
+          "obs_speed_p90": 0.0,
+          "model_dir": 240.1,
+          "model_speedup": 0.391,
+          "model_speed": 4.48,
+          "dir_err": null
+        },
+        "W": {
+          "n": 15,
+          "obs_dir": 65.5,
+          "obs_speed": 1.38,
+          "obs_speed_p90": 4.14,
+          "model_dir": 270.6,
+          "model_speedup": 0.465,
+          "model_speed": 5.54,
+          "dir_err": 155.0
+        },
+        "WNW": {
+          "n": 27,
+          "obs_dir": 64.9,
+          "obs_speed": 1.34,
+          "obs_speed_p90": 2.98,
+          "model_dir": 301.4,
+          "model_speedup": 0.293,
+          "model_speed": 3.22,
+          "dir_err": 123.5
+        },
+        "NW": {
+          "n": 19,
+          "obs_dir": 47.3,
+          "obs_speed": 0.7,
+          "obs_speed_p90": 2.58,
+          "model_dir": 324.2,
+          "model_speedup": 0.671,
+          "model_speed": 7.64,
+          "dir_err": 83.2
+        },
+        "NNW": {
+          "n": 20,
+          "obs_dir": 58.0,
+          "obs_speed": 0.56,
+          "obs_speed_p90": 1.53,
+          "model_dir": 344.6,
+          "model_speedup": 0.844,
+          "model_speed": 10.09,
+          "dir_err": 73.4
+        }
+      }
+    },
+    {
+      "id": "ICAPET169",
+      "name": "Cape Town",
+      "lat": -33.945,
+      "lon": 18.482,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 155.8,
+          "obs_speed": 1.44,
+          "obs_speed_p90": 2.14,
+          "model_dir": 358.2,
+          "model_speedup": 0.816,
+          "model_speed": 9.43,
+          "dir_err": 157.5
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 35.5,
+          "obs_speed": 1.46,
+          "obs_speed_p90": 1.92,
+          "model_dir": 113.6,
+          "model_speedup": 0.849,
+          "model_speed": 12.11,
+          "dir_err": 78.1
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 18.2,
+          "obs_speed": 1.9,
+          "obs_speed_p90": 2.53,
+          "model_dir": 134.4,
+          "model_speedup": 0.853,
+          "model_speed": 11.84,
+          "dir_err": 116.2
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 15.4,
+          "obs_speed": 2.19,
+          "obs_speed_p90": 3.24,
+          "model_dir": 155.7,
+          "model_speedup": 0.843,
+          "model_speed": 11.22,
+          "dir_err": 140.3
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 8.4,
+          "obs_speed": 1.97,
+          "obs_speed_p90": 3.06,
+          "model_dir": 177.9,
+          "model_speedup": 0.821,
+          "model_speed": 7.98,
+          "dir_err": 169.5
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 28.9,
+          "obs_speed": 1.1,
+          "obs_speed_p90": 1.97,
+          "model_dir": 200.1,
+          "model_speedup": 0.798,
+          "model_speed": 6.84,
+          "dir_err": 171.3
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 34.4,
+          "obs_speed": 1.03,
+          "obs_speed_p90": 1.81,
+          "model_dir": 225.5,
+          "model_speedup": 0.522,
+          "model_speed": 5.22,
+          "dir_err": 168.9
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 50.7,
+          "obs_speed": 0.52,
+          "obs_speed_p90": 1.28,
+          "model_dir": 248.9,
+          "model_speedup": 0.512,
+          "model_speed": 5.86,
+          "dir_err": 161.8
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 148.3,
+          "obs_speed": 1.49,
+          "obs_speed_p90": 2.74,
+          "model_dir": 271.5,
+          "model_speedup": 0.497,
+          "model_speed": 5.92,
+          "dir_err": 123.2
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 152.7,
+          "obs_speed": 2.31,
+          "obs_speed_p90": 3.13,
+          "model_dir": 292.9,
+          "model_speedup": 0.418,
+          "model_speed": 4.6,
+          "dir_err": 140.3
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 158.4,
+          "obs_speed": 1.92,
+          "obs_speed_p90": 3.97,
+          "model_dir": 314.4,
+          "model_speedup": 0.856,
+          "model_speed": 9.75,
+          "dir_err": 156.0
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 152.1,
+          "obs_speed": 2.07,
+          "obs_speed_p90": 3.64,
+          "model_dir": 336.2,
+          "model_speedup": 0.839,
+          "model_speed": 10.04,
+          "dir_err": 176.0
+        }
+      }
+    },
+    {
+      "id": "ICAPET62",
+      "name": "Cape Town",
+      "lat": -33.9439,
+      "lon": 18.41496,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 336.4,
+          "obs_speed": 0.31,
+          "obs_speed_p90": 0.7,
+          "model_dir": 358.7,
+          "model_speedup": 0.412,
+          "model_speed": 4.76,
+          "dir_err": 22.3
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 342.3,
+          "obs_speed": 0.33,
+          "obs_speed_p90": 0.83,
+          "model_dir": 107.3,
+          "model_speedup": 0.887,
+          "model_speed": 12.65,
+          "dir_err": 125.0
+        },
+        "SE": {
+          "n": 86,
+          "obs_dir": 319.8,
+          "obs_speed": 0.86,
+          "obs_speed_p90": 1.4,
+          "model_dir": 125.3,
+          "model_speedup": 0.877,
+          "model_speed": 12.16,
+          "dir_err": 165.4
+        },
+        "SSE": {
+          "n": 194,
+          "obs_dir": 323.7,
+          "obs_speed": 0.84,
+          "obs_speed_p90": 1.42,
+          "model_dir": 148.0,
+          "model_speedup": 0.402,
+          "model_speed": 5.36,
+          "dir_err": 175.6
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 324.5,
+          "obs_speed": 0.68,
+          "obs_speed_p90": 1.11,
+          "model_dir": 178.3,
+          "model_speedup": 0.367,
+          "model_speed": 3.56,
+          "dir_err": 146.2
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 294.7,
+          "obs_speed": 0.6,
+          "obs_speed_p90": 1.11,
+          "model_dir": 211.8,
+          "model_speedup": 0.39,
+          "model_speed": 3.34,
+          "dir_err": 82.9
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 289.2,
+          "obs_speed": 0.75,
+          "obs_speed_p90": 1.31,
+          "model_dir": 235.9,
+          "model_speedup": 0.837,
+          "model_speed": 8.37,
+          "dir_err": 53.3
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 359.3,
+          "obs_speed": 0.5,
+          "obs_speed_p90": 1.36,
+          "model_dir": 254.6,
+          "model_speedup": 0.468,
+          "model_speed": 5.36,
+          "dir_err": 104.7
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 302.5,
+          "obs_speed": 0.83,
+          "obs_speed_p90": 1.14,
+          "model_dir": 271.5,
+          "model_speedup": 0.488,
+          "model_speed": 5.81,
+          "dir_err": 30.9
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 269.8,
+          "obs_speed": 0.8,
+          "obs_speed_p90": 1.05,
+          "model_dir": 288.2,
+          "model_speedup": 0.605,
+          "model_speed": 6.66,
+          "dir_err": 18.4
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 336.8,
+          "obs_speed": 0.55,
+          "obs_speed_p90": 0.94,
+          "model_dir": 305.5,
+          "model_speedup": 0.527,
+          "model_speed": 6.0,
+          "dir_err": 31.3
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 316.0,
+          "obs_speed": 0.4,
+          "obs_speed_p90": 0.91,
+          "model_dir": 328.1,
+          "model_speedup": 0.46,
+          "model_speed": 5.51,
+          "dir_err": 12.1
+        }
+      }
+    },
+    {
+      "id": "ICAPET73",
+      "name": "Cape Town",
+      "lat": -33.94338,
+      "lon": 18.37325,
+      "by_dir": {
+        "N": {
+          "n": 18,
+          "obs_dir": 6.9,
+          "obs_speed": 3.23,
+          "obs_speed_p90": 5.89,
+          "model_dir": 359.1,
+          "model_speedup": 0.899,
+          "model_speed": 10.39,
+          "dir_err": 7.8
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 17.2,
+          "obs_speed": 1.61,
+          "obs_speed_p90": 2.3,
+          "model_dir": 122.5,
+          "model_speedup": 0.955,
+          "model_speed": 13.61,
+          "dir_err": 105.2
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 71.2,
+          "obs_speed": 3.46,
+          "obs_speed_p90": 8.77,
+          "model_dir": 146.3,
+          "model_speedup": 0.344,
+          "model_speed": 4.77,
+          "dir_err": 75.1
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 122.9,
+          "obs_speed": 4.81,
+          "obs_speed_p90": 12.18,
+          "model_dir": 162.8,
+          "model_speedup": 0.358,
+          "model_speed": 4.76,
+          "dir_err": 39.9
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 228.5,
+          "obs_speed": 4.56,
+          "obs_speed_p90": 9.59,
+          "model_dir": 178.2,
+          "model_speedup": 0.498,
+          "model_speed": 4.84,
+          "dir_err": 50.3
+        },
+        "SSW": {
+          "n": 73,
+          "obs_dir": 215.3,
+          "obs_speed": 4.99,
+          "obs_speed_p90": 7.68,
+          "model_dir": 193.0,
+          "model_speedup": 0.722,
+          "model_speed": 6.19,
+          "dir_err": 22.3
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 202.0,
+          "obs_speed": 3.47,
+          "obs_speed_p90": 5.44,
+          "model_dir": 209.8,
+          "model_speedup": 0.739,
+          "model_speed": 7.39,
+          "dir_err": 7.8
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 191.2,
+          "obs_speed": 2.04,
+          "obs_speed_p90": 3.64,
+          "model_dir": 236.4,
+          "model_speedup": 0.624,
+          "model_speed": 7.15,
+          "dir_err": 45.2
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 235.1,
+          "obs_speed": 1.86,
+          "obs_speed_p90": 2.67,
+          "model_dir": 270.5,
+          "model_speedup": 0.581,
+          "model_speed": 6.92,
+          "dir_err": 35.4
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 285.1,
+          "obs_speed": 1.79,
+          "obs_speed_p90": 3.21,
+          "model_dir": 303.4,
+          "model_speedup": 0.643,
+          "model_speed": 7.08,
+          "dir_err": 18.3
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 1.6,
+          "obs_speed": 3.18,
+          "obs_speed_p90": 6.47,
+          "model_dir": 325.7,
+          "model_speedup": 0.764,
+          "model_speed": 8.7,
+          "dir_err": 35.8
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 12.9,
+          "obs_speed": 3.99,
+          "obs_speed_p90": 6.25,
+          "model_dir": 343.3,
+          "model_speedup": 0.861,
+          "model_speed": 10.3,
+          "dir_err": 29.5
+        }
+      }
+    },
+    {
+      "id": "ICAPET99",
+      "name": "Cape Town",
+      "lat": -33.943,
+      "lon": 18.474,
+      "by_dir": {
+        "N": {
+          "n": 18,
+          "obs_dir": null,
+          "obs_speed": 0.07,
+          "obs_speed_p90": 0.19,
+          "model_dir": 354.9,
+          "model_speedup": 0.91,
+          "model_speed": 10.51,
+          "dir_err": null
+        },
+        "ESE": {
+          "n": 6,
+          "obs_dir": 87.4,
+          "obs_speed": 1.62,
+          "obs_speed_p90": 2.94,
+          "model_dir": 123.9,
+          "model_speedup": 0.766,
+          "model_speed": 10.92,
+          "dir_err": 36.4
+        },
+        "SE": {
+          "n": 78,
+          "obs_dir": 90.9,
+          "obs_speed": 1.75,
+          "obs_speed_p90": 2.89,
+          "model_dir": 143.4,
+          "model_speedup": 0.875,
+          "model_speed": 12.14,
+          "dir_err": 52.5
+        },
+        "SSE": {
+          "n": 142,
+          "obs_dir": 90.8,
+          "obs_speed": 2.16,
+          "obs_speed_p90": 3.5,
+          "model_dir": 159.9,
+          "model_speedup": 0.938,
+          "model_speed": 12.49,
+          "dir_err": 69.1
+        },
+        "S": {
+          "n": 100,
+          "obs_dir": 96.2,
+          "obs_speed": 1.6,
+          "obs_speed_p90": 2.81,
+          "model_dir": 173.9,
+          "model_speedup": 0.918,
+          "model_speed": 8.92,
+          "dir_err": 77.7
+        },
+        "SSW": {
+          "n": 42,
+          "obs_dir": 96.0,
+          "obs_speed": 0.58,
+          "obs_speed_p90": 1.66,
+          "model_dir": 190.0,
+          "model_speedup": 0.746,
+          "model_speed": 6.4,
+          "dir_err": 94.0
+        },
+        "SW": {
+          "n": 41,
+          "obs_dir": 89.5,
+          "obs_speed": 0.46,
+          "obs_speed_p90": 1.5,
+          "model_dir": 212.1,
+          "model_speedup": 0.29,
+          "model_speed": 2.9,
+          "dir_err": 122.6
+        },
+        "WSW": {
+          "n": 12,
+          "obs_dir": null,
+          "obs_speed": 0.01,
+          "obs_speed_p90": 0.0,
+          "model_dir": 244.4,
+          "model_speedup": 0.389,
+          "model_speed": 4.45,
+          "dir_err": null
+        },
+        "W": {
+          "n": 40,
+          "obs_dir": 135.0,
+          "obs_speed": 0.17,
+          "obs_speed_p90": 0.69,
+          "model_dir": 276.6,
+          "model_speedup": 0.354,
+          "model_speed": 4.21,
+          "dir_err": 141.6
+        },
+        "WNW": {
+          "n": 13,
+          "obs_dir": 181.4,
+          "obs_speed": 0.28,
+          "obs_speed_p90": 0.92,
+          "model_dir": 303.2,
+          "model_speedup": 0.545,
+          "model_speed": 6.0,
+          "dir_err": 121.9
+        },
+        "NW": {
+          "n": 18,
+          "obs_dir": 195.4,
+          "obs_speed": 0.38,
+          "obs_speed_p90": 1.2,
+          "model_dir": 322.7,
+          "model_speedup": 0.875,
+          "model_speed": 9.97,
+          "dir_err": 127.3
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 212.1,
+          "obs_speed": 0.17,
+          "obs_speed_p90": 0.63,
+          "model_dir": 339.2,
+          "model_speedup": 0.926,
+          "model_speed": 11.07,
+          "dir_err": 127.2
+        }
+      }
+    },
+    {
+      "id": "ICAPET156",
+      "name": "Cape Town",
+      "lat": -33.93791,
+      "lon": 18.42734,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 316.9,
+          "obs_speed": 0.77,
+          "obs_speed_p90": 1.31,
+          "model_dir": 5.0,
+          "model_speedup": 0.482,
+          "model_speed": 5.56,
+          "dir_err": 48.1
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 159.9,
+          "obs_speed": 0.98,
+          "obs_speed_p90": 3.35,
+          "model_dir": 99.8,
+          "model_speedup": 0.318,
+          "model_speed": 4.54,
+          "dir_err": 60.1
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 168.0,
+          "obs_speed": 3.35,
+          "obs_speed_p90": 6.95,
+          "model_dir": 122.6,
+          "model_speedup": 0.885,
+          "model_speed": 12.27,
+          "dir_err": 45.4
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 165.2,
+          "obs_speed": 3.23,
+          "obs_speed_p90": 6.98,
+          "model_dir": 150.7,
+          "model_speedup": 0.746,
+          "model_speed": 9.94,
+          "dir_err": 14.6
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 170.6,
+          "obs_speed": 1.82,
+          "obs_speed_p90": 4.26,
+          "model_dir": 182.6,
+          "model_speedup": 0.362,
+          "model_speed": 3.52,
+          "dir_err": 12.0
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 228.1,
+          "obs_speed": 1.55,
+          "obs_speed_p90": 3.22,
+          "model_dir": 212.1,
+          "model_speedup": 0.428,
+          "model_speed": 3.67,
+          "dir_err": 16.0
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 248.7,
+          "obs_speed": 1.66,
+          "obs_speed_p90": 3.47,
+          "model_dir": 232.2,
+          "model_speedup": 0.557,
+          "model_speed": 5.57,
+          "dir_err": 16.5
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 245.1,
+          "obs_speed": 0.92,
+          "obs_speed_p90": 2.14,
+          "model_dir": 247.3,
+          "model_speedup": 0.447,
+          "model_speed": 5.12,
+          "dir_err": 2.3
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 272.0,
+          "obs_speed": 2.02,
+          "obs_speed_p90": 3.38,
+          "model_dir": 265.7,
+          "model_speedup": 0.538,
+          "model_speed": 6.41,
+          "dir_err": 6.3
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 280.9,
+          "obs_speed": 2.09,
+          "obs_speed_p90": 2.79,
+          "model_dir": 281.9,
+          "model_speedup": 0.614,
+          "model_speed": 6.75,
+          "dir_err": 1.0
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 294.6,
+          "obs_speed": 1.7,
+          "obs_speed_p90": 2.97,
+          "model_dir": 302.7,
+          "model_speedup": 0.536,
+          "model_speed": 6.1,
+          "dir_err": 8.1
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 315.2,
+          "obs_speed": 1.23,
+          "obs_speed_p90": 2.34,
+          "model_dir": 332.8,
+          "model_speedup": 0.481,
+          "model_speed": 5.75,
+          "dir_err": 17.6
+        }
+      }
+    },
+    {
+      "id": "ICAPET43",
+      "name": "Cape Town",
+      "lat": -33.93764,
+      "lon": 18.49411,
+      "by_dir": {
+        "N": {
+          "n": 19,
+          "obs_dir": 345.1,
+          "obs_speed": 1.72,
+          "obs_speed_p90": 2.86,
+          "model_dir": 358.9,
+          "model_speedup": 0.705,
+          "model_speed": 8.15,
+          "dir_err": 13.8
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 195.2,
+          "obs_speed": 2.69,
+          "obs_speed_p90": 3.47,
+          "model_dir": 114.0,
+          "model_speedup": 0.705,
+          "model_speed": 10.06,
+          "dir_err": 81.2
+        },
+        "SE": {
+          "n": 58,
+          "obs_dir": 178.7,
+          "obs_speed": 3.65,
+          "obs_speed_p90": 4.56,
+          "model_dir": 135.8,
+          "model_speedup": 0.716,
+          "model_speed": 9.92,
+          "dir_err": 42.9
+        },
+        "SSE": {
+          "n": 157,
+          "obs_dir": 180.4,
+          "obs_speed": 4.01,
+          "obs_speed_p90": 5.52,
+          "model_dir": 157.1,
+          "model_speedup": 0.721,
+          "model_speed": 9.61,
+          "dir_err": 23.3
+        },
+        "S": {
+          "n": 98,
+          "obs_dir": 176.5,
+          "obs_speed": 3.65,
+          "obs_speed_p90": 5.01,
+          "model_dir": 178.7,
+          "model_speedup": 0.712,
+          "model_speed": 6.92,
+          "dir_err": 2.2
+        },
+        "SSW": {
+          "n": 46,
+          "obs_dir": 198.8,
+          "obs_speed": 2.11,
+          "obs_speed_p90": 3.11,
+          "model_dir": 200.0,
+          "model_speedup": 0.69,
+          "model_speed": 5.91,
+          "dir_err": 1.2
+        },
+        "SW": {
+          "n": 41,
+          "obs_dir": 196.6,
+          "obs_speed": 1.89,
+          "obs_speed_p90": 3.17,
+          "model_dir": 223.8,
+          "model_speedup": 0.676,
+          "model_speed": 6.76,
+          "dir_err": 27.1
+        },
+        "WSW": {
+          "n": 11,
+          "obs_dir": 198.6,
+          "obs_speed": 0.83,
+          "obs_speed_p90": 1.97,
+          "model_dir": 247.4,
+          "model_speedup": 0.679,
+          "model_speed": 7.78,
+          "dir_err": 48.8
+        },
+        "W": {
+          "n": 15,
+          "obs_dir": 317.9,
+          "obs_speed": 2.13,
+          "obs_speed_p90": 3.14,
+          "model_dir": 271.1,
+          "model_speedup": 0.69,
+          "model_speed": 8.22,
+          "dir_err": 46.8
+        },
+        "WNW": {
+          "n": 27,
+          "obs_dir": 334.5,
+          "obs_speed": 2.6,
+          "obs_speed_p90": 3.15,
+          "model_dir": 293.9,
+          "model_speedup": 0.705,
+          "model_speed": 7.76,
+          "dir_err": 40.6
+        },
+        "NW": {
+          "n": 19,
+          "obs_dir": 338.3,
+          "obs_speed": 2.24,
+          "obs_speed_p90": 4.27,
+          "model_dir": 315.0,
+          "model_speedup": 0.713,
+          "model_speed": 8.12,
+          "dir_err": 23.3
+        },
+        "NNW": {
+          "n": 20,
+          "obs_dir": 344.2,
+          "obs_speed": 2.41,
+          "obs_speed_p90": 3.73,
+          "model_dir": 337.3,
+          "model_speedup": 0.715,
+          "model_speed": 8.55,
+          "dir_err": 7.0
+        }
+      }
+    },
+    {
+      "id": "ICAPET158",
+      "name": "Cape Town",
+      "lat": -33.937,
+      "lon": 18.504,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 359.1,
+          "obs_speed": 1.47,
+          "obs_speed_p90": 2.92,
+          "model_dir": 359.1,
+          "model_speedup": 0.818,
+          "model_speed": 9.44,
+          "dir_err": 0.0
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 222.6,
+          "obs_speed": 3.08,
+          "obs_speed_p90": 4.27,
+          "model_dir": 114.0,
+          "model_speedup": 0.792,
+          "model_speed": 11.3,
+          "dir_err": 108.6
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 208.6,
+          "obs_speed": 3.18,
+          "obs_speed_p90": 4.31,
+          "model_dir": 136.4,
+          "model_speedup": 0.81,
+          "model_speed": 11.23,
+          "dir_err": 72.1
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 204.7,
+          "obs_speed": 3.44,
+          "obs_speed_p90": 4.78,
+          "model_dir": 157.4,
+          "model_speedup": 0.826,
+          "model_speed": 11.0,
+          "dir_err": 47.3
+        },
+        "S": {
+          "n": 148,
+          "obs_dir": 190.7,
+          "obs_speed": 2.49,
+          "obs_speed_p90": 4.1,
+          "model_dir": 178.9,
+          "model_speedup": 0.82,
+          "model_speed": 7.97,
+          "dir_err": 11.8
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 224.3,
+          "obs_speed": 1.55,
+          "obs_speed_p90": 3.36,
+          "model_dir": 200.1,
+          "model_speedup": 0.801,
+          "model_speed": 6.87,
+          "dir_err": 24.2
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 230.2,
+          "obs_speed": 1.94,
+          "obs_speed_p90": 3.88,
+          "model_dir": 221.7,
+          "model_speedup": 0.779,
+          "model_speed": 7.79,
+          "dir_err": 8.5
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 264.6,
+          "obs_speed": 0.37,
+          "obs_speed_p90": 1.25,
+          "model_dir": 245.9,
+          "model_speedup": 0.776,
+          "model_speed": 8.89,
+          "dir_err": 18.6
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 321.6,
+          "obs_speed": 1.17,
+          "obs_speed_p90": 3.31,
+          "model_dir": 271.0,
+          "model_speedup": 0.779,
+          "model_speed": 9.27,
+          "dir_err": 50.6
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 335.4,
+          "obs_speed": 2.82,
+          "obs_speed_p90": 3.95,
+          "model_dir": 294.3,
+          "model_speedup": 0.794,
+          "model_speed": 8.74,
+          "dir_err": 41.1
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 343.5,
+          "obs_speed": 2.15,
+          "obs_speed_p90": 4.72,
+          "model_dir": 316.4,
+          "model_speedup": 0.812,
+          "model_speed": 9.25,
+          "dir_err": 27.1
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 352.0,
+          "obs_speed": 2.09,
+          "obs_speed_p90": 3.94,
+          "model_dir": 338.2,
+          "model_speedup": 0.82,
+          "model_speed": 9.81,
+          "dir_err": 13.7
+        }
+      }
+    },
+    {
+      "id": "ICAPET69",
+      "name": "Cape Town",
+      "lat": -33.935,
+      "lon": 18.466,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 328.2,
+          "obs_speed": 2.16,
+          "obs_speed_p90": 3.63,
+          "model_dir": 350.7,
+          "model_speedup": 0.826,
+          "model_speed": 9.54,
+          "dir_err": 22.5
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 202.0,
+          "obs_speed": 3.55,
+          "obs_speed_p90": 6.15,
+          "model_dir": 118.6,
+          "model_speedup": 0.887,
+          "model_speed": 12.65,
+          "dir_err": 83.4
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 182.6,
+          "obs_speed": 4.74,
+          "obs_speed_p90": 6.49,
+          "model_dir": 135.1,
+          "model_speedup": 0.932,
+          "model_speed": 12.92,
+          "dir_err": 47.5
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 185.6,
+          "obs_speed": 4.99,
+          "obs_speed_p90": 7.09,
+          "model_dir": 151.6,
+          "model_speedup": 0.911,
+          "model_speed": 12.13,
+          "dir_err": 33.9
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 178.0,
+          "obs_speed": 4.0,
+          "obs_speed_p90": 5.92,
+          "model_dir": 169.1,
+          "model_speedup": 0.827,
+          "model_speed": 8.04,
+          "dir_err": 8.9
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 193.5,
+          "obs_speed": 2.25,
+          "obs_speed_p90": 3.47,
+          "model_dir": 191.2,
+          "model_speedup": 0.325,
+          "model_speed": 2.79,
+          "dir_err": 2.3
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 224.1,
+          "obs_speed": 2.07,
+          "obs_speed_p90": 3.92,
+          "model_dir": 223.1,
+          "model_speedup": 0.662,
+          "model_speed": 6.62,
+          "dir_err": 1.0
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 293.1,
+          "obs_speed": 1.26,
+          "obs_speed_p90": 2.97,
+          "model_dir": 253.7,
+          "model_speedup": 0.53,
+          "model_speed": 6.07,
+          "dir_err": 39.4
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 312.5,
+          "obs_speed": 2.6,
+          "obs_speed_p90": 4.58,
+          "model_dir": 277.8,
+          "model_speedup": 0.476,
+          "model_speed": 5.67,
+          "dir_err": 34.8
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 319.9,
+          "obs_speed": 3.58,
+          "obs_speed_p90": 5.08,
+          "model_dir": 298.3,
+          "model_speedup": 0.883,
+          "model_speed": 9.72,
+          "dir_err": 21.6
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 329.2,
+          "obs_speed": 3.27,
+          "obs_speed_p90": 5.58,
+          "model_dir": 315.1,
+          "model_speedup": 0.92,
+          "model_speed": 10.48,
+          "dir_err": 14.1
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 327.4,
+          "obs_speed": 3.25,
+          "obs_speed_p90": 5.23,
+          "model_dir": 332.7,
+          "model_speedup": 0.897,
+          "model_speed": 10.73,
+          "dir_err": 5.4
+        }
+      }
+    },
+    {
+      "id": "ICAPET172",
+      "name": "Cape Town",
+      "lat": -33.93405,
+      "lon": 18.45634,
+      "by_dir": {
+        "N": {
+          "n": 19,
+          "obs_dir": 333.8,
+          "obs_speed": 2.02,
+          "obs_speed_p90": 3.01,
+          "model_dir": 346.0,
+          "model_speedup": 0.601,
+          "model_speed": 6.94,
+          "dir_err": 12.3
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 187.7,
+          "obs_speed": 3.08,
+          "obs_speed_p90": 6.22,
+          "model_dir": 117.9,
+          "model_speedup": 0.756,
+          "model_speed": 10.78,
+          "dir_err": 69.8
+        },
+        "SE": {
+          "n": 78,
+          "obs_dir": 154.5,
+          "obs_speed": 5.39,
+          "obs_speed_p90": 7.52,
+          "model_dir": 131.1,
+          "model_speedup": 0.767,
+          "model_speed": 10.64,
+          "dir_err": 23.4
+        },
+        "SSE": {
+          "n": 166,
+          "obs_dir": 156.7,
+          "obs_speed": 5.42,
+          "obs_speed_p90": 7.86,
+          "model_dir": 145.8,
+          "model_speedup": 0.71,
+          "model_speed": 9.46,
+          "dir_err": 10.9
+        },
+        "S": {
+          "n": 102,
+          "obs_dir": 149.5,
+          "obs_speed": 4.28,
+          "obs_speed_p90": 5.66,
+          "model_dir": 164.3,
+          "model_speedup": 0.274,
+          "model_speed": 2.66,
+          "dir_err": 14.9
+        },
+        "SSW": {
+          "n": 54,
+          "obs_dir": 183.4,
+          "obs_speed": 2.35,
+          "obs_speed_p90": 3.58,
+          "model_dir": 192.7,
+          "model_speedup": 0.918,
+          "model_speed": 7.87,
+          "dir_err": 9.4
+        },
+        "SW": {
+          "n": 43,
+          "obs_dir": 259.9,
+          "obs_speed": 1.48,
+          "obs_speed_p90": 3.02,
+          "model_dir": 228.9,
+          "model_speedup": 0.225,
+          "model_speed": 2.25,
+          "dir_err": 31.0
+        },
+        "WSW": {
+          "n": 13,
+          "obs_dir": 339.6,
+          "obs_speed": 1.1,
+          "obs_speed_p90": 3.14,
+          "model_dir": 258.8,
+          "model_speedup": 0.276,
+          "model_speed": 3.16,
+          "dir_err": 80.7
+        },
+        "W": {
+          "n": 22,
+          "obs_dir": 296.7,
+          "obs_speed": 2.16,
+          "obs_speed_p90": 3.49,
+          "model_dir": 280.5,
+          "model_speedup": 0.626,
+          "model_speed": 7.45,
+          "dir_err": 16.2
+        },
+        "WNW": {
+          "n": 27,
+          "obs_dir": 313.9,
+          "obs_speed": 3.11,
+          "obs_speed_p90": 3.9,
+          "model_dir": 297.4,
+          "model_speedup": 0.748,
+          "model_speed": 8.23,
+          "dir_err": 16.5
+        },
+        "NW": {
+          "n": 19,
+          "obs_dir": 334.7,
+          "obs_speed": 2.92,
+          "obs_speed_p90": 5.35,
+          "model_dir": 311.4,
+          "model_speedup": 0.759,
+          "model_speed": 8.65,
+          "dir_err": 23.3
+        },
+        "NNW": {
+          "n": 21,
+          "obs_dir": 335.5,
+          "obs_speed": 2.86,
+          "obs_speed_p90": 4.81,
+          "model_dir": 327.0,
+          "model_speedup": 0.702,
+          "model_speed": 8.4,
+          "dir_err": 8.5
+        }
+      }
+    },
+    {
+      "id": "ICAPET147",
+      "name": "Cape Town",
+      "lat": -33.929,
+      "lon": 18.389,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 359.9,
+          "obs_speed": 0.21,
+          "obs_speed_p90": 0.72,
+          "model_dir": 3.4,
+          "model_speedup": 0.293,
+          "model_speed": 3.38,
+          "dir_err": 3.5
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": null,
+          "obs_speed": 0.0,
+          "obs_speed_p90": 0.0,
+          "model_dir": 99.8,
+          "model_speedup": 0.64,
+          "model_speed": 9.13,
+          "dir_err": null
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 11.5,
+          "obs_speed": 0.15,
+          "obs_speed_p90": 0.62,
+          "model_dir": 110.5,
+          "model_speedup": 0.384,
+          "model_speed": 5.32,
+          "dir_err": 99.0
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 41.7,
+          "obs_speed": 0.41,
+          "obs_speed_p90": 1.24,
+          "model_dir": 131.7,
+          "model_speedup": 0.359,
+          "model_speed": 4.79,
+          "dir_err": 90.0
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 40.7,
+          "obs_speed": 0.7,
+          "obs_speed_p90": 1.76,
+          "model_dir": 185.6,
+          "model_speedup": 0.271,
+          "model_speed": 2.63,
+          "dir_err": 144.9
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 24.6,
+          "obs_speed": 0.87,
+          "obs_speed_p90": 2.06,
+          "model_dir": 236.1,
+          "model_speedup": 0.437,
+          "model_speed": 3.74,
+          "dir_err": 148.5
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 43.7,
+          "obs_speed": 1.28,
+          "obs_speed_p90": 2.53,
+          "model_dir": 253.4,
+          "model_speedup": 0.629,
+          "model_speed": 6.29,
+          "dir_err": 150.3
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 43.0,
+          "obs_speed": 0.92,
+          "obs_speed_p90": 2.11,
+          "model_dir": 262.3,
+          "model_speedup": 0.767,
+          "model_speed": 8.79,
+          "dir_err": 140.7
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 49.8,
+          "obs_speed": 1.39,
+          "obs_speed_p90": 2.44,
+          "model_dir": 270.5,
+          "model_speedup": 0.81,
+          "model_speed": 9.65,
+          "dir_err": 139.3
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 49.5,
+          "obs_speed": 1.62,
+          "obs_speed_p90": 2.4,
+          "model_dir": 279.3,
+          "model_speedup": 0.755,
+          "model_speed": 8.31,
+          "dir_err": 130.3
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 44.5,
+          "obs_speed": 1.16,
+          "obs_speed_p90": 2.75,
+          "model_dir": 292.1,
+          "model_speedup": 0.606,
+          "model_speed": 6.91,
+          "dir_err": 112.3
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 28.8,
+          "obs_speed": 0.86,
+          "obs_speed_p90": 1.54,
+          "model_dir": 311.3,
+          "model_speedup": 0.411,
+          "model_speed": 4.91,
+          "dir_err": 77.5
+        }
+      }
+    },
+    {
+      "id": "ICAPET21",
+      "name": "Cape Town",
+      "lat": -33.924,
+      "lon": 18.386,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 68.9,
+          "obs_speed": 0.81,
+          "obs_speed_p90": 1.34,
+          "model_dir": 12.1,
+          "model_speedup": 0.428,
+          "model_speed": 4.94,
+          "dir_err": 56.7
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 42.9,
+          "obs_speed": 0.38,
+          "obs_speed_p90": 0.83,
+          "model_dir": 99.0,
+          "model_speedup": 0.537,
+          "model_speed": 7.66,
+          "dir_err": 56.1
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 292.7,
+          "obs_speed": 0.75,
+          "obs_speed_p90": 1.56,
+          "model_dir": 122.5,
+          "model_speedup": 0.292,
+          "model_speed": 4.05,
+          "dir_err": 170.2
+        },
+        "SSE": {
+          "n": 203,
+          "obs_dir": 11.7,
+          "obs_speed": 0.96,
+          "obs_speed_p90": 1.77,
+          "model_dir": 155.0,
+          "model_speedup": 0.183,
+          "model_speed": 2.44,
+          "dir_err": 143.3
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 315.1,
+          "obs_speed": 1.63,
+          "obs_speed_p90": 3.51,
+          "model_dir": 194.4,
+          "model_speedup": 0.45,
+          "model_speed": 4.37,
+          "dir_err": 120.7
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 268.6,
+          "obs_speed": 2.4,
+          "obs_speed_p90": 3.94,
+          "model_dir": 220.0,
+          "model_speedup": 0.498,
+          "model_speed": 4.26,
+          "dir_err": 48.6
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 269.3,
+          "obs_speed": 2.73,
+          "obs_speed_p90": 4.02,
+          "model_dir": 236.1,
+          "model_speedup": 0.606,
+          "model_speed": 6.06,
+          "dir_err": 33.2
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 274.3,
+          "obs_speed": 1.7,
+          "obs_speed_p90": 2.92,
+          "model_dir": 249.5,
+          "model_speedup": 0.642,
+          "model_speed": 7.36,
+          "dir_err": 24.7
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 287.5,
+          "obs_speed": 2.01,
+          "obs_speed_p90": 2.93,
+          "model_dir": 264.0,
+          "model_speedup": 0.622,
+          "model_speed": 7.41,
+          "dir_err": 23.4
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 300.9,
+          "obs_speed": 1.81,
+          "obs_speed_p90": 2.8,
+          "model_dir": 280.4,
+          "model_speedup": 0.546,
+          "model_speed": 6.0,
+          "dir_err": 20.5
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 318.5,
+          "obs_speed": 1.01,
+          "obs_speed_p90": 1.81,
+          "model_dir": 304.5,
+          "model_speedup": 0.452,
+          "model_speed": 5.15,
+          "dir_err": 14.0
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 41.1,
+          "obs_speed": 1.18,
+          "obs_speed_p90": 2.21,
+          "model_dir": 337.3,
+          "model_speedup": 0.395,
+          "model_speed": 4.73,
+          "dir_err": 63.8
+        }
+      }
+    },
+    {
+      "id": "ICAPET130",
+      "name": "Cape Town",
+      "lat": -33.921,
+      "lon": 18.393,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 231.7,
+          "obs_speed": 1.05,
+          "obs_speed_p90": 2.01,
+          "model_dir": 1.5,
+          "model_speedup": 0.549,
+          "model_speed": 6.35,
+          "dir_err": 129.7
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 177.2,
+          "obs_speed": 0.28,
+          "obs_speed_p90": 0.43,
+          "model_dir": 121.0,
+          "model_speedup": 0.319,
+          "model_speed": 4.55,
+          "dir_err": 56.2
+        },
+        "SE": {
+          "n": 98,
+          "obs_dir": 98.3,
+          "obs_speed": 0.6,
+          "obs_speed_p90": 1.59,
+          "model_dir": 150.5,
+          "model_speedup": 0.304,
+          "model_speed": 4.22,
+          "dir_err": 52.2
+        },
+        "SSE": {
+          "n": 197,
+          "obs_dir": 155.2,
+          "obs_speed": 0.82,
+          "obs_speed_p90": 1.69,
+          "model_dir": 170.1,
+          "model_speedup": 0.344,
+          "model_speed": 4.58,
+          "dir_err": 14.9
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 147.5,
+          "obs_speed": 1.26,
+          "obs_speed_p90": 2.57,
+          "model_dir": 182.1,
+          "model_speedup": 0.448,
+          "model_speed": 4.35,
+          "dir_err": 34.6
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 68.0,
+          "obs_speed": 1.74,
+          "obs_speed_p90": 3.28,
+          "model_dir": 196.1,
+          "model_speedup": 0.603,
+          "model_speed": 5.17,
+          "dir_err": 128.2
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 63.1,
+          "obs_speed": 2.08,
+          "obs_speed_p90": 3.37,
+          "model_dir": 209.1,
+          "model_speedup": 0.471,
+          "model_speed": 4.71,
+          "dir_err": 146.0
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 72.5,
+          "obs_speed": 1.25,
+          "obs_speed_p90": 2.31,
+          "model_dir": 230.7,
+          "model_speedup": 0.385,
+          "model_speed": 4.41,
+          "dir_err": 158.2
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 99.4,
+          "obs_speed": 1.31,
+          "obs_speed_p90": 1.86,
+          "model_dir": 262.0,
+          "model_speedup": 0.314,
+          "model_speed": 3.74,
+          "dir_err": 162.6
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 136.2,
+          "obs_speed": 1.3,
+          "obs_speed_p90": 1.64,
+          "model_dir": 303.4,
+          "model_speedup": 0.334,
+          "model_speed": 3.68,
+          "dir_err": 167.2
+        },
+        "NW": {
+          "n": 20,
+          "obs_dir": 228.1,
+          "obs_speed": 1.14,
+          "obs_speed_p90": 2.36,
+          "model_dir": 330.7,
+          "model_speedup": 0.42,
+          "model_speed": 4.79,
+          "dir_err": 102.6
+        },
+        "NNW": {
+          "n": 22,
+          "obs_dir": 229.6,
+          "obs_speed": 1.44,
+          "obs_speed_p90": 2.23,
+          "model_dir": 347.1,
+          "model_speedup": 0.507,
+          "model_speed": 6.07,
+          "dir_err": 117.5
+        }
+      }
+    },
+    {
+      "id": "ICAPET120",
+      "name": "Cape Town",
+      "lat": -33.91708,
+      "lon": 18.39087,
+      "by_dir": {
+        "N": {
+          "n": 19,
+          "obs_dir": 34.5,
+          "obs_speed": 1.35,
+          "obs_speed_p90": 2.73,
+          "model_dir": 6.8,
+          "model_speedup": 0.619,
+          "model_speed": 7.15,
+          "dir_err": 27.7
+        },
+        "ESE": {
+          "n": 9,
+          "obs_dir": 299.8,
+          "obs_speed": 0.84,
+          "obs_speed_p90": 1.83,
+          "model_dir": 106.9,
+          "model_speedup": 0.417,
+          "model_speed": 5.95,
+          "dir_err": 167.0
+        },
+        "SE": {
+          "n": 26,
+          "obs_dir": 197.6,
+          "obs_speed": 2.07,
+          "obs_speed_p90": 4.82,
+          "model_dir": 144.4,
+          "model_speedup": 0.433,
+          "model_speed": 6.01,
+          "dir_err": 53.2
+        },
+        "SSE": {
+          "n": 97,
+          "obs_dir": 261.3,
+          "obs_speed": 1.39,
+          "obs_speed_p90": 3.26,
+          "model_dir": 170.2,
+          "model_speedup": 0.432,
+          "model_speed": 5.76,
+          "dir_err": 91.1
+        },
+        "S": {
+          "n": 87,
+          "obs_dir": 270.5,
+          "obs_speed": 2.26,
+          "obs_speed_p90": 4.62,
+          "model_dir": 188.8,
+          "model_speedup": 1.084,
+          "model_speed": 10.54,
+          "dir_err": 81.6
+        },
+        "SSW": {
+          "n": 45,
+          "obs_dir": 206.5,
+          "obs_speed": 3.55,
+          "obs_speed_p90": 5.64,
+          "model_dir": 202.3,
+          "model_speedup": 0.614,
+          "model_speed": 5.26,
+          "dir_err": 4.1
+        },
+        "SW": {
+          "n": 41,
+          "obs_dir": 208.0,
+          "obs_speed": 4.11,
+          "obs_speed_p90": 5.56,
+          "model_dir": 215.2,
+          "model_speedup": 0.627,
+          "model_speed": 6.27,
+          "dir_err": 7.2
+        },
+        "WSW": {
+          "n": 11,
+          "obs_dir": 207.2,
+          "obs_speed": 3.17,
+          "obs_speed_p90": 3.81,
+          "model_dir": 232.9,
+          "model_speedup": 0.555,
+          "model_speed": 6.35,
+          "dir_err": 25.7
+        },
+        "W": {
+          "n": 15,
+          "obs_dir": 224.6,
+          "obs_speed": 3.31,
+          "obs_speed_p90": 3.87,
+          "model_dir": 255.6,
+          "model_speedup": 0.456,
+          "model_speed": 5.43,
+          "dir_err": 31.0
+        },
+        "WNW": {
+          "n": 27,
+          "obs_dir": 262.3,
+          "obs_speed": 2.16,
+          "obs_speed_p90": 3.12,
+          "model_dir": 288.6,
+          "model_speedup": 0.402,
+          "model_speed": 4.42,
+          "dir_err": 26.3
+        },
+        "NW": {
+          "n": 19,
+          "obs_dir": 342.0,
+          "obs_speed": 1.35,
+          "obs_speed_p90": 3.13,
+          "model_dir": 324.2,
+          "model_speedup": 0.445,
+          "model_speed": 5.07,
+          "dir_err": 17.8
+        },
+        "NNW": {
+          "n": 20,
+          "obs_dir": 35.0,
+          "obs_speed": 2.02,
+          "obs_speed_p90": 3.03,
+          "model_dir": 350.0,
+          "model_speedup": 0.536,
+          "model_speed": 6.41,
+          "dir_err": 44.9
+        }
+      }
+    },
+    {
+      "id": "ICAPET105",
+      "name": "Cape Town",
+      "lat": -33.91432,
+      "lon": 18.42405,
+      "by_dir": {
+        "N": {
+          "n": 20,
+          "obs_dir": 209.3,
+          "obs_speed": 0.56,
+          "obs_speed_p90": 0.89,
+          "model_dir": 358.7,
+          "model_speedup": 0.62,
+          "model_speed": 7.16,
+          "dir_err": 149.4
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 71.3,
+          "obs_speed": 0.79,
+          "obs_speed_p90": 1.24,
+          "model_dir": 113.1,
+          "model_speedup": 0.656,
+          "model_speed": 9.36,
+          "dir_err": 41.8
+        },
+        "SE": {
+          "n": 96,
+          "obs_dir": 190.9,
+          "obs_speed": 1.02,
+          "obs_speed_p90": 2.18,
+          "model_dir": 133.6,
+          "model_speedup": 0.579,
+          "model_speed": 8.03,
+          "dir_err": 57.3
+        },
+        "SSE": {
+          "n": 200,
+          "obs_dir": 185.1,
+          "obs_speed": 0.93,
+          "obs_speed_p90": 2.21,
+          "model_dir": 155.2,
+          "model_speedup": 0.587,
+          "model_speed": 7.82,
+          "dir_err": 29.9
+        },
+        "S": {
+          "n": 148,
+          "obs_dir": 204.4,
+          "obs_speed": 1.16,
+          "obs_speed_p90": 2.82,
+          "model_dir": 178.4,
+          "model_speedup": 0.58,
+          "model_speed": 5.64,
+          "dir_err": 26.1
+        },
+        "SSW": {
+          "n": 81,
+          "obs_dir": 162.1,
+          "obs_speed": 0.9,
+          "obs_speed_p90": 1.69,
+          "model_dir": 200.6,
+          "model_speedup": 0.564,
+          "model_speed": 4.84,
+          "dir_err": 38.5
+        },
+        "SW": {
+          "n": 60,
+          "obs_dir": 196.8,
+          "obs_speed": 0.97,
+          "obs_speed_p90": 1.84,
+          "model_dir": 226.9,
+          "model_speedup": 0.587,
+          "model_speed": 5.87,
+          "dir_err": 30.1
+        },
+        "WSW": {
+          "n": 19,
+          "obs_dir": 185.0,
+          "obs_speed": 0.63,
+          "obs_speed_p90": 1.26,
+          "model_dir": 249.7,
+          "model_speedup": 0.601,
+          "model_speed": 6.89,
+          "dir_err": 64.7
+        },
+        "W": {
+          "n": 45,
+          "obs_dir": 149.6,
+          "obs_speed": 0.65,
+          "obs_speed_p90": 1.29,
+          "model_dir": 271.6,
+          "model_speedup": 0.585,
+          "model_speed": 6.96,
+          "dir_err": 122.0
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 220.7,
+          "obs_speed": 1.74,
+          "obs_speed_p90": 3.97,
+          "model_dir": 292.1,
+          "model_speedup": 0.656,
+          "model_speed": 7.22,
+          "dir_err": 71.4
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 170.1,
+          "obs_speed": 0.86,
+          "obs_speed_p90": 1.61,
+          "model_dir": 315.2,
+          "model_speedup": 0.657,
+          "model_speed": 7.49,
+          "dir_err": 145.1
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 171.4,
+          "obs_speed": 0.42,
+          "obs_speed_p90": 0.89,
+          "model_dir": 334.4,
+          "model_speedup": 0.643,
+          "model_speed": 7.69,
+          "dir_err": 163.0
+        }
+      }
+    },
+    {
+      "id": "ICAPET167",
+      "name": "Cape Town",
+      "lat": -33.90134,
+      "lon": 18.42454,
+      "by_dir": {
+        "N": {
+          "n": 6,
+          "obs_dir": 49.3,
+          "obs_speed": 2.89,
+          "obs_speed_p90": 6.51,
+          "model_dir": 357.3,
+          "model_speedup": 0.606,
+          "model_speed": 7.0,
+          "dir_err": 51.9
+        },
+        "ESE": {
+          "n": 8,
+          "obs_dir": 96.7,
+          "obs_speed": 3.27,
+          "obs_speed_p90": 5.52,
+          "model_dir": 116.1,
+          "model_speedup": 0.627,
+          "model_speed": 8.94,
+          "dir_err": 19.5
+        },
+        "SE": {
+          "n": 82,
+          "obs_dir": 3.9,
+          "obs_speed": 5.46,
+          "obs_speed_p90": 10.25,
+          "model_dir": 135.6,
+          "model_speedup": 0.637,
+          "model_speed": 8.84,
+          "dir_err": 131.7
+        },
+        "SSE": {
+          "n": 131,
+          "obs_dir": 353.1,
+          "obs_speed": 5.02,
+          "obs_speed_p90": 9.58,
+          "model_dir": 155.8,
+          "model_speedup": 0.628,
+          "model_speed": 8.36,
+          "dir_err": 162.7
+        },
+        "S": {
+          "n": 97,
+          "obs_dir": 340.8,
+          "obs_speed": 3.64,
+          "obs_speed_p90": 6.21,
+          "model_dir": 176.8,
+          "model_speedup": 0.598,
+          "model_speed": 5.82,
+          "dir_err": 164.0
+        },
+        "SSW": {
+          "n": 62,
+          "obs_dir": 358.5,
+          "obs_speed": 4.24,
+          "obs_speed_p90": 8.44,
+          "model_dir": 200.1,
+          "model_speedup": 0.574,
+          "model_speed": 4.92,
+          "dir_err": 158.3
+        },
+        "SW": {
+          "n": 34,
+          "obs_dir": 343.9,
+          "obs_speed": 7.05,
+          "obs_speed_p90": 9.98,
+          "model_dir": 225.2,
+          "model_speedup": 0.67,
+          "model_speed": 6.7,
+          "dir_err": 118.7
+        },
+        "WSW": {
+          "n": 9,
+          "obs_dir": 348.6,
+          "obs_speed": 4.81,
+          "obs_speed_p90": 10.43,
+          "model_dir": 249.5,
+          "model_speedup": 0.581,
+          "model_speed": 6.65,
+          "dir_err": 99.1
+        },
+        "W": {
+          "n": 34,
+          "obs_dir": 3.3,
+          "obs_speed": 4.58,
+          "obs_speed_p90": 7.42,
+          "model_dir": 273.8,
+          "model_speedup": 0.606,
+          "model_speed": 7.21,
+          "dir_err": 89.5
+        },
+        "WNW": {
+          "n": 16,
+          "obs_dir": 318.5,
+          "obs_speed": 6.01,
+          "obs_speed_p90": 8.82,
+          "model_dir": 295.7,
+          "model_speedup": 0.627,
+          "model_speed": 6.9,
+          "dir_err": 22.8
+        },
+        "NW": {
+          "n": 6,
+          "obs_dir": 43.9,
+          "obs_speed": 5.95,
+          "obs_speed_p90": 9.47,
+          "model_dir": 315.0,
+          "model_speedup": 0.64,
+          "model_speed": 7.29,
+          "dir_err": 88.9
+        },
+        "NNW": {
+          "n": 7,
+          "obs_dir": 79.4,
+          "obs_speed": 3.87,
+          "obs_speed_p90": 8.81,
+          "model_dir": 335.6,
+          "model_speedup": 0.628,
+          "model_speed": 7.51,
+          "dir_err": 103.9
+        }
+      }
+    },
+    {
+      "id": "ICAPET143",
+      "name": "Cape Town",
+      "lat": -33.90069,
+      "lon": 18.42706,
+      "by_dir": {
+        "N": {
+          "n": 17,
+          "obs_dir": 59.7,
+          "obs_speed": 1.9,
+          "obs_speed_p90": 3.49,
+          "model_dir": 358.7,
+          "model_speedup": 0.717,
+          "model_speed": 8.28,
+          "dir_err": 61.0
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 340.3,
+          "obs_speed": 2.84,
+          "obs_speed_p90": 5.36,
+          "model_dir": 115.2,
+          "model_speedup": 0.679,
+          "model_speed": 9.69,
+          "dir_err": 134.9
+        },
+        "SE": {
+          "n": 99,
+          "obs_dir": 271.1,
+          "obs_speed": 5.76,
+          "obs_speed_p90": 9.86,
+          "model_dir": 137.5,
+          "model_speedup": 0.709,
+          "model_speed": 9.83,
+          "dir_err": 133.6
+        },
+        "SSE": {
+          "n": 202,
+          "obs_dir": 289.0,
+          "obs_speed": 4.33,
+          "obs_speed_p90": 8.92,
+          "model_dir": 158.1,
+          "model_speedup": 0.721,
+          "model_speed": 9.6,
+          "dir_err": 130.9
+        },
+        "S": {
+          "n": 149,
+          "obs_dir": 338.2,
+          "obs_speed": 3.06,
+          "obs_speed_p90": 6.36,
+          "model_dir": 178.4,
+          "model_speedup": 0.706,
+          "model_speed": 6.86,
+          "dir_err": 159.8
+        },
+        "SSW": {
+          "n": 80,
+          "obs_dir": 335.6,
+          "obs_speed": 3.12,
+          "obs_speed_p90": 7.0,
+          "model_dir": 200.4,
+          "model_speedup": 0.683,
+          "model_speed": 5.86,
+          "dir_err": 135.2
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 335.5,
+          "obs_speed": 4.4,
+          "obs_speed_p90": 7.81,
+          "model_dir": 222.9,
+          "model_speedup": 0.704,
+          "model_speed": 7.04,
+          "dir_err": 112.6
+        },
+        "WSW": {
+          "n": 21,
+          "obs_dir": 333.1,
+          "obs_speed": 2.27,
+          "obs_speed_p90": 4.69,
+          "model_dir": 246.0,
+          "model_speedup": 0.651,
+          "model_speed": 7.46,
+          "dir_err": 87.1
+        },
+        "W": {
+          "n": 46,
+          "obs_dir": 11.7,
+          "obs_speed": 3.08,
+          "obs_speed_p90": 5.08,
+          "model_dir": 271.1,
+          "model_speedup": 0.654,
+          "model_speed": 7.79,
+          "dir_err": 100.6
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 24.0,
+          "obs_speed": 2.92,
+          "obs_speed_p90": 4.84,
+          "model_dir": 295.3,
+          "model_speedup": 0.68,
+          "model_speed": 7.48,
+          "dir_err": 88.8
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 42.4,
+          "obs_speed": 4.66,
+          "obs_speed_p90": 9.06,
+          "model_dir": 317.4,
+          "model_speedup": 0.708,
+          "model_speed": 8.07,
+          "dir_err": 85.1
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 55.5,
+          "obs_speed": 3.34,
+          "obs_speed_p90": 7.25,
+          "model_dir": 338.4,
+          "model_speedup": 0.725,
+          "model_speed": 8.67,
+          "dir_err": 77.1
+        }
+      }
+    },
+    {
+      "id": "IMILNE7",
+      "name": "Milnerton",
+      "lat": -33.867,
+      "lon": 18.502,
+      "by_dir": {
+        "N": {
+          "n": 19,
+          "obs_dir": 155.7,
+          "obs_speed": 1.28,
+          "obs_speed_p90": 3.25,
+          "model_dir": 358.9,
+          "model_speedup": 0.735,
+          "model_speed": 8.49,
+          "dir_err": 156.8
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 294.8,
+          "obs_speed": 1.18,
+          "obs_speed_p90": 1.74,
+          "model_dir": 114.2,
+          "model_speedup": 0.71,
+          "model_speed": 10.12,
+          "dir_err": 179.4
+        },
+        "SE": {
+          "n": 90,
+          "obs_dir": 320.7,
+          "obs_speed": 1.79,
+          "obs_speed_p90": 3.14,
+          "model_dir": 136.4,
+          "model_speedup": 0.724,
+          "model_speed": 10.04,
+          "dir_err": 175.7
+        },
+        "SSE": {
+          "n": 201,
+          "obs_dir": 322.4,
+          "obs_speed": 1.75,
+          "obs_speed_p90": 2.89,
+          "model_dir": 157.8,
+          "model_speedup": 0.736,
+          "model_speed": 9.81,
+          "dir_err": 164.6
+        },
+        "S": {
+          "n": 148,
+          "obs_dir": 344.1,
+          "obs_speed": 1.59,
+          "obs_speed_p90": 2.81,
+          "model_dir": 178.8,
+          "model_speedup": 0.735,
+          "model_speed": 7.14,
+          "dir_err": 165.4
+        },
+        "SSW": {
+          "n": 78,
+          "obs_dir": 96.1,
+          "obs_speed": 1.13,
+          "obs_speed_p90": 2.62,
+          "model_dir": 200.5,
+          "model_speedup": 0.728,
+          "model_speed": 6.24,
+          "dir_err": 104.3
+        },
+        "SW": {
+          "n": 62,
+          "obs_dir": 114.5,
+          "obs_speed": 1.46,
+          "obs_speed_p90": 3.37,
+          "model_dir": 224.2,
+          "model_speedup": 0.714,
+          "model_speed": 7.14,
+          "dir_err": 109.6
+        },
+        "WSW": {
+          "n": 20,
+          "obs_dir": 115.3,
+          "obs_speed": 0.8,
+          "obs_speed_p90": 2.59,
+          "model_dir": 246.1,
+          "model_speedup": 0.702,
+          "model_speed": 8.04,
+          "dir_err": 130.9
+        },
+        "W": {
+          "n": 45,
+          "obs_dir": 113.9,
+          "obs_speed": 1.32,
+          "obs_speed_p90": 2.57,
+          "model_dir": 271.1,
+          "model_speedup": 0.698,
+          "model_speed": 8.32,
+          "dir_err": 157.2
+        },
+        "WNW": {
+          "n": 28,
+          "obs_dir": 144.8,
+          "obs_speed": 1.69,
+          "obs_speed_p90": 3.46,
+          "model_dir": 294.1,
+          "model_speedup": 0.704,
+          "model_speed": 7.74,
+          "dir_err": 149.3
+        },
+        "NW": {
+          "n": 21,
+          "obs_dir": 147.1,
+          "obs_speed": 2.87,
+          "obs_speed_p90": 5.89,
+          "model_dir": 316.7,
+          "model_speedup": 0.722,
+          "model_speed": 8.22,
+          "dir_err": 169.6
+        },
+        "NNW": {
+          "n": 23,
+          "obs_dir": 159.7,
+          "obs_speed": 2.24,
+          "obs_speed_p90": 4.86,
+          "model_dir": 337.9,
+          "model_speedup": 0.736,
+          "model_speed": 8.81,
+          "dir_err": 178.2
+        }
+      }
+    },
+    {
+      "id": "IMILNE8",
+      "name": "Milnerton",
+      "lat": -33.854,
+      "lon": 18.513,
+      "by_dir": {
+        "N": {
+          "n": 18,
+          "obs_dir": 187.3,
+          "obs_speed": 0.41,
+          "obs_speed_p90": 1.36,
+          "model_dir": 359.2,
+          "model_speedup": 0.932,
+          "model_speed": 10.76,
+          "dir_err": 171.9
+        },
+        "ESE": {
+          "n": 13,
+          "obs_dir": 278.8,
+          "obs_speed": 0.73,
+          "obs_speed_p90": 1.11,
+          "model_dir": 112.1,
+          "model_speedup": 0.948,
+          "model_speed": 13.51,
+          "dir_err": 166.7
+        },
+        "SE": {
+          "n": 85,
+          "obs_dir": 348.6,
+          "obs_speed": 1.94,
+          "obs_speed_p90": 3.16,
+          "model_dir": 134.4,
+          "model_speedup": 0.942,
+          "model_speed": 13.07,
+          "dir_err": 145.8
+        },
+        "SSE": {
+          "n": 154,
+          "obs_dir": 329.4,
+          "obs_speed": 2.72,
+          "obs_speed_p90": 5.61,
+          "model_dir": 156.6,
+          "model_speedup": 0.938,
+          "model_speed": 12.49,
+          "dir_err": 172.8
+        },
+        "S": {
+          "n": 73,
+          "obs_dir": 333.0,
+          "obs_speed": 1.96,
+          "obs_speed_p90": 4.46,
+          "model_dir": 179.0,
+          "model_speedup": 0.93,
+          "model_speed": 9.04,
+          "dir_err": 154.0
+        },
+        "SSW": {
+          "n": 46,
+          "obs_dir": 327.6,
+          "obs_speed": 1.09,
+          "obs_speed_p90": 2.5,
+          "model_dir": 202.0,
+          "model_speedup": 0.93,
+          "model_speed": 7.97,
+          "dir_err": 125.6
+        },
+        "SW": {
+          "n": 35,
+          "obs_dir": 322.2,
+          "obs_speed": 1.31,
+          "obs_speed_p90": 2.57,
+          "model_dir": 225.0,
+          "model_speedup": 0.938,
+          "model_speed": 9.38,
+          "dir_err": 97.2
+        },
+        "WSW": {
+          "n": 13,
+          "obs_dir": 284.2,
+          "obs_speed": 0.44,
+          "obs_speed_p90": 1.09,
+          "model_dir": 247.5,
+          "model_speedup": 0.94,
+          "model_speed": 10.76,
+          "dir_err": 36.8
+        },
+        "W": {
+          "n": 36,
+          "obs_dir": 216.2,
+          "obs_speed": 0.66,
+          "obs_speed_p90": 1.9,
+          "model_dir": 269.4,
+          "model_speedup": 0.947,
+          "model_speed": 11.27,
+          "dir_err": 53.2
+        },
+        "WNW": {
+          "n": 17,
+          "obs_dir": 183.7,
+          "obs_speed": 0.78,
+          "obs_speed_p90": 1.32,
+          "model_dir": 292.1,
+          "model_speedup": 0.948,
+          "model_speed": 10.42,
+          "dir_err": 108.4
+        },
+        "NW": {
+          "n": 19,
+          "obs_dir": 190.9,
+          "obs_speed": 1.04,
+          "obs_speed_p90": 3.19,
+          "model_dir": 314.1,
+          "model_speedup": 0.942,
+          "model_speed": 10.73,
+          "dir_err": 123.2
+        },
+        "NNW": {
+          "n": 22,
+          "obs_dir": 196.8,
+          "obs_speed": 0.98,
+          "obs_speed_p90": 2.33,
+          "model_dir": 336.6,
+          "model_speedup": 0.938,
+          "model_speed": 11.22,
+          "dir_err": 139.8
+        }
+      }
+    }
+  ]
+}

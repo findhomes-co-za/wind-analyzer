@@ -11,7 +11,7 @@
 // Token comes from web/config.local.js (window.MAPBOX_TOKEN) — keep it out of app.js
 const MAPBOX_TOKEN = window.MAPBOX_TOKEN || "YOUR_MAPBOX_TOKEN";
 // Bump when web/data/* is regenerated so browsers refetch instead of caching.
-const DATA_VERSION = "2026-06-17-fanshelter";
+const DATA_VERSION = "2026-06-22-stations";
 const SECTOR_LABELS = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
 const TRANSPARENT_PX = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 const GROUP_ORDER = ["City Bowl", "Atlantic Seaboard", "Southern Suburbs", "South Peninsula",
@@ -62,7 +62,8 @@ const OVERLAYS = {
 };
 
 /* ---------------- data ---------------- */
-let STATIC = null, RUN = null;
+let STATIC = null, RUN = null, STATIONS = null, showStations = true;
+const EMPTY_FC = { type: "FeatureCollection", features: [] };
 let GRIDS = null;            // {region:{bbox,nx,ny,elev,dx_m}, detail:{...}}
 const runCache = new Map();
 const shelterCache = new Map();   // dirIdx -> {grid:{bbox,nx,ny}, factor}
@@ -386,6 +387,34 @@ function initMap() {
     map.on("mousemove", onProbeMove);
     map.getCanvas().addEventListener("mouseleave", () => ($("#probe").hidden = true));
 
+    // Weather-station overlay: an arrow per PWS pointing downwind at the
+    // OBSERVED aggregate bearing, coloured by how closely that bearing matches
+    // the model here, for the hours the False Bay input blew from the selected
+    // direction. Populated by updateStationSource() on every direction change.
+    map.addImage("wind-arrow", makeArrowImage(), { sdf: true });
+    map.addSource("stations", { type: "geojson", data: EMPTY_FC });
+    map.addLayer({
+      id: "station-halo", type: "circle", source: "stations",
+      paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, 5, 14, 8],
+               "circle-color": "#ffffff", "circle-opacity": 0.85,
+               "circle-stroke-width": 2, "circle-stroke-color": ["get", "color"] },
+    });
+    map.addLayer({
+      id: "station-arrows", type: "symbol", source: "stations",
+      filter: ["==", ["get", "hasDir"], true],
+      layout: {
+        "icon-image": "wind-arrow", "icon-rotate": ["get", "bearing"],
+        "icon-rotation-alignment": "map", "icon-pitch-alignment": "map",
+        "icon-allow-overlap": true, "icon-ignore-placement": true,
+        "icon-size": ["interpolate", ["linear"], ["get", "size"], 1, 0.45, 4, 0.8, 9, 1.3],
+      },
+      paint: { "icon-color": ["get", "color"] },
+    });
+    map.on("click", "station-halo", openStationPopup);
+    map.on("click", "station-arrows", openStationPopup);
+    map.on("mouseenter", "station-halo", () => (map.getCanvas().style.cursor = "pointer"));
+    map.on("mouseleave", "station-halo", () => (map.getCanvas().style.cursor = ""));
+
     mapReady = true;
     if (RUN) renderAll();
     map.once("idle", () => ($("#loading").style.display = "none"));
@@ -693,6 +722,76 @@ function effectTags(r) {
   if ((r.downwash_share || 0) > 0.05) tags.push(["🏙️", "tall-building downwash"]);
   return tags;
 }
+/* ---------------- weather-station overlay ---------------- */
+// A solid up-pointing (north) arrow as an SDF image so icon-color can recolor
+// it per station; icon-rotate then aims it downwind.
+function makeArrowImage() {
+  const s = 30, c = document.createElement("canvas");
+  c.width = c.height = s;
+  const x = c.getContext("2d"), m = s / 2;
+  x.clearRect(0, 0, s, s);
+  x.fillStyle = "#000";
+  x.beginPath();
+  x.moveTo(m, 3); x.lineTo(m + 8, 16); x.lineTo(m + 3.2, 16);
+  x.lineTo(m + 3.2, 27); x.lineTo(m - 3.2, 27); x.lineTo(m - 3.2, 16);
+  x.lineTo(m - 8, 16); x.closePath(); x.fill();
+  return { width: s, height: s, data: new Uint8Array(x.getImageData(0, 0, s, s).data.buffer) };
+}
+// How closely the observed bearing matches the model bearing here.
+function stationMatchColor(err) {
+  if (err == null) return "#64748b";
+  return err <= 20 ? "#15803d" : err <= 45 ? "#d97706" : "#dc2626";
+}
+function updateStationSource() {
+  if (!mapReady || !map.getSource("stations")) return;
+  const vis = showStations ? "visible" : "none";
+  ["station-halo", "station-arrows"].forEach((id) =>
+    map.getLayer(id) && map.setLayoutProperty(id, "visibility", vis));
+  if (!STATIONS) return;
+  const lab = SECTOR_LABELS[state.dirIdx];
+  const features = [];
+  for (const s of STATIONS.stations) {
+    const d = s.by_dir[lab];
+    if (!d) continue;                       // no data for this input direction
+    const hasDir = d.obs_dir != null;
+    features.push({
+      type: "Feature",
+      properties: {
+        id: s.id, name: s.name || s.id, n: d.n, hasDir,
+        bearing: hasDir ? (d.obs_dir + 180) % 360 : 0,   // downwind, matches the flow particles
+        color: stationMatchColor(d.dir_err),
+        size: d.obs_speed_p90 || d.obs_speed || 1,
+        obs_dir: d.obs_dir, obs_speed: d.obs_speed, obs_p90: d.obs_speed_p90,
+        model_dir: d.model_dir, model_speed: d.model_speed, dir_err: d.dir_err,
+      },
+      geometry: { type: "Point", coordinates: [s.lon, s.lat] },
+    });
+  }
+  map.getSource("stations").setData({ type: "FeatureCollection", features });
+}
+function openStationPopup(e) {
+  const p = e.features[0].properties;
+  const lab = SECTOR_LABELS[state.dirIdx];
+  const verdict = p.dir_err == null ? "no usable direction here"
+    : p.dir_err <= 20 ? "closely matches the model"
+    : p.dir_err <= 45 ? "a fair match" : "diverges from the model";
+  const dirLine = p.hasDir
+    ? `from <b>${Math.round(p.obs_dir)}°</b> · ${fmtSpeed(p.obs_speed, true)} mean (${fmtSpeed(p.obs_p90, true)} p90)`
+    : `direction too sparse · ${fmtSpeed(p.obs_speed, true)} mean`;
+  if (popup) popup.remove();
+  popup = new mapboxgl.Popup({ offset: 12 })
+    .setLngLat(e.features[0].geometry.coordinates)
+    .setHTML(`<div class="popup-title">${p.name} <span style="opacity:.6">${p.id}</span></div>
+      <div class="popup-sub">
+        Over <b>${p.n} h</b> of <b>${lab}</b> False-Bay input:<br>
+        <b>Observed:</b> ${dirLine}<br>
+        <b>Model here:</b> from <b>${Math.round(p.model_dir)}°</b> · ${fmtSpeed(p.model_speed, true)} strong<br>
+        ${p.dir_err == null ? "" : `<b>Direction Δ ${Math.round(p.dir_err)}°</b> — ${verdict}.<br>`}
+        <span style="opacity:.65">Arrow = observed bearing, colour = direction match. Speeds aren't directly comparable (PWS siting; observed mean vs model strong/p90).</span>
+      </div>`)
+    .addTo(map);
+}
+
 function updateSuburbSource() {
   if (!mapReady || !RUN) return;
   // Marker colour = windiness score (the ranking quantity), so the map and
@@ -868,6 +967,7 @@ function renderAll() {
   renderField();
   if (mapReady) $("#loading").style.display = "none";
   updateSuburbSource();
+  updateStationSource();
   renderTable();
   renderLegend();
   updateChip();
@@ -982,6 +1082,8 @@ function wireControls() {
     if (e.key === "ArrowLeft") setDirection(state.dirIdx - 1);
     if (e.key === "ArrowRight") setDirection(state.dirIdx + 1);
   });
+  const ts = $("#toggleStations");
+  if (ts) ts.addEventListener("change", () => { showStations = ts.checked; updateStationSource(); });
   $("#opacity").value = Math.round(state.opacity * 100);
   updateUnitsSeg();
 }
@@ -993,6 +1095,10 @@ async function boot() {
     const resp = await fetch(`data/static.json?v=${DATA_VERSION}`);
     if (!resp.ok) throw new Error(`static.json: HTTP ${resp.status} — did you run scripts/precompute_web.py?`);
     STATIC = await resp.json();
+    fetch(`data/stations.json?v=${DATA_VERSION}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((s) => { STATIONS = s; updateStationSource(); })
+      .catch(() => {});
     GRIDS = {
       region: gridFromStatic(STATIC.domains.region),
       detail: gridFromStatic(STATIC.domains.detail),

@@ -116,6 +116,15 @@
       <canvas id="legendCanvas" width="200" height="10"></canvas>
       <div id="legendLabels"></div>
       <div class="legend-note"><i></i>pins = the 10 calmest pockets · click to fly</div>
+      <label class="legend-note" style="cursor:pointer;display:flex;align-items:center;gap:5px">
+        <input type="checkbox" id="toggleStations" checked style="margin:0">weather stations — observed vs model
+      </label>
+      <div class="legend-note" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+        arrow = observed wind, colour = dir match:
+        <i style="background:#15803d;border-radius:50%"></i>≤20°
+        <i style="background:#d97706;border-radius:50%"></i>≤45°
+        <i style="background:#dc2626;border-radius:50%"></i>off
+      </div>
     </div>
     <div id="probe" hidden></div>
     <div id="loading"><div class="spinner"></div><p>Loading wind fields…</p></div>
@@ -223,6 +232,6 @@
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <script src="config.local.js"></script>
-<script src="app.js?v=14"></script>
+<script src="app.js?v=15"></script>
 </body>
 </html>
